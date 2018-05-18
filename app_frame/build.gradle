@@ -38,6 +38,6 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.9.1'
     compile 'io.reactivex:rxandroid:1.2.1'
     compile 'com.tbruyelle.rxpermissions:rxpermissions:0.9.1@aar'
-    compile 'com.github.zengzhaoxing:SharpView:v2.3.0'
+    //compile 'com.github.zengzhaoxing:SharpView:v2.3.0'
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
 }
