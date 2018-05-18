@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="LeBubbleView">
+        <attr name="bubbleCornerRadius" format="dimension"/>
+        <attr name="bubbleBackgroundColor" format="color"/>
+        <attr name="bubbleArrowDirection">
+            <enum name="left" value="1"/>
+            <enum name="top" value="2"/>
+            <enum name="right" value="3"/>
+            <enum name="bottom" value="4"/>
+        </attr>
+        <attr name = "relativePosition" format = "fraction" />
+    </declare-styleable>
+
+    <declare-styleable name="CornerView">
+        <attr name="radius" format="dimension"/>
+        <attr name="top_left_radius" format="dimension"/>
+        <attr name="top_right_radius" format="dimension"/>
+        <attr name="bottom_right_radius" format="dimension"/>
+        <attr name="bottom_left_radius" format="dimension"/>
+        <attr name="backgroundColor" format="color"/>
+        <attr name="borderColor" format="color"/>
+        <attr name="border" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="ProgressButton" >
+        <attr name="enable_bg_color" format="color"/>
+        <attr name="disable_bg_color" format="color"/>
+        <attr name="text_color" format="color"/>
+        <attr name="disable_text_color" format="color"/>
+        <attr name="text_size" format="dimension"/>
+        <attr name="text" format="string"/>
+        <attr name="progress_position">
+            <enum name="left" value="1"/>
+            <enum name="middle" value="2"/>
+            <enum name="right" value="3"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="GalleryView">
+        <attr name="dotMargin" format="dimension"/>
+        <attr name="swapDuration" format="integer"/>
+        <attr name="initPosition" format="integer"/>
+        <attr name="selectDotColor" format="integer"/>
+        <attr name="defaultDotColor" format="integer"/>
+        <attr name="selectDotRadius" format="integer"/>
+        <attr name="defaultDotRadius" format="integer"/>
+        <attr name="showDot" format="boolean"/>
+        <attr name="allowManual" format="boolean"/>
+        <attr name="allowAuto" format="boolean"/>
+        <attr name="loop" format="boolean"/>
+        <attr name="dotPosition">
+            <enum name="left" value="1"/>
+            <enum name="up" value="2"/>
+            <enum name="right" value="3"/>
+            <enum name="down" value="4"/>
+        </attr>
+        <attr name="autoDirection">
+            <enum name="left" value="1"/>
+            <enum name="up" value="2"/>
+            <enum name="right" value="3"/>
+            <enum name="down" value="4"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="DirectionViewPager">
+        <attr name="vertical" format="boolean"/>
+        <attr name="manual" format="boolean"/>
+    </declare-styleable>
+
+    <declare-styleable name="WaterLightDot">
+        <attr name="dotRadius" format="dimension"/>
+        <attr name="othersDotRadius" format="dimension"/>
+        <attr name="dotColor" format="color"/>
+        <attr name="othersDotColor" format="color"/>
+    </declare-styleable>
+
+    <declare-styleable name="WaterLightView">
+        <attr name="itemMargin" format="dimension"/>
+        <attr name="itemCount" format="integer"/>
+        <attr name="duration" format="integer"/>
+        <attr name="position" format="integer"/>
+        <attr name="itemClickable" format="boolean"/>
+        <attr name="auto" format="boolean"/>
+        <attr name="showArrow" format="boolean"/>
+        <attr name="direction">
+            <enum name="left" value="1"/>
+            <enum name="up" value="2"/>
+            <enum name="right" value="3"/>
+            <enum name="down" value="4"/>
+        </attr>
+        <attr name="child_layout_type">
+            <enum name="fix" value="1"/>
+            <enum name="unFix" value="2"/>
+            <enum name="divideParent" value="3"/>
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="AnimationView">
+        <attr name="pictureCount" format="integer"/>
+        <attr name="pictureName" format="string"/>
+        <attr name="pictureDuration" format="integer"/>
+        <attr name="extraText" format="string"/>
+    </declare-styleable>
+
+</resources>
