@@ -7,8 +7,6 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.zxz.www.base.R;
-import com.zxz.www.base.view.corner.CornerTextView;
-import com.zxz.www.base.view.corner.ICornerView;
 
 /**
  * Created by zengxianzi on 2016/8/16.
@@ -80,19 +78,17 @@ public class WaterLightDot extends WaterLightView{
              lp.height = (int) (selectDotRadius * 2);
              lp.width = (int) (selectDotRadius * 2);
              v.setBackgroundColor(selectDotColor);
-             ((ICornerView)v).getRenderProxy().setRadius(selectDotRadius);
          }else {
              lp.height = (int) (defaultDotRadius * 2);
              lp.width = (int) (defaultDotRadius * 2);
              v.setBackgroundColor(defaultDotColor);
-             ((ICornerView)v).getRenderProxy().setRadius(defaultDotRadius);
          }
         v.setLayoutParams(lp);
     }
 
     @Override
     protected View getItemView(int position) {
-        return new CornerTextView(getContext());
+        return null;
     }
 
     @Override
