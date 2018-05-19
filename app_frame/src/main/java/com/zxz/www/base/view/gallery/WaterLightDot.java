@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.RelativeLayout;
 
+import com.zhaoxing.view.sharpview.SharpTextView;
 import com.zxz.www.base.R;
 
 /**
@@ -78,17 +79,19 @@ public class WaterLightDot extends WaterLightView{
              lp.height = (int) (selectDotRadius * 2);
              lp.width = (int) (selectDotRadius * 2);
              v.setBackgroundColor(selectDotColor);
+             ((SharpTextView)v).getRenderProxy().setRadius(selectDotRadius);
          }else {
              lp.height = (int) (defaultDotRadius * 2);
              lp.width = (int) (defaultDotRadius * 2);
              v.setBackgroundColor(defaultDotColor);
+             ((SharpTextView)v).getRenderProxy().setRadius(defaultDotRadius);
          }
         v.setLayoutParams(lp);
     }
 
     @Override
     protected View getItemView(int position) {
-        return null;
+        return new SharpTextView(getContext());
     }
 
     @Override
