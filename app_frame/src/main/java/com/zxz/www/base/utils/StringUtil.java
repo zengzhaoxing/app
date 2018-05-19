@@ -4,6 +4,7 @@ package com.zxz.www.base.utils;
 import android.content.Context;
 import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -78,7 +79,11 @@ public class StringUtil {
         } else {
             return false;
         }
+    }
 
+    public static boolean isValidatePhoneNumber(String phoneNumber) {
+        return phoneNumber != null && !isEmpty(phoneNumber) && isNumber(phoneNumber) && ((phoneNumber.length() == 11 && (phoneNumber.startsWith("13") || phoneNumber.startsWith("15") || phoneNumber.startsWith("18") || phoneNumber.startsWith("17")
+                || phoneNumber.startsWith("14"))));
     }
 
     public static boolean isLengthBetween(String s, int from, int to) {
@@ -140,6 +145,28 @@ public class StringUtil {
         }
         return true;
     }
+
+    public static boolean isIdCardNo(String idCardNO) {
+        boolean isID = false;
+        if (idCardNO == null){
+            return false;
+        }
+        int len = idCardNO.length();
+        if (len != 18) {
+            return false;
+        } else {
+            // 排除最后一位是:X的情况
+            for (int i = 0; i < len; i++) {
+                try {
+                    isID = (idCardNO.charAt(i) + "").equalsIgnoreCase("X")|| Integer.parseInt("" + idCardNO.charAt(i)) > -1;
+                } catch (NumberFormatException e) {
+                    return false;
+                }
+            }
+        }
+        return isID;
+    }
+
 
 }
 

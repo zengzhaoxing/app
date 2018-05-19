@@ -97,8 +97,9 @@ public abstract class JsonRequester<req extends RequestModel, resp extends Respo
 
     public void addHeader(String key, String value) {
         if (!mHeader.containsKey(key)) {
-            mHeader.put(key, value);
+            mHeader.remove(key);
         }
+        mHeader.put(key, value);
     }
 
     protected final String getBody() {

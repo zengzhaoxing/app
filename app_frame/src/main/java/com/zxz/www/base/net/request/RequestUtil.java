@@ -19,7 +19,7 @@ public class RequestUtil {
 
     private static RequesterFactory mFactory = OkHttpRequesterFactory.getInstance();
 
-    public static HashMap<String, String> mHeader;
+    private static HashMap<String, String> mHeader;
 
     public static void init(RequesterFactory factory) {
         mFactory = factory;

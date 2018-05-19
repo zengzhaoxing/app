@@ -186,6 +186,21 @@ public class DateUtil {
         return sum1 - sum2;
     }
 
+    public static int getTodayYear() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.YEAR);
+    }
 
+    public static int getTodayMonth() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.MONTH);
+    }
+
+    public static int getTodayDay() {
+        Calendar calendar = Calendar.getInstance();
+        return calendar.get(Calendar.DATE);
+    }
+
+    
 
 }

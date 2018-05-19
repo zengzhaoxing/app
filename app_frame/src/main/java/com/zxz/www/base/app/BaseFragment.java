@@ -15,11 +15,11 @@ public abstract class BaseFragment extends Fragment {
 
     BaseFragment mPreFragment;
 
-    protected abstract boolean handleBackEvent();
+    protected  boolean handleBackEvent(){return false;};
 
-    protected abstract void onTopFragmentExit(Class<? extends BaseFragment> topFragmentClass, Bundle params);
+    protected  void onTopFragmentExit(Class<? extends BaseFragment> topFragmentClass, Bundle params){};
 
-    protected abstract Bundle onExit();
+    protected  Bundle onExit(){return null;};
 
     public void close() {
         mBaseActivity.closeCurrentFragment();
