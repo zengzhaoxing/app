@@ -9,12 +9,12 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zhaoxing.view.sharpview.SharpRelativeLayout;
 import com.zxz.www.base.R;
 import com.zxz.www.base.utils.DensityUtil;
+import com.zxz.www.base.utils.ResUtil;
 
 public class ProgressButton extends SharpRelativeLayout {
 
@@ -26,6 +26,10 @@ public class ProgressButton extends SharpRelativeLayout {
 
     private  int disableBg;
 
+    private int[] enableBgs;
+
+    private  int[] disableBgs;
+
     private int textColor;
 
     private int disableTextColor;
@@ -36,7 +40,23 @@ public class ProgressButton extends SharpRelativeLayout {
 
     private ProgressBar mProgress;
 
+    public void setText(String text) {
+        this.text = text;
+        mTextView.setText(text);
+    }
+
+    public void setTextSize(int size) {
+        mTextView.setTextSize(size);
+    }
+
+    public void setText(int id) {
+        this.text = ResUtil.getString(id);
+        mTextView.setText(text);
+    }
+
     private String text;
+
+    private String disableText;
 
     public ProgressButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -62,6 +82,10 @@ public class ProgressButton extends SharpRelativeLayout {
         float textSize = a.getDimension(R.styleable.ProgressButton_text_size, 12);
         int i = a.getInt(R.styleable.ProgressButton_progress_position, 1);
         text = a.getString(R.styleable.ProgressButton_text);
+        disableText = a.getString(R.styleable.ProgressButton_loading_text);
+        if (disableText == null) {
+            disableText = text;
+        }
         switch (i){
             case 1:
                 progressPosition = ProgressPosition.LEFT;
@@ -81,24 +105,24 @@ public class ProgressButton extends SharpRelativeLayout {
         mTextView.setGravity(Gravity.CENTER);
 
         mProgress = new ProgressBar(context);
-        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(DensityUtil.dip2px(30), DensityUtil.dip2px(30));
+        LayoutParams layoutParams = new LayoutParams(DensityUtil.dip2px(30), DensityUtil.dip2px(30));
         layoutParams.addRule(CENTER_VERTICAL, TRUE);
         switch (progressPosition){
             case LEFT:
                 layoutParams.addRule(ALIGN_PARENT_LEFT,TRUE);
-                layoutParams.leftMargin = (int) (getLayoutParams().height / 2 - DensityUtil.dip2px(15));
+                layoutParams.leftMargin = getLayoutParams().height / 2 - DensityUtil.dip2px(15);
                 break;
             case MIDDLE:
                 layoutParams.addRule(CENTER_HORIZONTAL, TRUE);
                 break;
             case RIGHT:
                 layoutParams.addRule(ALIGN_PARENT_RIGHT,TRUE);
-                layoutParams.leftMargin = (int) (getLayoutParams().height / 2 - DensityUtil.dip2px(15));
+                layoutParams.leftMargin = getLayoutParams().height / 2 - DensityUtil.dip2px(15);
                 break;
         }
         mProgress.setLayoutParams(layoutParams);
 
-        addView(mTextView,new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        addView(mTextView,new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         addView(mProgress);
 
         setEnabled(true);
@@ -109,12 +133,31 @@ public class ProgressButton extends SharpRelativeLayout {
     @Override
     public void setEnabled(boolean enabled) {
         super.setEnabled(enabled);
-        setBackgroundColor(enabled ? enableBg : disableBg);
+        if (enableBgs != null && disableBgs != null) {
+            getRenderProxy().setBgColor(enabled ? enableBgs : disableBgs);
+        }
+        getRenderProxy().setBackgroundColor(enabled ? enableBg : disableBg);
         mTextView.setTextColor(enabled ? textColor : disableTextColor);
     }
 
+    public void setEnableBg(int color) {
+        enableBg = color;
+    }
+
+    public void setDisableBg(int color) {
+        disableBg = color;
+    }
+
+    public void setEnableBg(int[] color) {
+        enableBgs = color;
+    }
+
+    public void setDisableBg(int[] color) {
+        disableBgs = color;
+    }
+
     public void setEnableCanClick(boolean enabled) {
-        setBackgroundColor(enabled ? enableBg : disableBg);
+        getRenderProxy().setBackgroundColor(enabled ? enableBg : disableBg);
         mTextView.setTextColor(enabled ? textColor : disableTextColor);
     }
 
@@ -124,11 +167,14 @@ public class ProgressButton extends SharpRelativeLayout {
             mProgress.setVisibility(VISIBLE);
             if (progressPosition == ProgressPosition.MIDDLE) {
                 mTextView.setText(null);
+            } else {
+                mTextView.setText(disableText);
             }
         } else {
             mProgress.setVisibility(GONE);
             mTextView.setText(text);
         }
+        setClickable(!isLoading);
         invalidate();
     }
 

@@ -31,6 +31,7 @@
         <attr name="disable_text_color" format="color"/>
         <attr name="text_size" format="dimension"/>
         <attr name="text" format="string"/>
+        <attr name="loading_text" format="string"/>
         <attr name="progress_position">
             <enum name="left" value="1"/>
             <enum name="middle" value="2"/>
