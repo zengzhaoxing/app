@@ -1,8 +1,6 @@
 package com.zxz.www.base.net.request.okhttp;
 
 import com.zxz.www.base.model.BaseModel;
-import com.zxz.www.base.model.RequestModel;
-import com.zxz.www.base.model.ResponseModel;
 import com.zxz.www.base.net.request.JsonRequester;
 import com.zxz.www.base.net.request.RequesterFactory;
 
@@ -13,35 +11,35 @@ import com.zxz.www.base.net.request.RequesterFactory;
 public class OkHttpRequesterFactory extends RequesterFactory{
 
     @Override
-    public JsonRequester createPostRequester(String url, RequestModel request, Class<? extends ResponseModel> responseClass) {
-        return new OkHttpJsonRequester(url, request, responseClass, JsonRequester.POST);
+    public JsonRequester createPostRequester(String url, BaseModel request, Class<? extends BaseModel> responseClass) {
+        return new OkJsonRequester(url, request, responseClass, JsonRequester.POST);
     }
 
     @Override
-    public JsonRequester createGetRequester(String url, RequestModel request, Class<? extends ResponseModel> responseClass) {
-        return new OkHttpJsonRequester(url, request, responseClass, JsonRequester.GET);
+    public JsonRequester createGetRequester(String url, BaseModel request, Class<? extends BaseModel> responseClass) {
+        return new OkJsonRequester(url, request, responseClass, JsonRequester.GET);
     }
 
     @Override
-    public JsonRequester createDeleteRequester(String url, RequestModel request, Class<? extends ResponseModel> responseClass) {
-        return new OkHttpJsonRequester(url, request, responseClass, JsonRequester.DELETE);
+    public JsonRequester createDeleteRequester(String url, BaseModel request, Class<? extends BaseModel> responseClass) {
+        return new OkJsonRequester(url, request, responseClass, JsonRequester.DELETE);
     }
 
     @Override
-    public JsonRequester createPutRequester(String url, RequestModel request, Class<? extends ResponseModel> responseClass) {
-        return new OkHttpJsonRequester(url, request, responseClass, JsonRequester.PUT);
+    public JsonRequester createPutRequester(String url, BaseModel request, Class<? extends BaseModel> responseClass) {
+        return new OkJsonRequester(url, request, responseClass, JsonRequester.PUT);
     }
 
     @Override
-    public JsonRequester createPostRequesterList(String url, RequestModel request, Class<? extends ResponseModel> responseClass) {
-        OkHttpJsonRequester volleyJsonRequester =  new OkHttpJsonRequester(url, request, responseClass, JsonRequester.POST);
+    public JsonRequester createPostRequesterList(String url, BaseModel request, Class<? extends BaseModel> responseClass) {
+        OkJsonRequester volleyJsonRequester =  new OkJsonRequester(url, request, responseClass, JsonRequester.POST);
         volleyJsonRequester.setIsRequestList(true);
         return volleyJsonRequester;
     }
 
     @Override
-    public JsonRequester createGetRequesterList(String url, RequestModel request, Class<? extends ResponseModel> responseClass) {
-        OkHttpJsonRequester volleyJsonRequester =  new OkHttpJsonRequester(url, request, responseClass, JsonRequester.GET);
+    public JsonRequester createGetRequesterList(String url, BaseModel request, Class<? extends BaseModel> responseClass) {
+        OkJsonRequester volleyJsonRequester =  new OkJsonRequester(url, request, responseClass, JsonRequester.GET);
         volleyJsonRequester.setIsRequestList(true);
         return volleyJsonRequester;
     }

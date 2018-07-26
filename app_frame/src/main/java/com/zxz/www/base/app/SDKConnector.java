@@ -10,6 +10,8 @@ public abstract class SDKConnector {
 
     protected boolean mEnable = true;
 
+    protected BaseApp mApp;
+
     public  void setEnable(boolean enable){
         mEnable = enable;
     }
@@ -17,11 +19,7 @@ public abstract class SDKConnector {
     protected Activity mActivity;
 
     protected  void onAppCreate(BaseApp application){
-
-    }
-
-    protected  void attachBaseContext(Context application){
-
+        mApp = application;
     }
 
     protected  void onMainActivityCreate(Bundle savedInstanceState,Activity activity){
@@ -46,5 +44,8 @@ public abstract class SDKConnector {
         return true;
     }
 
+    protected void onAttachBaseContext(Context b) {
+
+    }
 
 }

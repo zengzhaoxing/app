@@ -56,7 +56,7 @@
 //                    float downLoadTime = downloadFileInfo.getDownloadedSizeLong() / downloadSpeed / 1024;
 //                    float faction =  downLoadTime/(downLoadTime + remainingTime);
 //                    faction = Math.min(1, faction);
-//                    mDownloadListener.onDownLoad(faction,DOWNLOADING);
+//                    mDownloadListener.onDownLoad(faction);
 //                }
 //            }
 //
@@ -68,7 +68,7 @@
 //            @Override
 //            public void onFileDownloadStatusCompleted(DownloadFileInfo downloadFileInfo) {
 //                if (mDownloadListener != null) {
-//                    mDownloadListener.onDownLoad(1,DOWNLOAD_FINISH);
+//                    mDownloadListener.onDownLoad(100);
 //                }
 //            }
 //
@@ -94,7 +94,7 @@
 //            public void onDetectUrlFileFailed(String url, DetectBigUrlFileFailReason failReason) {
 //                Log.i(TAG, failReason.toString());
 //                if (mDownloadListener != null) {
-//                    mDownloadListener.onDownLoad(0,DOWNLOAD_FAIL);
+//                    mDownloadListener.onDownLoad(-1);
 //                }
 //            }
 //        });

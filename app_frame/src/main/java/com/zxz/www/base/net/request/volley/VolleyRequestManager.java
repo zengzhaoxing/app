@@ -23,6 +23,7 @@ class VolleyRequestManager {
 
     public static void cancelAll(Object tag) {
         mRequestQueue.cancelAll(tag);
+        mRequestQueue.stop();
     }
 
 }

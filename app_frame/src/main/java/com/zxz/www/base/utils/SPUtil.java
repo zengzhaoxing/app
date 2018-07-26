@@ -8,7 +8,7 @@ import com.zxz.www.base.app.BaseApp;
 
 public class SPUtil {
 
-    private static final String FILE_NAME = SPUtil.class.getName();
+    private static String FILE_NAME = SPUtil.class.getName();
 
     public static void put(String key,Object object) {
         if(object == null){

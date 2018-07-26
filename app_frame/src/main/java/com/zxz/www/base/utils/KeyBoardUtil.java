@@ -5,6 +5,7 @@ package com.zxz.www.base.utils;
  */
 
 import android.content.Context;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
@@ -13,13 +14,13 @@ import com.zxz.www.base.app.BaseApp;
 //打开或关闭软键盘
 public class KeyBoardUtil {
 
-    public static void openKeyboard(EditText editText) {
+    public static void openKeyboard(View editText) {
         InputMethodManager imm = (InputMethodManager) BaseApp.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(editText, InputMethodManager.RESULT_SHOWN);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
-    public static void closeKeyboard(EditText editText) {
+    public static void closeKeyboard(View editText) {
         InputMethodManager imm = (InputMethodManager) BaseApp.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
     }

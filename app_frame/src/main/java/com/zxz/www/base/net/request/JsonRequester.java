@@ -6,19 +6,24 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import com.zxz.www.base.model.BaseModel;
-import com.zxz.www.base.model.RequestModel;
-import com.zxz.www.base.model.ResponseModel;
 import com.zxz.www.base.utils.StringUtil;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
 
 /**
  * Created by igola on 2017/9/11.
  */
 
-public abstract class JsonRequester<req extends RequestModel, resp extends ResponseModel> {
+public abstract class JsonRequester<RequestModel extends BaseModel, ResponseModel extends BaseModel> {
 
     public static final String CONTENT_TYPE_URLENCODED = "application/x-www-form-urlencoded";
 
@@ -38,15 +43,15 @@ public abstract class JsonRequester<req extends RequestModel, resp extends Respo
     public static int TRACE = 6;
     public static int PATCH = 7;
 
-    protected req mRequestData;
+    private RequestModel mRequestData;
 
-    protected Class<resp> mResponseClass;
+    private Class<ResponseModel> mResponseClass;
 
-    protected HashMap<String ,String> mHeader;
+    protected HashMap<String, String> mHeader;
 
     protected int mRequestMethod;
 
-    protected String mUrl;
+    private String mUrl;
 
     private Gson mGson;
 
@@ -56,16 +61,12 @@ public abstract class JsonRequester<req extends RequestModel, resp extends Respo
 
     private boolean mIsRequestList;
 
-
-    public JsonRequester(String url, req request, Class<resp> responseClass, int requestMethod) {
+    public JsonRequester(String url, RequestModel request, Class<ResponseModel> responseClass, int requestMethod) {
         mUrl = url;
         mRequestData = request;
         mHeader = new HashMap<>();
         mResponseClass = responseClass;
         mRequestMethod = requestMethod;
-        mHeader.put("Content-Type", "application/json;charset=UTF-8");
-        mHeader.put("Accept-Encoding", "gzip");
-        mHeader.put("Accept", "application/json");
         mGson = new Gson();
     }
 
@@ -73,13 +74,13 @@ public abstract class JsonRequester<req extends RequestModel, resp extends Respo
         this.mListener = listener;
     }
 
-    protected OnResponseListener mListener;
+    private OnResponseListener mListener;
 
     public void setTimeOutMs(int timeOutMs) {
         this.mTimeOutMs = timeOutMs;
     }
 
-    protected int mTimeOutMs = 15000;
+    protected int mTimeOutMs = 25000;
 
     public void setRepeatTime(int mRepeatTime) {
         this.mRepeatTime = mRepeatTime;
@@ -97,9 +98,60 @@ public abstract class JsonRequester<req extends RequestModel, resp extends Respo
 
     public void addHeader(String key, String value) {
         if (!mHeader.containsKey(key)) {
-            mHeader.remove(key);
+            mHeader.put(key, value);
         }
-        mHeader.put(key, value);
+    }
+
+    public void addHeader(HashMap<String, String> header) {
+        if (header == null) {
+            return;
+        }
+        for(Map.Entry<String, String> entry: header.entrySet()) {
+            mHeader.put(entry.getKey(),entry.getValue());
+        }
+    }
+
+    public abstract void startRequest();
+
+    public abstract void stopRequest();
+
+    protected final void parseResponse(String jsonResponse, int respCode) {
+        Log.d(TAG, " url : " + getUrl());
+        Log.d(TAG, " body : " + getBody());
+        Log.d(TAG, " header : " + mHeader.toString());
+        Log.d(TAG, " response : " + jsonResponse);
+        Log.d(TAG, " respCode : " + respCode);
+        if (!mIsRequestList) {
+            ResponseModel obj = null;
+            try {
+                obj = mGson.fromJson(jsonResponse, mResponseClass);
+            } catch (Exception e) {
+                if (mListener != null) {
+                    mListener.onResponse(null, respCode);
+                }
+            }
+            if (mListener != null) {
+                mListener.onResponse(obj, respCode);
+            }
+        } else {
+            ArrayList<ResponseModel> lcs = new ArrayList<ResponseModel>();
+            try {
+                Gson gson = new Gson();
+                JsonParser parser = new JsonParser();
+                JsonArray Jarray = parser.parse(jsonResponse).getAsJsonArray();
+                for (JsonElement obj : Jarray) {
+                    ResponseModel cse = gson.fromJson(obj, mResponseClass);
+                    lcs.add(cse);
+                }
+            }catch (Exception e) {
+                if (mListener != null) {
+                    mListener.onResponse(null, respCode);
+                }
+            }
+            if (mListener != null) {
+                mListener.onResponse(lcs, respCode);
+            }
+        }
     }
 
     protected final String getBody() {
@@ -119,54 +171,9 @@ public abstract class JsonRequester<req extends RequestModel, resp extends Respo
         return body;
     }
 
-    public abstract void startRequest();
-
-    public abstract void stopRequest();
-
-    protected final void parseResponse(String jsonResponse,int respCode) {
-        Log.d(TAG, "JsonRequester url : " + mUrl);
-        Log.d(TAG, "JsonRequester body : " + (mRequestData != null ? mRequestData.toJson() : "null"));
-        Log.d(TAG, "JsonRequester header : " + mHeader.toString());
-        Log.d(TAG, "JsonRequester response : " + jsonResponse);
-        Log.d(TAG, "JsonRequester respCode : " + respCode);
-        if (StringUtil.isBlank(jsonResponse)) {
-            if (mListener != null) {
-                mListener.onResponse(null, respCode);
-            }
-        } else {
-            if (!mIsRequestList) {
-                resp obj = null;
-                try {
-                    obj = mGson.fromJson(jsonResponse, mResponseClass);
-                } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
-                    callResponse(null,1000);
-                }
-                callResponse(obj,respCode);
-            } else {
-                ArrayList<resp> lcs = null;
-                try {
-                    lcs = new ArrayList<>();
-                    Gson gson = new Gson();
-                    JsonParser parser = new JsonParser();
-                    JsonArray Jarray = parser.parse(jsonResponse).getAsJsonArray();
-                    for(JsonElement obj : Jarray ){
-                        resp cse = gson.fromJson( obj , mResponseClass);
-                        lcs.add(cse);
-                    }
-                } catch (Exception e) {
-                    Log.e(TAG, e.getMessage());
-                    callResponse(null,1000);
-                }
-                callResponse(lcs,respCode);
-            }
-        }
+    public interface OnResponseListener<T> {
+        void onResponse(T response, int resCode);
     }
 
-    private  <T> void callResponse(T resp, int code) {
-        if (mListener != null) {
-            mListener.onResponse(resp,code);
-        }
-    }
 
 }

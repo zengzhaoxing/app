@@ -3,10 +3,15 @@ package com.zxz.www.base.net.download;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.zxz.www.base.utils.AsyncTaskUtil;
+import com.zxz.www.base.utils.FileUtil;
+
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Iterator;
 import java.util.Map;
 
 /**

@@ -13,6 +13,10 @@ public class ToastUtil {
         Toast.makeText(BaseApp.getContext(), text, Toast.LENGTH_SHORT).show();
     }
 
+    public static void toast(int resId) {
+        Toast.makeText(BaseApp.getContext(), ResUtil.getString(resId), Toast.LENGTH_SHORT).show();
+    }
+
     public static void toast(String text, int duration) {
         Toast toast = Toast.makeText(BaseApp.getContext(), text, Toast.LENGTH_SHORT);
         toast.setDuration(duration);

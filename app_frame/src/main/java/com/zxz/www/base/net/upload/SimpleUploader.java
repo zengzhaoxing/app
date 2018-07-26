@@ -1,4 +1,4 @@
-package com.zxz.www.base.net.upload;//package com.zxz.www.base.net.upload;
+//package com.zxz.www.base.net.upload;
 //
 //import android.graphics.Bitmap;
 //import android.os.AsyncTask;

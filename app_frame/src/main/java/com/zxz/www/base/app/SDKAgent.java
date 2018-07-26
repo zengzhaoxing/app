@@ -35,14 +35,6 @@ final public class SDKAgent {
         }
     }
 
-    void doAttachBaseContext(Context app) {
-        for (SDKConnector sdkConnector : mSDKConnectorList) {
-            if (ProcessUtil.isMainProcess() || !sdkConnector.mainProcessOnly()) {
-                sdkConnector.attachBaseContext(app);
-            }
-        }
-    }
-
     void doInMainActivityCreate(Bundle savedInstanceState, Activity activity) {
         for (SDKConnector sdkConnector : mSDKConnectorList) {
             sdkConnector.onMainActivityCreate(savedInstanceState, activity);
@@ -88,6 +80,12 @@ final public class SDKAgent {
     void doInMainActivityNewIntent(Intent intent) {
         for (SDKConnector sdkConnector : mSDKConnectorList) {
             sdkConnector.onMainActivityNewIntent(intent);
+        }
+    }
+
+    void doAttachBaseContext(Context b) {
+        for (SDKConnector sdkConnector : mSDKConnectorList) {
+            sdkConnector.onAttachBaseContext(b);
         }
     }
 

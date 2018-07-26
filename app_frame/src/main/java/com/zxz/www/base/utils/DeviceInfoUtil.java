@@ -27,15 +27,15 @@ public class DeviceInfoUtil {
     }
 
     public static String getDeviceName() {
-        return Build.MODEL;
+        return android.os.Build.MODEL;
     }
 
     public static String getAndroidVersion() {
-        return Build.VERSION.RELEASE;
+        return android.os.Build.VERSION.RELEASE;
     }
 
     public static String getDeviceSerial() {
-        return Build.SERIAL;
+        return android.os.Build.SERIAL;
     }
 
     public static int getScreenHeight(Activity activity) {

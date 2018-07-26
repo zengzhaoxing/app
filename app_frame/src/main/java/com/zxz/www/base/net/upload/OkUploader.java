@@ -1,6 +1,7 @@
 package com.zxz.www.base.net.upload;
 
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -10,6 +11,7 @@ import com.zxz.www.base.model.BaseModel;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;

@@ -8,17 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.zxz.www.base.R;
+import com.zxz.www.base.utils.GetNativeBitmapSDK;
+import com.zxz.www.base.utils.KeyBoardUtil;
 import com.zxz.www.base.utils.ViewUtil;
 import com.zxz.www.base.view.LoadingView;
 
 
 public abstract class BaseActivity extends AppCompatActivity {
-
-    public boolean isBackGround() {
-        return mIsBackGround;
-    }
-
-    private boolean mIsBackGround;
 
     private BaseFragment mCurrentFragment;
 
@@ -34,16 +30,21 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         SDKAgent.getInstance().doInMainActivityResult(requestCode,  resultCode,  data);
+        GetNativeBitmapSDK.getInstance().callbackFromSystem(requestCode,resultCode,data);
+    }
+
+    protected void onSaveInstanceState(Bundle outState) {
+        // No call for super(). Bug on API Level > 11.
     }
 
     @Override
-    public final void onBackPressed() {
+    public  void onBackPressed() {
         if (mCurrentFragment == null) {
             super.onBackPressed();
             return;
         }
         if (!mCurrentFragment.handleBackEvent()) {
-            if (isHome()) {
+            if (mCurrentFragment == mMainFragment) {
                 finish();
             } else {
                 closeCurrentFragment();
@@ -52,9 +53,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public final void openNewFragmentWithAnim(BaseFragment baseFragment,final int enterAnim, final int exitAnim) {
-        if (baseFragment == null) {
+        openNewFragmentWithAnim(baseFragment,enterAnim,exitAnim,null);
+    }
+
+    public final void openNewFragmentWithAnim(BaseFragment baseFragment,final int enterAnim, final int exitAnim,BaseFragment pre) {
+        if (baseFragment == null || (pre != mCurrentFragment && pre != null)) {
             return;
         }
+        KeyBoardUtil.closeKeyboard(getWindow().getDecorView());
         baseFragment.mPreFragment = mCurrentFragment;
         mCurrentFragment = baseFragment;
         FragmentTransaction fragmentTransaction = mFragmentManager.beginTransaction();
@@ -64,26 +70,44 @@ public abstract class BaseActivity extends AppCompatActivity {
         fragmentTransaction.commitAllowingStateLoss();
     }
 
-    public final void openNewFragment(BaseFragment baseFragment) {
-        openNewFragmentWithAnim(baseFragment,0, 0);
+    public final void openNewFragment(BaseFragment newFragment) {
+        openNewFragmentWithAnim(newFragment,0, 0,null);
     }
 
-    public final void openNewFragmentWithDefaultAnim(BaseFragment baseFragment) {
-        openNewFragmentWithAnim(baseFragment,android.R.anim.slide_in_left, android.R.anim.slide_out_right);
+    public final void openNewFragment(BaseFragment newFragment,BaseFragment pre) {
+        openNewFragmentWithAnim(newFragment,0, 0,pre);
+    }
+
+    public final void openNewFragmentWithDefaultAnim(BaseFragment newFragment) {
+        openNewFragmentWithAnim(newFragment,android.R.anim.slide_in_left, android.R.anim.slide_out_right,null);
+    }
+
+    public final void openNewFragmentWithDefaultAnim(BaseFragment newFragment,BaseFragment pre) {
+        openNewFragmentWithAnim(newFragment,android.R.anim.slide_in_left, android.R.anim.slide_out_right,pre);
+    }
+
+    public final void replaceFragment(BaseFragment baseFragment,boolean anim) {
+        closeCurrentFragment();
+        if (anim) {
+            openNewFragmentWithDefaultAnim(baseFragment);
+        } else {
+            openNewFragment(baseFragment);
+        }
     }
 
     public final void goHome() {
-        while (!isHome()) {
+        int count = mFragmentManager.getBackStackEntryCount();
+        for(int i = 0;i < count - 1;i++) {
             closeCurrentFragment();
         }
     }
 
     public final boolean isHome() {
-        return mCurrentFragment == null || mCurrentFragment instanceof MainFragment;
+        return mCurrentFragment instanceof MainFragment;
     }
 
-    public final void backToFragment(Class<? extends BaseFragment> cls) {
-        while (!isHome() && mCurrentFragment.getClass() == cls) {
+    public final void goBackTo(Class<? extends BaseFragment> cls) {
+        while (mCurrentFragment != null && !isHome() && !mCurrentFragment.getClass().getName().equals(cls.getName())) {
             closeCurrentFragment();
         }
     }
@@ -103,15 +127,12 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        mIsBackGround = false;
         SDKAgent.getInstance().doInMainActivityOnStart();
     }
-
 
     @Override
     protected void onStop() {
         super.onStop();
-        mIsBackGround = true;
         SDKAgent.getInstance().doInMainActivityStop();
     }
 
@@ -148,6 +169,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             finish();
         }
         else if (mCurrentFragment != null) {
+            KeyBoardUtil.closeKeyboard(getWindow().getDecorView());
             Bundle bundle = mCurrentFragment.onExit();
             Class cl = mCurrentFragment.getClass();
             mCurrentFragment = mCurrentFragment.mPreFragment;
@@ -168,5 +190,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     public boolean isLoadingViewShown() {
         return  mLoadingView.getVisibility() == View.VISIBLE;
     }
+
 
 }

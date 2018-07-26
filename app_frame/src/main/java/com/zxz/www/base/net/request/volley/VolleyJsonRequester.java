@@ -9,19 +9,17 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.zxz.www.base.model.BaseModel;
-import com.zxz.www.base.model.RequestModel;
-import com.zxz.www.base.model.ResponseModel;
 import com.zxz.www.base.net.request.JsonRequester;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
-class VolleyJsonRequester<req extends RequestModel,resp extends ResponseModel> extends JsonRequester<req,resp>{
+class VolleyJsonRequester<RequestModel extends BaseModel,ResponseModel extends BaseModel> extends JsonRequester<RequestModel,ResponseModel>{
 
     public static String TAG = "VolleyJsonRequester";
 
-    public VolleyJsonRequester(String url, req request, Class<resp> responseClass, int requestMethod) {
+    VolleyJsonRequester(String url, RequestModel request, Class<ResponseModel> responseClass, int requestMethod) {
         super(url, request, responseClass, requestMethod);
     }
 
@@ -41,7 +39,10 @@ class VolleyJsonRequester<req extends RequestModel,resp extends ResponseModel> e
         }){
             @Override
             public byte[] getBody() throws AuthFailureError {
-                return mRequestData == null ? null : mRequestData.toJson().getBytes();
+                if (VolleyJsonRequester.this.getBody() == null) {
+                    return null;
+                }
+                return VolleyJsonRequester.this.getBody().getBytes();
             }
         };
         DefaultRetryPolicy defaultRetryPolicy = new DefaultRetryPolicy(mTimeOutMs,mRepeatTime,1);

@@ -2,10 +2,16 @@ package com.zxz.www.base.app;
 
 import android.app.Application;
 import android.content.Context;
+import android.util.Log;
 
+import com.zxz.www.base.utils.GetNativeBitmapSDK;
 import com.zxz.www.base.utils.SPUtil;
 
 public class BaseApp extends Application {
+
+    static {
+        SDKAgent.getInstance().addSDKConnector(GetNativeBitmapSDK.getInstance());
+    }
 
     public static Context getContext() {
         return _context;

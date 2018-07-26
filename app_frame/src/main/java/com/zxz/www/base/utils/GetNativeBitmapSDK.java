@@ -18,7 +18,7 @@ import java.io.InputStream;
 /**
  * Created by zengxianzi on 2016/10/9.
  */
-public class GetNativeBitmapSDK extends SDKConnector {
+public class GetNativeBitmapSDK extends SDKConnector{
 
     private static GetNativeBitmapSDK mGetNativeBitmapSDK;
 

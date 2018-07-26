@@ -12,5 +12,8 @@ public abstract class BaseModel{
     }
 
 
-
+    @Override
+    public String toString() {
+        return toJson();
+    }
 }

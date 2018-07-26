@@ -1,13 +1,22 @@
 package com.zxz.www.base.net.upload;
 
+import android.content.pm.ProviderInfo;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.zxz.www.base.model.BaseModel;
+import com.zxz.www.base.utils.FileUtil;
+import com.zxz.www.base.utils.StringUtil;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by igola on 2017/9/18.

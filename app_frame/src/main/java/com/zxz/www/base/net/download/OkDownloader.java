@@ -3,6 +3,7 @@ package com.zxz.www.base.net.download;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
