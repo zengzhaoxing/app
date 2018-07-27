@@ -1,15 +1,10 @@
 package com.zxz.www.base.app;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-
-import com.zxz.www.base.R;
 import com.zxz.www.base.utils.ViewUtil;
 
 
@@ -31,8 +26,8 @@ public abstract class BaseFragment extends Fragment {
         return null;
     }
 
-    public void goBack() {
-        if (mBaseActivity != null && isAdded()) {
+    public final void goBack() {
+        if (isAdded() && isCurrentFragment()) {
             mBaseActivity.closeCurrentFragment();
         }
     }
@@ -60,6 +55,10 @@ public abstract class BaseFragment extends Fragment {
             ViewUtil.interceptTouchEvent(view);
         }
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    public final boolean isCurrentFragment() {
+        return mBaseActivity != null && this == mBaseActivity.mCurrentFragment;
     }
 
 }

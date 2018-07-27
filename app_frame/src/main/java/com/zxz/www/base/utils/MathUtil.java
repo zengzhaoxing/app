@@ -68,4 +68,13 @@ public class MathUtil {
         return hs + mins + ss;
     }
 
+    public  static <T> boolean contains(T[] arr,T t) {
+        for(int i = 0 ;arr != null && i < arr.length;i++) {
+            if (arr[i] == t) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

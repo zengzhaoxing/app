@@ -1,22 +1,23 @@
 package com.zxz.www.base.app;
 
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.zxz.www.base.R;
 import com.zxz.www.base.utils.GetNativeBitmapSDK;
 import com.zxz.www.base.utils.KeyBoardUtil;
+import com.zxz.www.base.utils.MathUtil;
 import com.zxz.www.base.utils.ViewUtil;
 import com.zxz.www.base.view.LoadingView;
 
 
 public abstract class BaseActivity extends AppCompatActivity {
 
-    private BaseFragment mCurrentFragment;
+    BaseFragment mCurrentFragment;
 
     private FragmentManager mFragmentManager;
 
@@ -95,9 +96,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public final void replaceFragmentWithAnim(BaseFragment baseFragment,final int enterAnim, final int exitAnim) {
+        closeCurrentFragment();
+        openNewFragmentWithAnim(baseFragment,enterAnim,exitAnim);
+    }
+
     public final void goHome() {
-        int count = mFragmentManager.getBackStackEntryCount();
-        for(int i = 0;i < count - 1;i++) {
+        while (!isHome()) {
             closeCurrentFragment();
         }
     }
@@ -106,16 +111,10 @@ public abstract class BaseActivity extends AppCompatActivity {
         return mCurrentFragment instanceof MainFragment;
     }
 
-    public final void goBackTo(Class<? extends BaseFragment> cls) {
-        while (mCurrentFragment != null && !isHome() && !mCurrentFragment.getClass().getName().equals(cls.getName())) {
-            closeCurrentFragment();
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mFragmentManager = getSupportFragmentManager();
+        mFragmentManager = getFragmentManager();
         SDKAgent.getInstance().doInMainActivityCreate(savedInstanceState,this);
         setContentView(R.layout.layout_app_frame);
         mLoadingView = (LoadingView) findViewById(R.id.loading_view);
@@ -160,7 +159,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         SDKAgent.getInstance().doInMainActivityResume();
     }
 
-    BaseFragment getCurrentFragment() {
+    public final BaseFragment getCurrentFragment() {
         return mCurrentFragment;
     }
 
@@ -191,5 +190,45 @@ public abstract class BaseActivity extends AppCompatActivity {
         return  mLoadingView.getVisibility() == View.VISIBLE;
     }
 
+    public final void closeTopFragment(Class<? extends BaseFragment>... cls) {
+
+        while (mCurrentFragment != null) {
+            if (MathUtil.contains(cls,mCurrentFragment.getClass())) {
+                closeCurrentFragment();
+            } else {
+                return;
+            }
+        }
+    }
+
+    public final BaseFragment findFragment(Class<? extends BaseFragment> cls) {
+        BaseFragment fragment = mCurrentFragment;
+        while (fragment != null) {
+            if (fragment.getClass() == cls) {
+                return fragment;
+            } else {
+                fragment = fragment.mPreFragment;
+            }
+        }
+        return null;
+    }
+
+    public final boolean hasFragment(Class<? extends BaseFragment> cls) {
+        BaseFragment fragment = mCurrentFragment;
+        while (fragment != null) {
+            if (fragment.getClass() == cls) {
+                return true;
+            } else {
+                fragment = fragment.mPreFragment;
+            }
+        }
+        return false;
+    }
+
+    public final void goBackToFragment(Class<? extends BaseFragment> cls) {
+        while (mCurrentFragment != null && !isHome() && !mCurrentFragment.getClass().getName().equals(cls.getName())) {
+            closeCurrentFragment();
+        }
+    }
 
 }
