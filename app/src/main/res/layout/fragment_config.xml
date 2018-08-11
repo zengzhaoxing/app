@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+              android:background="@color/ground"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/blue"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设备配置"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:layout_centerInParent="true"
+            />
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/back"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:id="@+id/back25"
+            />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/a100px"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:textSize="@dimen/a30px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="push_id"
+            android:textColor="@color/text_name"
+            android:layout_marginLeft="10dp"/>
+
+        <EditText
+            android:id="@+id/tv_config_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" "
+            android:layout_alignParentRight="true"
+            android:textColor="@color/text_content"
+            android:layout_marginRight="10dp"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#50e1e1e1"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/a100px"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:textSize="@dimen/a30px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="push_key"
+            android:textColor="@color/text_name"
+            android:layout_marginLeft="10dp"/>
+
+        <EditText
+            android:id="@+id/tv_config_key"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" "
+            android:layout_alignParentRight="true"
+            android:textColor="@color/text_content"
+            android:layout_marginRight="10dp"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#50e1e1e1"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/a100px"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:textSize="@dimen/a30px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="push_user_name"
+            android:textColor="@color/text_name"
+            android:layout_marginLeft="10dp"/>
+
+        <EditText
+            android:id="@+id/tv_config_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" "
+            android:layout_alignParentRight="true"
+            android:textColor="@color/text_content"
+            android:layout_marginRight="10dp"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#50e1e1e1"/>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#50e1e1e1" >
+
+
+        <Button
+
+            android:id="@+id/btn_config_xiugai"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@mipmap/background"/>
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+</LinearLayout>

@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/text_bu_screen_choice"
+        android:text="支付方式"/>
+
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/bu_screen_zhifubao"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:background="@drawable/bu_screen_choice"
+            android:text="支付宝"
+            android:textColor="@drawable/text_screen_choice" />
+
+        <TextView
+            android:id="@+id/bu_screen_weixin"
+            android:text="微信"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:background="@drawable/bu_screen_choice"
+            android:textColor="@drawable/text_screen_choice" />
+
+        <TextView
+            android:id="@+id/bu_screen_jingdong"
+            android:text="京东"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/bu_screen_choice"
+            android:textColor="@drawable/text_screen_choice" />
+
+        <TextView
+            android:id="@+id/bu_screen_yinlian"
+            android:text="银联"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/bu_screen_choice"
+            android:textColor="@drawable/text_screen_choice" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/bu_screen_yizhifu"
+            android:text="翼支付"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/bu_screen_choice"
+            android:textColor="@drawable/text_screen_choice" />
+
+        <TextView
+            android:id="@+id/bu_screen_kuaijiea"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:text="快捷大额"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/bu_screen_choice"
+            android:textColor="@drawable/text_screen_choice"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:background="#00000000" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:background="#00000000" />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:background="#73d7d7d7"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/text_bu_screen_choice"
+        android:text="支付状态"/>
+
+    <LinearLayout
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/bu_screen_chenggong"
+            android:text="收款成功"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/bu_screen_choice"
+            android:textColor="@drawable/text_screen_choice" />
+
+        <TextView
+            android:id="@+id/bu_screen_weizhifu"
+            android:text="未支付"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/bu_screen_choice"
+            android:textColor="@drawable/text_screen_choice" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:background="#00000000" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_marginRight="10dp"
+            android:background="#00000000" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dip"
+        android:layout_marginTop="16dp"
+        android:background="#00000000">
+
+        <Button
+            android:id="@+id/bu_reset"
+            android:layout_width="90dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/bu_reset_seletor"
+            android:textSize="15sp"
+            android:text="重置"
+            android:textColor="#000000"/>
+
+        <Button
+            android:id="@+id/tx_finish"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="确定"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:background="@drawable/bu_screen_seletor"/>
+
+    </LinearLayout>
+
+</LinearLayout>

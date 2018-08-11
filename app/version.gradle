@@ -1,0 +1,6 @@
+ext {
+    appVersionCode = 13
+    appVersionName = "2.3.3"
+    appName = appVersionName + ".apk"
+}
+

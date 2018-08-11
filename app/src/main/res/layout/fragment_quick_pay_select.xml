@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/ground"
+              android:baselineAligned="false"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/blue"
+
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="快捷收款"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            />
+
+        <ImageView
+            android:id="@+id/back31"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:src="@mipmap/back"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/a100px"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/a28px"
+            android:text="金额"
+            android:textColor="#333333"
+            android:textSize="@dimen/a30px"
+            />
+
+        <TextView
+            android:id="@+id/quick_payment_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/a28px"
+            android:text="￥1200元"
+            android:textColor="#333333"
+            android:textSize="@dimen/a30px"
+
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/quick_payment_selectcard"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/a120px"
+        android:layout_marginTop="@dimen/a2px"
+        android:background="@color/white">
+
+        <RelativeLayout
+            android:id="@+id/card_info_ll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ImageView
+                android:id="@+id/quick_payment_selectcard_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/a28px"
+                android:background="@mipmap/yhkpic"/>
+
+            <TextView
+                android:id="@+id/card_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginLeft="@dimen/a20px"
+                android:layout_marginTop="10dp"
+                android:layout_toRightOf="@+id/quick_payment_selectcard_pic"
+                android:text="中国农业银行"
+                android:textColor="#333333"
+                android:textSize="@dimen/a30px"
+                />
+
+            <TextView
+                android:id="@+id/card_no_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="@dimen/a20px"
+                android:layout_toRightOf="@+id/quick_payment_selectcard_pic"
+                android:text="尾号0917储蓄卡"
+                android:textColor="#666666"
+                android:textSize="@dimen/a28px"/>
+
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/a28px"
+            android:background="@mipmap/zhishijiantou"/>
+
+        <TextView
+            android:id="@+id/no_card_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/a28px"
+            android:text="请选择信用卡"
+            android:textColor="#333333"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:orientation="horizontal"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/a28px"
+            android:src="@mipmap/logo"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="支付方式"
+            android:textColor="#333333"
+            android:textSize="@dimen/a30px"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="金额范围"
+            android:textColor="#333333"
+            android:textSize="@dimen/a30px"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="手续费用"
+            android:textColor="#333333"
+            android:textSize="@dimen/a30px"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pay_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_gray"/>
+
+    <com.zxz.www.base.view.corner.ProgressButton
+        android:id="@+id/quick_payment_sure"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/a100px"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="@dimen/a250px"
+        app:enable_bg_color="@color/blue"
+        app:progress_position="middle"
+        app:text="确认"
+        app:loading_text="正向银行请求交易"
+        app:text_color="@color/white"
+        app:text_size="15sp"
+        />
+
+
+</LinearLayout>

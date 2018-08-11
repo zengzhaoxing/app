@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:background="@color/black_30"
+                android:orientation="vertical">
+
+        <com.zhaoxing.view.sharpview.SharpLinearLayout
+            android:layout_width="260dp"
+            android:layout_height="160dp"
+            android:orientation="vertical"
+            android:layout_marginTop="190dp"
+            android:layout_centerHorizontal="true"
+            android:gravity="center_vertical"
+            app:backgroundColor="@color/white"
+            app:radius="5dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/pengyouquan2"/>
+
+            <TextView
+                android:id="@+id/share_text_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:layout_gravity="center_horizontal"
+                android:textSize="12sp"
+                android:text="@string/share"
+                android:textColor="@color/text_black"/>
+            
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+                
+                <com.zhaoxing.view.sharpview.SharpTextView
+                    android:id="@+id/no_share_tv"
+                    android:layout_width="110dp"
+                    android:layout_height="35dp"
+                    android:layout_marginRight="10dp"
+                    app:radius="3dp"
+                    app:border="1dp"
+                    app:borderColor="@color/line_gray"
+                    android:textColor="@color/text_gray"
+                    app:backgroundColor="@color/transparent"
+                    android:text="@string/no_share"
+                    android:textSize="15sp"
+                    android:gravity="center"/>
+
+                <com.zhaoxing.view.sharpview.SharpTextView
+                    android:id="@+id/share_tv"
+                    android:layout_width="110dp"
+                    android:layout_height="35dp"
+                    app:radius="3dp"
+                    app:border="1dp"
+                    app:borderColor="@color/line_gray"
+                    android:textColor="@color/white"
+                    app:backgroundColor="@color/blue"
+                    android:text="@string/ok_share"
+                    android:textSize="15sp"
+                    android:gravity="center"/>
+                
+            </LinearLayout>
+
+
+
+        </com.zhaoxing.view.sharpview.SharpLinearLayout>
+
+</RelativeLayout>

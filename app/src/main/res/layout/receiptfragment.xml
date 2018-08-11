@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <com.example.admin.fastpay.view.Calculater
+        android:id="@+id/calculater_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
+
+
+    </com.example.admin.fastpay.view.Calculater>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/saoyisao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/a28px"
+            android:layout_weight="1"
+            android:text="扫一扫收款"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:background="@mipmap/background"/>
+        <Button
+            android:id="@+id/erweima"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/a28px"
+            android:layout_weight="1"
+            android:layout_marginRight="@dimen/a28px"
+            android:text="二维码收款"
+            android:textColor="#ffffff"
+            android:background="@mipmap/background"
+            android:textSize="20dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginTop="@dimen/a30px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/cardpay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/a28px"
+            android:layout_weight="1"
+            android:text="刷卡收款"
+            android:textColor="#ffffff"
+            android:textSize="20dp"
+            android:background="@mipmap/background"/>
+        <Button
+            android:id="@+id/fastpay"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/a28px"
+            android:layout_weight="1"
+            android:layout_marginRight="@dimen/a28px"
+            android:text="快捷收款"
+            android:textColor="#ffffff"
+            android:background="@mipmap/background"
+            android:textSize="20dp"
+            android:layout_marginBottom="@dimen/a30px"
+            />
+    </LinearLayout>
+</LinearLayout>

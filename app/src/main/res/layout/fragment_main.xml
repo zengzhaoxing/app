@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:id="@+id/fragment"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="@dimen/a10px"
+            android:background="@color/gray"
+            />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+
+            android:id="@+id/radio_group"
+            android:orientation="horizontal"
+            >
+            <RadioButton
+                android:id="@+id/home_fragment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:checked="true"
+                android:text="首页"
+                android:textSize="10sp"
+                android:layout_weight="1"
+
+                android:button="@null"
+                android:gravity="center"
+
+                android:textColor="@drawable/rb_color_selector"
+                android:drawableTop="@drawable/rb_one_selector"
+                />
+
+            <RadioButton
+                android:id="@+id/receipt_fragment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="收款"
+                android:textSize="10sp"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:textColor="@drawable/rb_color_selector"
+                android:drawableTop="@drawable/rb_two_selector"
+                />
+
+            <RadioButton
+                android:id="@+id/invite_fragment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="邀请"
+                android:textSize="10sp"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:textColor="@drawable/rb_color_selector"
+                android:drawableTop="@drawable/rb_three_selector"
+                />
+            <RadioButton
+                android:id="@+id/me_fragment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:text="我的"
+                android:textSize="10sp"
+                android:layout_weight="1"
+                android:button="@null"
+                android:gravity="center"
+                android:textColor="@drawable/rb_color_selector"
+                android:drawableTop="@drawable/rb_four_selector"
+                />
+
+        </RadioGroup>
+
+    </LinearLayout>
+
+    <com.zxz.www.base.view.gallery.GalleryView
+        android:id="@+id/leading_gv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:allowAuto="false"
+        app:allowManual="false"
+        app:showDot="false">
+
+    </com.zxz.www.base.view.gallery.GalleryView>
+
+</FrameLayout>

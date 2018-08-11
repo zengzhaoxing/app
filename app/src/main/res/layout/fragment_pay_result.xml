@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:background="@color/ground">
+
+    <ImageView
+        android:id="@+id/result_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:src="@drawable/chenggong"/>
+
+    <TextView
+        android:id="@+id/error_text"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="支付信息："
+        android:textColor="#1d1d1d"
+        android:layout_marginBottom="3dp"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/error_tv"
+        android:layout_width="230dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="20dp"
+        android:text="dddddddddd"
+        android:textColor="#717171"
+        android:textSize="15sp"/>
+
+    <Button
+        android:id="@+id/result_btn"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="确定"
+        android:background="@color/blue"
+        android:textColor="#ffffff"/>
+
+</LinearLayout>

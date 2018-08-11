@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/white">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/blue"
+        android:text="@string/certification"
+        android:textColor="@color/white"
+        android:textSize="17sp"
+        android:gravity="center"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/shangjia"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingRight="10dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_black"
+                android:text="@string/merchants_certification"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_gray"
+                android:layout_marginTop="3dp"
+                android:text="@string/merchants_certification_notice"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+        
+        <com.zhaoxing.view.sharpview.SharpTextView
+            android:id="@+id/merchants_btn"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:textColor="@color/blue"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:text="@string/add"
+            app:border="1dp"
+            app:borderColor="@color/blue"
+            app:radius="12.5dp"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_gray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/shiming"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingRight="10dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_black"
+                android:text="@string/name_certification"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_gray"
+                android:layout_marginTop="3dp"
+                android:text="@string/name__certification_notice"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+        <com.zhaoxing.view.sharpview.SharpTextView
+            android:id="@+id/name_btn"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:textColor="@color/blue"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:text="@string/add"
+            app:border="1dp"
+            app:borderColor="@color/blue"
+            app:radius="12.5dp"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_gray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/bind"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingRight="10dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_black"
+                android:text="@string/bind_bank"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_gray"
+                android:layout_marginTop="3dp"
+                android:text="@string/bind_bank_notice"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+        <com.zhaoxing.view.sharpview.SharpTextView
+            android:id="@+id/bind_btn"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:textColor="@color/blue"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:text="@string/add"
+            app:border="1dp"
+            app:borderColor="@color/blue"
+            app:radius="12.5dp"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_gray"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/bind"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingRight="10dp"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_black"
+                android:text="@string/add_bank_card"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/text_gray"
+                android:layout_marginTop="3dp"
+                android:text="@string/add_bank_card_notice"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+
+        <com.zhaoxing.view.sharpview.SharpTextView
+            android:id="@+id/add_card_btn"
+            android:layout_width="50dp"
+            android:layout_height="25dp"
+            android:textColor="@color/blue"
+            android:textSize="12sp"
+            android:gravity="center"
+            android:text="@string/add"
+            app:border="1dp"
+            app:borderColor="@color/blue"
+            app:radius="12.5dp"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/line_gray"/>
+
+</LinearLayout>

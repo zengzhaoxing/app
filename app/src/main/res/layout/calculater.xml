@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        layout="@layout/count"
+        android:layout_weight="7"/>
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="3">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <ImageButton
+                android:id="@+id/ib_number1"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:src="@mipmap/one"
+                android:gravity="center"
+                android:background="@drawable/calculater"
+               />
+            <ImageButton
+                android:id="@+id/ib_number2"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/calculater"
+                android:gravity="center"
+                android:src="@mipmap/two" />
+            <ImageButton
+                android:id="@+id/ib_number3"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/calculater"
+                android:gravity="center"
+                android:src="@mipmap/three" />
+
+
+
+        </TableRow>
+
+        <TableRow android:orientation="vertical"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/ib_number4"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/calculater"
+                android:gravity="center"
+                android:src="@mipmap/four" />
+
+            <ImageButton
+                android:id="@+id/ib_number5"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/calculater"
+                android:gravity="center"
+                android:src="@mipmap/five" />
+            <ImageButton
+                android:id="@+id/ib_number6"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/calculater"
+                android:gravity="center"
+                android:src="@mipmap/six" />
+
+            <!--<ImageButton-->
+                <!--android:id="@+id/ib_qingkong"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@drawable/calculater"-->
+                <!--android:gravity="center"-->
+                <!--android:src="@drawable/shuc1" />-->
+
+        </TableRow>
+
+        <TableRow android:orientation="vertical"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/ib_number7"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/calculater"
+                android:gravity="center"
+                android:src="@mipmap/seven" />
+            <ImageButton
+                android:id="@+id/ib_number8"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/calculater"
+                android:gravity="center"
+                android:src="@mipmap/eight" />
+            <ImageButton
+                android:id="@+id/ib_number9"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/calculater"
+                android:gravity="center"
+                android:src="@mipmap/nine" />
+
+            <!--<ImageButton-->
+                <!--android:id="@+id/ib_zengjia"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@drawable/calculater"-->
+                <!--android:gravity="center"-->
+                <!--android:src="@drawable/jia" />-->
+
+        </TableRow>
+
+        <TableRow android:orientation="vertical"
+            android:layout_weight="1">
+
+            <ImageButton
+                android:id="@+id/ib_number0"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/calculater"
+                android:gravity="center"
+                android:src="@mipmap/ling" />
+
+            <ImageButton
+                android:id="@+id/ib_xiaoshu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/calculater"
+                android:gravity="center"
+                android:src="@mipmap/zero" />
+
+            <ImageButton
+                android:id="@+id/ib_shanchu"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/calculater"
+                android:gravity="center"
+                android:src="@mipmap/chexiao" />
+
+            <!--<ImageButton-->
+                <!--android:id="@+id/ib_number00"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@drawable/calculater"-->
+                <!--android:gravity="center"-->
+                <!--android:src="@drawable/shu0000" />-->
+
+            <!--<ImageButton-->
+                <!--android:id="@+id/ib_dengyu"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="1"-->
+                <!--android:background="@drawable/calculater"-->
+                <!--android:gravity="center"-->
+                <!--android:src="@drawable/dengyu" />-->
+
+        </TableRow>
+    </TableLayout>
+
+</LinearLayout>

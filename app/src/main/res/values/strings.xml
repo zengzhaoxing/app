@@ -1,3 +1,103 @@
 <resources>
-    <string name="app_name">demo</string>
+
+    <string name="company_website">www.miaodaochina.com</string>
+    <string name="company_phone">020&#8211;28130508</string>
+    <string name="user_protocol">用户协议</string>
+    <string name="user_protocol_url">https://isv.ccmknt.com/app/UserAgreementOfMDSK.html</string>
+    <string name="disclaimer">免责申明</string>
+    <string name="disclaimer_url">https://isv.ccmknt.com/app/DisclaimerOfMDSK.html</string>
+    <string name="consumer_protocol">消费者协议</string>
+    <string name="consumer_protocol_url">https://isv.ccmknt.com/app/ConsumerAgreementOfMDSK.html</string>
+
+    <string name="app_name">秒到收款</string>
+    <string name="str_scan_title">扫一扫</string>
+    <string name="str_open_light">开启闪光灯</string>
+    <string name="str_close_light">关闭闪光灯</string>
+    <string name="str_scan_hint">取景框对准二维码, 即可自动扫描</string>
+    <string name="viewfinderview_status_text1">将二维码/条码放入取景框内</string>
+    <string name="viewfinderview_status_text2">即可自动扫描</string>
+
+
+    <!--版本更新-->
+    <string name="hello">Hello World, MainActivity!</string>
+    <string name="soft_update_no">已经是最新版本</string>
+    <string name="soft_update_title">软件更新</string>
+    <string name="soft_update_info">检测到新版本，立即更新吗</string>
+    <string name="soft_update_updatebtn">更新</string>
+    <string name="soft_update_later">稍后更新</string>
+    <string name="soft_updating">正在更新</string>
+    <string name="soft_update_cancel">取消</string>
+
+    <!--认证中心-->
+    <string name="certification">认证中心</string>
+    <string name="merchants_certification">商家认证</string>
+    <string name="merchants_certification_notice">必须输入商家名称，没上传营业执照不能使用二维码收款</string>
+    <string name="name_certification">实名认证</string>
+    <string name="name__certification_notice">必须完成实名所有内容</string>
+    <string name="bind_bank">到账银行卡绑定</string>
+    <string name="bind_bank_notice">到账银行卡绑定一张常用银行卡，用于商家日常收款到账。</string>
+    <string name="add_bank_card">添加信用卡</string>
+    <string name="bank_card">信用卡</string>
+    <string name="add_bank_card_notice">用于快捷收款，识别持卡人真实身份。</string>
+    <string name="add">添加</string>
+    <string name="see">查看</string>
+    <string name="ok">确定</string>
+    <string name="edit">编辑</string>
+
+    <string name="certified">已认证</string>
+    <string name="name">真实姓名</string>
+    <string name="name_hint">请输入真实姓名</string>
+    <string name="id_card_no">身份证号</string>
+    <string name="card_no_hint">请输入18位身份证号</string>
+    <string name="id_card_organ">发证机关</string>
+    <string name="id_card_organ_hint">请输入发证机关</string>
+    <string name="id_card_date">有效期限</string>
+    <string name="id_card_date_hint">请选择有效期限</string>
+    <string name="bank_date_hint">输入银行卡四位数有效日期，如：0222</string>
+    <string name="half_photo">半身手持身份证照</string>
+    <string name="front_photo">身份证正面照</string>
+    <string name="back_photo">身份证反面照</string>
+
+    <string name="bank_card_no">银行卡号</string>
+    <string name="bank_card_no_hint">请输入银行卡号</string>
+    <string name="bank_cvv">CVV2验证码</string>
+    <string name="bank_cvv_hint">输入背面三位数CVV2码，如：365</string>
+    <string name="bank_name">开户行</string>
+    <string name="bank_name_hint">请选择开户行</string>
+    <string name="location">所属省市</string>
+    <string name="location_hint">请选择所属省市</string>
+    <string name="bank_phone">手机号码</string>
+    <string name="bank_phone_hint">请输入预留手机号码</string>
+    <string name="code">验证码</string>
+    <string name="code_hint">请输入验证码</string>
+    <string name="bank_photo">上传银行卡正面照</string>
+    <string name="bank_photo_hint">请上传银行卡正面照</string>
+    <string name="bank_card_notice">温馨提示：绑定只做为交易资金到账所用，我司及工作人员不会向您索取银行卡密码，请勿向任何人泄露取款密码！</string>
+    <string name="credit_card_notice">信用卡只做为核实持卡人身份，不会有任何安全风险</string>
+
+    <string name="shop_code">信用代码</string>
+    <string name="shop_code_hint">请输入信用代码</string>
+    <string name="shop_address">店铺地址</string>
+    <string name="shop_address_hint">请输入店铺地址</string>
+    <string name="shop_name">店铺名称</string>
+    <string name="shop_name_hint">请输入店铺名称</string>
+    <string name="shop_type_hint">请输入经营性质</string>
+    <string name="shop_type">经营性质</string>
+    <string name="shop_cert_photo">营业执照</string>
+    <string name="room_photo">场所照</string>
+    <string name="door_photo">头门照</string>
+    <string name="shop_photo">营业执照</string>
+    <string name="shop_photo_hint">请上传门店执照</string>
+    <string name="change_config">修改配置</string>
+    
+    <!--pay-->
+    <string name="payee_name">收款人</string>
+    <string name="payee_amount">手续费用</string>
+    <string name="payee_fax">额外手续费</string>
+    <string name="payee_card">收款卡号</string>
+    <string name="payer_card">付款卡号</string>
+    <string name="ok_pay">确认支付</string>
+    <string name="ok_share">分享</string>
+    <string name="no_share">不免</string>
+    <string name="share">分享朋友圈免%s元手续费</string>
 </resources>

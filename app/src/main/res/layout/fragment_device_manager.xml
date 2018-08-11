@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/ground"
+              android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/blue">
+
+        <TextView
+
+
+            android:id="@+id/management_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="设备管理"
+            android:textColor="@color/white"
+            android:textSize="17sp"/>
+
+        <ImageView
+            android:id="@+id/back21"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:src="@mipmap/back"/>
+
+        <ImageView
+            android:id="@+id/management_config"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:src="@drawable/seting"/>
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        >
+
+        <ListView
+            android:id="@+id/lv_management1"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:divider="@color/ground"
+            android:dividerHeight="1dp"
+            ></ListView>
+
+        <TextView
+            android:id="@+id/tv_problem_tishi3"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="暂无内容"
+            android:visibility="gone"/>
+
+
+    </LinearLayout>
+
+
+    <Button
+
+
+        android:id="@+id/add_management"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/a100px"
+        android:layout_below="@+id/lv_management1"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="20dp"
+        android:background="@mipmap/background"
+        android:text="添加设备"
+        android:textColor="@color/white"
+
+        />
+
+
+</LinearLayout>
+

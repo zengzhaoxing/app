@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@mipmap/ground"
+       android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        >
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="@dimen/a35px"
+            android:layout_height="wrap_content">
+
+
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:src="@mipmap/yhkpic"
+
+                android:layout_marginLeft="@dimen/a20px"
+                android:id="@+id/bankcard_icon"
+
+                />
+
+            <TextView
+                android:id="@+id/bankcard_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/bankcard_icon"
+                android:textSize="@dimen/a34px"
+                android:layout_centerVertical="true"
+                android:text="中国农业银行"
+                android:textColor="#333333"
+                android:layout_marginLeft="@dimen/a20px"
+                />
+
+        </RelativeLayout>
+
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="25dp"
+            android:layout_marginLeft="65dp"
+            android:layout_marginRight="65dp"
+            android:orientation="horizontal"
+            >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="****"
+                android:textSize="@dimen/a40px"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="****"
+                android:textSize="@dimen/a40px"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="****"
+                android:textSize="@dimen/a40px"
+                android:layout_gravity="center_vertical"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="3659"
+                android:textSize="@dimen/a40px"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/bankcard_munber"
+                />
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+</LinearLayout>

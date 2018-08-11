@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/ground"
+              android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/blue"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="收银员管理"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            />
+
+        <ImageView
+            android:id="@+id/back7"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:src="@mipmap/back"
+            />
+    </RelativeLayout>
+
+    <ListView
+        android:id="@+id/lv_annex"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:divider="@color/ground"
+        android:dividerHeight="1dp"
+        android:visibility="gone"
+        />
+
+    <TextView
+        android:id="@+id/tv_problem_tishi1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="暂无内容"
+        />
+
+
+</LinearLayout>

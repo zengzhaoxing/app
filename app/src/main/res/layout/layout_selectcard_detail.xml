@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/a110px"
+        android:background="@color/white"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@mipmap/yhkpic"
+            android:layout_marginLeft="@dimen/a28px"
+            android:layout_centerVertical="true"
+            android:id="@+id/selectcard_card_icon"
+
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/selectcard_card_icon"
+            android:layout_marginTop="7dp"
+            android:text="中国农业银行"
+            android:textColor="#333333"
+            android:id="@+id/selectcard_card_name"
+            android:layout_marginLeft="10dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/selectcard_card_icon"
+           android:layout_alignParentBottom="true"
+            android:layout_marginBottom="7dp"
+            android:layout_marginLeft="10dp"
+            android:text="尾号0971 储蓄卡"
+            android:id="@+id/selectcard_card_number"
+            />
+
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/weixuanzhong"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/a28px"
+            android:id="@+id/selectcard_card_zhuangtai"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:textColor="@color/bill_text"
+            />
+    </RelativeLayout>
+
+
+</LinearLayout>

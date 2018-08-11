@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/ground"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/blue"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="扫码收款"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:layout_centerInParent="true"
+            />
+        <ImageView
+            android:id="@+id/back1"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/back"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/a700px"
+        android:layout_marginLeft="@dimen/a20px"
+        android:layout_marginRight="@dimen/a20px"
+        android:layout_marginTop="@dimen/a40px"
+        android:background="#ffffff"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="金额"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/a40px"
+            android:textSize="17sp"
+            android:textColor="#333333"
+            android:id="@+id/tv_code_price"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:background="#e2e2e2"
+            android:layout_below="@id/tv_code_price"/>
+
+        <ImageView
+            android:layout_width="@dimen/a400px"
+            android:layout_height="@dimen/a400px"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tv_code_price"
+            android:layout_marginTop="@dimen/a100px"
+            android:src="@drawable/morenma"
+            android:id="@+id/iv_code_change"
+
+            />
+
+
+    </RelativeLayout>
+
+
+
+</LinearLayout>

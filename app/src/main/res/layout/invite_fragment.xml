@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/sv_fixed_collection1"
+    android:background="@color/ground"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/blue"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我的邀请码"
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:layout_centerInParent="true"
+            />
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/back"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:visibility="gone"
+        android:id="@+id/back10"
+        />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/a660px"
+        android:layout_marginLeft="@dimen/a20px"
+        android:layout_marginRight="@dimen/a20px"
+        android:layout_marginTop="@dimen/a20px"
+        android:background="#ffffff"
+        android:id="@+id/jietu"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=" "
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/a60px"
+            android:textSize="17sp"
+            android:textColor="#333333"
+            android:id="@+id/inviteer_name"
+            />
+
+        <ImageView
+            android:layout_width="@dimen/a450px"
+            android:layout_height="@dimen/a450px"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/inviteer_name"
+            android:layout_marginTop="@dimen/a40px"
+
+            android:id="@+id/inviteer_pic"
+
+            />
+
+
+    </RelativeLayout>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="我要分享"
+        android:layout_marginTop="@dimen/a100px"
+        android:layout_marginLeft="@dimen/a30px"
+        android:layout_marginRight="@dimen/a30px"
+        android:background="@mipmap/fengxiang"
+        android:textColor="#219af8"
+        android:id="@+id/invite_fragment_button"
+        />
+
+</LinearLayout>

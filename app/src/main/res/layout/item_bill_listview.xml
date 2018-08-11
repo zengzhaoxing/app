@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_bill_item"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:id="@+id/ll_ll"
+            android:layout_width="60dp"
+            android:gravity="center"
+            android:layout_height="60dp">
+
+            <ImageView
+                android:id="@+id/iv_bill"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:src="@drawable/jiazai"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_toRightOf="@id/ll_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_zhifu_leixing"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="微信支付收款"
+                android:layout_marginTop="8dp"
+                android:textSize="15dp"
+                android:textColor="#000000"/>
+
+            <TextView
+                android:id="@+id/tv_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="22:00:00"
+                android:textSize="12dp"
+                android:layout_marginTop="8dp"
+                android:textColor="#000000"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:orientation="vertical"
+            android:paddingRight="10dp">
+
+            <LinearLayout
+                android:id="@+id/ll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:alpha="0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/tv_jine"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:textSize="15dp"
+                    android:text="￥0.01"
+                    android:textColor="@color/bill_text" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+                <TextView
+                    android:alpha="0"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <TextView
+                    android:id="@+id/tv_zhuangtai"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="收款成功"
+                    android:textSize="12dp"
+                    android:textColor="@color/green" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <TextView
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:background="#64e1e1e1"/>
+
+</LinearLayout>

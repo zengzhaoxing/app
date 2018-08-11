@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/cashier_lv_rl"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/a100px"
+        android:background="@color/white"
+
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/a30px"
+            android:text=" "
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/a28px"
+            android:textColor="#333333"
+            android:id="@+id/cashier_lv_name"
+
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/zhishijiantou"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/a28px"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/a30px"
+            android:text=" "
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="190dp"
+            android:textColor="#999999"
+            android:id="@+id/cashier_lv_daymoney"
+
+            />
+
+
+
+
+
+    </RelativeLayout>
+
+
+</LinearLayout>
