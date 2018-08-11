@@ -28,7 +28,7 @@ public abstract class BaseFragment extends Fragment {
 
     public final void goBack() {
         if (isAdded() && isCurrentFragment()) {
-            mBaseActivity.closeCurrentFragment();
+            mBaseActivity.doGoBack();
         }
     }
 

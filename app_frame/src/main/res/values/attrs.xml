@@ -105,4 +105,15 @@
         <attr name="extraText" format="string"/>
     </declare-styleable>
 
+    <declare-styleable name="ImageTextView">
+        <attr name="text"/>
+        <attr name="image" format="reference"/>
+        <attr name="disable_image" format="reference"/>
+        <attr name="showCircle" format="boolean"/>
+        <attr name="textColor" format="color"/>
+        <attr name="disable_textColor" format="color"/>
+        <attr name="textSize" format="dimension"/>
+        <attr name="margin" format="dimension"/>
+    </declare-styleable>
+
 </resources>

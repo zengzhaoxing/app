@@ -39,17 +39,25 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     @Override
-    public  void onBackPressed() {
+    public void onBackPressed() {
+        pressBackKey();
+    }
+
+    public final void pressBackKey() {
         if (mCurrentFragment == null) {
             super.onBackPressed();
             return;
         }
         if (!mCurrentFragment.handleBackEvent()) {
-            if (mCurrentFragment == mMainFragment) {
-                finish();
-            } else {
-                closeCurrentFragment();
-            }
+            doGoBack();
+        }
+    }
+
+    public final void doGoBack() {
+        if (isHome()) {
+            finish();
+        } else {
+            closeCurrentFragment();
         }
     }
 
@@ -108,7 +116,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public final boolean isHome() {
-        return mCurrentFragment instanceof MainFragment;
+        return mCurrentFragment == mMainFragment;
     }
 
     @Override
