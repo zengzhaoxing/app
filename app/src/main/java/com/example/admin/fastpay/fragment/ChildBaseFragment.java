@@ -3,12 +3,13 @@ package com.example.admin.fastpay.fragment;
 import android.os.Bundle;
 
 import com.zxz.www.base.app.BaseFragment;
+import com.zxz.www.base.app.MainChildFragment;
 
 /**
  * Created by 曾宪梓 on 2017/12/30.
  */
 
-abstract public class ChildBaseFragment extends BaseFragment {
+abstract public class ChildBaseFragment extends MainChildFragment {
 
     @Override
     public boolean handleBackEvent() {

@@ -44,6 +44,11 @@
     <string name="ok">确定</string>
     <string name="edit">编辑</string>
 
+    <string name="home">首页</string>
+    <string name="shoukuan">收款</string>
+    <string name="yaoqing">邀请</string>
+    <string name="me">我的</string>
+
     <string name="certified">已认证</string>
     <string name="name">真实姓名</string>
     <string name="name_hint">请输入真实姓名</string>

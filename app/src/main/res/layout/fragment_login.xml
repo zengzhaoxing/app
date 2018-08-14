@@ -30,13 +30,13 @@
             android:src="@drawable/geren"/>
 
         <EditText
-            android:id="@+id/user_phone"
+            android:id="@+id/user_phone_et"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:background="@null"
             android:hint="商户号/手机号"
-            android:inputType="number"
+            android:inputType="phone"
             android:textCursorDrawable="@null"/>
 
     </LinearLayout>

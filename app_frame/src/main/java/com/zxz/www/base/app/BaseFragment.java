@@ -1,9 +1,12 @@
 package com.zxz.www.base.app;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 import com.zxz.www.base.utils.ViewUtil;
 
@@ -36,13 +39,31 @@ public abstract class BaseFragment extends Fragment {
 
     }
 
+    @TargetApi(23)
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        Log.i("zxz", "onAttach context");
         if (context instanceof BaseActivity) {
             mBaseActivity = (BaseActivity) context;
         }
     }
+
+    /*
+     * Deprecated on API 23
+     * Use onAttachToContext instead
+     */
+    @SuppressWarnings("deprecation")
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        Log.i("zxz", "onAttach activity");
+        if (activity instanceof BaseActivity) {
+            mBaseActivity = (BaseActivity) activity;
+        }
+    }
+
+
 
 
     protected boolean interceptTouchEvent() {

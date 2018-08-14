@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +68,7 @@ public class DefaultMainFragment extends MainFragment implements MainTab.OnItemS
             mainTab.addTab(textIds.get(i),imgIds.get(i),disableImgIds.get(i),mTabTextColor,mDisableTabTextColor);
         }
         switchFragment(mFragments.get(0).getClass());
+        mainTab.setCurrentPosition(0);
         return view;
     }
 
@@ -80,7 +82,7 @@ public class DefaultMainFragment extends MainFragment implements MainTab.OnItemS
                 ft.show(mainChildFragment);
                 mCurrentFragment = fragment;
             } else if (mainChildFragment == null && fragment.getClass() == fragmentClass) {
-                ft.add(fragment, fragment.getClass().getName());
+                ft.add(R.id.fragment_container_frame,fragment, fragment.getClass().getName());
                 mCurrentFragment = fragment;
             }
         }

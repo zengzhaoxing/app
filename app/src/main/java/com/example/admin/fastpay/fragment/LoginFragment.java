@@ -27,7 +27,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class LoginFragment extends BaseFragment implements LoginPresenter.OnLoginListener {
-    @BindView(R.id.user_phone)
+    @BindView(R.id.user_phone_et)
     EditText mUserPhone;
     @BindView(R.id.user_password)
     EditText mUserPassword;
@@ -46,7 +46,7 @@ public class LoginFragment extends BaseFragment implements LoginPresenter.OnLogi
         unbinder = ButterKnife.bind(this, view);
         mLoginPresenter = new LoginPresenter();
         mLoginPresenter.setOnLoginListener(this);
-        mUserPhone.setText((String) SPUtil.get(SPConstant.USER_NAME, ""));
+//        mUserPhone.setText((String) SPUtil.get(SPConstant.USER_NAME, ""));
         return view;
     }
 
