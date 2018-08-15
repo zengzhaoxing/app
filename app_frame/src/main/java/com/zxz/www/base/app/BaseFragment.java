@@ -57,7 +57,7 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.i("zxz", "onAttach activity");
+        Log.i("zxz", "onAttach activity " + getClass().getName());
         if (activity instanceof BaseActivity) {
             mBaseActivity = (BaseActivity) activity;
         }

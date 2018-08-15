@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply from: 'tinker-support.gradle'
 apply from: 'version.gradle'
+//apply plugin: 'com.jakewharton.butterknife'
 android {
     compileSdkVersion 25
     buildToolsVersion "26.0.0"
@@ -88,6 +89,8 @@ android {
 //        compile 'com.github.zengzhaoxing:app:v1.2.0'
         compile(name: 'appkefu_sdk_4', ext: 'aar')
         compile fileTree(include: ['*.jar'], dir: 'libs')
+//        compile 'com.jakewharton:butterknife:8.4.0'
+        annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
 
     }
 }
