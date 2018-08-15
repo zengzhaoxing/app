@@ -20,7 +20,7 @@ public class MainActivity extends BaseActivity {
         DefaultMainFragment fragment = new MainHomeFragment();
         fragment.addFragment(new HomeFragment(),R.mipmap.home1,R.mipmap.home2,R.string.home);
         fragment.addFragment(new ReceiptFragment(),R.mipmap.shoukuan1,R.mipmap.shoukuan2,R.string.shoukuan);
-        fragment.addFragment(new InviteFragment(),R.mipmap.yaoqing1,R.mipmap.shoukuan2,R.string.yaoqing);
+        fragment.addFragment(new InviteFragment(),R.mipmap.yaoqing1,R.mipmap.yaoqing2,R.string.yaoqing);
         fragment.addFragment(new MeFragment(),R.mipmap.me1,R.mipmap.me2,R.string.me);
         fragment.setTabTextColor(ResUtil.getColor(R.color.blue),ResUtil.getColor(R.color.dark));
         return fragment;
