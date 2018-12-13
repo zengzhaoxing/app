@@ -23,6 +23,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     private MainFragment mMainFragment;
 
+    private FragmentRouter mFragmentRouter;
+
     protected abstract MainFragment returnMainFragment();
 
     private LoadingView mLoadingView;
@@ -129,6 +131,8 @@ public abstract class BaseActivity extends AppCompatActivity {
         ViewUtil.interceptTouchEvent(mLoadingView);
         mMainFragment = returnMainFragment();
         openNewFragment(mMainFragment);
+        mFragmentRouter = new FragmentRouter(this);
+        mFragmentRouter.onRouterReady(mMainFragment);
     }
 
     @Override
@@ -147,6 +151,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         SDKAgent.getInstance().doInMainActivityDestroy();
+        mFragmentRouter.onRouterDestroy();
     }
 
     @Override

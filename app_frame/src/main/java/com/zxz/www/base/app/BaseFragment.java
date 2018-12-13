@@ -11,7 +11,7 @@ import android.view.View;
 import com.zxz.www.base.utils.ViewUtil;
 
 
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends Fragment implements UIPage{
 
     protected BaseActivity mBaseActivity;
 
@@ -43,7 +43,6 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        Log.i("zxz", "onAttach context");
         if (context instanceof BaseActivity) {
             mBaseActivity = (BaseActivity) context;
         }
@@ -57,14 +56,10 @@ public abstract class BaseFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        Log.i("zxz", "onAttach activity " + getClass().getName());
         if (activity instanceof BaseActivity) {
             mBaseActivity = (BaseActivity) activity;
         }
     }
-
-
-
 
     protected boolean interceptTouchEvent() {
         return true;
@@ -82,4 +77,9 @@ public abstract class BaseFragment extends Fragment {
         return mBaseActivity != null && this == mBaseActivity.mCurrentFragment;
     }
 
+
+    @Override
+    public void onNotify(Bundle bundle) {
+
+    }
 }

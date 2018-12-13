@@ -6,13 +6,14 @@ import android.view.ViewGroup;
 import android.view.ViewParent;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ViewPagerAdapter extends PagerAdapter {
-    private ArrayList<View> mViewList;
+    private List<View> mViewList;
     private int mCount;
 
-    public ViewPagerAdapter(ArrayList<View> viewList, int count) {
+    public ViewPagerAdapter(List<View> viewList, int count) {
         this.mViewList = viewList;
         this.mCount = mViewList == null ? 0 : count;
     }

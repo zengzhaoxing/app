@@ -97,6 +97,16 @@ public class ViewUtil {
         }
     }
 
+    public static void setChildrenLongClickEnable(ViewGroup parent, boolean enable) {
+        for(int i = 0;parent != null && i < parent.getChildCount();i++) {
+            View view = parent.getChildAt(i);
+            view.setLongClickable(enable);
+            if (view instanceof ViewGroup) {
+                setChildrenEnable((ViewGroup) view,enable);
+            }
+        }
+    }
+
 
 
 }

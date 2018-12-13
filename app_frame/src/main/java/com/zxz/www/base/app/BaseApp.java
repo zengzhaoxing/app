@@ -26,6 +26,7 @@ public class BaseApp extends Application {
         super.onCreate();
         _context = getApplicationContext();
         SDKAgent.getInstance().doInAppCreate(this);
+        registerActivityLifecycleCallbacks(ActivityRouter.getRouter());
     }
 
     public static boolean isFirstInstall() {
