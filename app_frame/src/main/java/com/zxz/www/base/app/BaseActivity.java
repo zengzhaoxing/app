@@ -5,6 +5,7 @@ import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 import com.zxz.www.base.R;
@@ -46,11 +47,7 @@ public abstract class BaseActivity extends AppCompatActivity implements UIPage{
     }
 
     public final void pressBackKey() {
-        if (mCurrentFragment == null) {
-            finish();
-            return;
-        }
-        if (!mCurrentFragment.handleBackEvent()) {
+        if (mCurrentFragment != null && !mCurrentFragment.handleBackEvent()) {
             doGoBack();
         }
     }
@@ -177,14 +174,13 @@ public abstract class BaseActivity extends AppCompatActivity implements UIPage{
     }
 
     public final void closeCurrentFragment() {
-        if (mCurrentFragment != null && mCurrentFragment == mMainFragment) {
-            finish();
-        } else if (mCurrentFragment != null) {
+        if (mCurrentFragment != null) {
             KeyBoardUtil.closeKeyboard(getWindow().getDecorView());
             Bundle bundle = mCurrentFragment.onExit();
             Class cl = mCurrentFragment.getClass();
             mCurrentFragment = mCurrentFragment.mPreFragment;
             mCurrentFragment.onTopFragmentExit(cl,bundle);
+            Log.i("zxz", mCurrentFragment.getClass().getSimpleName() + " mCurrentFragment.onTopFragmentExit");
             mFragmentManager.popBackStack();
         }
     }

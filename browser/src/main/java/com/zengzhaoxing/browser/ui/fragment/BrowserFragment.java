@@ -84,7 +84,7 @@ public class BrowserFragment extends BaseFragment {
 
     MainActivity mMainActivity;
 
-
+    private boolean mRedirect;
 
     /**
      * 视频全屏参数
@@ -93,6 +93,7 @@ public class BrowserFragment extends BaseFragment {
     private View customView;
     private FrameLayout fullscreenContainer;
     private WebChromeClient.CustomViewCallback customViewCallback;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -120,13 +121,17 @@ public class BrowserFragment extends BaseFragment {
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.startsWith(HTTP) || url.startsWith(HTTPS)) {
-                    BrowserFragment fragment = new BrowserFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(DEFAULT_WEB,url);
-                    fragment.setArguments(bundle);
-                    mMainActivity.mFragmentStack.removeAllElements();
-                    mBaseActivity.openNewFragment(fragment);
+                if ((url.startsWith(HTTP) || url.startsWith(HTTPS))) {
+                    if (!mRedirect) {
+                        BrowserFragment fragment = new BrowserFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(DEFAULT_WEB, url);
+                        fragment.setArguments(bundle);
+                        mMainActivity.mFragmentStack.removeAllElements();
+                        mBaseActivity.openNewFragment(fragment);
+                    } else {
+                        view.loadUrl(url);
+                    }
                 }
                 return true;
             }
@@ -134,16 +139,23 @@ public class BrowserFragment extends BaseFragment {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                errorLl.setVisibility(View.GONE);
-                if (!listView.isShown()) {
+                mRedirect = true;
+                view.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mRedirect = false;
+                    }
+                }, 500);
+                if (listView!= null && !listView.isShown()) {
+                    errorLl.setVisibility(View.GONE);
                     searchEt.setText(url);
                 }
             }
 
             @Override
-            public void onPageFinished(WebView view, String url) {
+            public void onPageFinished(WebView view, final String url) {
                 super.onPageFinished(view, url);
-                if (!listView.isShown()) {
+                if (listView!= null && !listView.isShown()) {
                     searchEt.setText(view.getTitle());
                 }
             }
@@ -151,8 +163,10 @@ public class BrowserFragment extends BaseFragment {
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 super.onReceivedError(view, errorCode, description, failingUrl);
-                view.loadUrl(BLANK);
-                errorLl.setVisibility(View.VISIBLE);
+                if (errorLl != null) {
+                    view.loadUrl(BLANK);
+                    errorLl.setVisibility(View.VISIBLE);
+                }
             }
         });
         webView.setWebChromeClient(new WebChromeClient() {
@@ -300,11 +314,6 @@ public class BrowserFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @Override
-    public void onDestroy() {
-        webView.destroy();
-        super.onDestroy();
-    }
 
     @Override
     protected boolean handleBackEvent() {
@@ -314,17 +323,12 @@ public class BrowserFragment extends BaseFragment {
         } else if (listView.isShown()) {
             clearEtFocus();
             return true;
-        } else if (webView.canGoBack()) {
-            errorLl.setVisibility(View.GONE);
-            webView.goBack();
-            return true;
         }
         return false;
     }
 
     @Override
     protected void onTopFragmentExit(Class<? extends BaseFragment> topFragmentClass, Bundle params) {
-        super.onTopFragmentExit(topFragmentClass, params);
         aheadIv.setImageResource(mMainActivity.mFragmentStack.isEmpty() ? R.drawable.arrow_right_gray : R.drawable.arrow_right_blue);
     }
 

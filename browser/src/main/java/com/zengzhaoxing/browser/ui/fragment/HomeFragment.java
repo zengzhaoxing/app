@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.zengzhaoxing.browser.R;
+import com.zxz.www.base.app.BaseFragment;
 import com.zxz.www.base.app.MainFragment;
 
 public class HomeFragment extends MainFragment {
@@ -24,6 +25,19 @@ public class HomeFragment extends MainFragment {
 
     @Override
     protected boolean handleBackEvent() {
-        return mBrowserFragment.handleBackEvent();
+        if (mBrowserFragment != null) {
+            return mBrowserFragment.handleBackEvent();
+        } else {
+            return false;
+        }
     }
+
+    @Override
+    protected void onTopFragmentExit(Class<? extends BaseFragment> topFragmentClass, Bundle params) {
+        super.onTopFragmentExit(topFragmentClass, params);
+        if (mBrowserFragment != null) {
+            mBrowserFragment.onTopFragmentExit(topFragmentClass,params);
+        }
+    }
+
 }
