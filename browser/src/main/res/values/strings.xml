@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">browser</string>
+
+    <string name="enter">进入</string>
+    <string name="search">搜索</string>
+    <string name="refresh">刷新</string>
+</resources>

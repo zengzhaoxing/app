@@ -15,7 +15,7 @@ import com.zxz.www.base.utils.ViewUtil;
 import com.zxz.www.base.view.LoadingView;
 
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements UIPage{
 
     BaseFragment mCurrentFragment;
 
@@ -47,7 +47,7 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     public final void pressBackKey() {
         if (mCurrentFragment == null) {
-            super.onBackPressed();
+            finish();
             return;
         }
         if (!mCurrentFragment.handleBackEvent()) {
@@ -177,16 +177,15 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public final void closeCurrentFragment() {
-        if (mCurrentFragment != null && mCurrentFragment instanceof MainFragment) {
+        if (mCurrentFragment != null && mCurrentFragment == mMainFragment) {
             finish();
-        }
-        else if (mCurrentFragment != null) {
+        } else if (mCurrentFragment != null) {
             KeyBoardUtil.closeKeyboard(getWindow().getDecorView());
             Bundle bundle = mCurrentFragment.onExit();
             Class cl = mCurrentFragment.getClass();
             mCurrentFragment = mCurrentFragment.mPreFragment;
-            mFragmentManager.popBackStack();
             mCurrentFragment.onTopFragmentExit(cl,bundle);
+            mFragmentManager.popBackStack();
         }
     }
 
@@ -243,5 +242,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             closeCurrentFragment();
         }
     }
+
 
 }
