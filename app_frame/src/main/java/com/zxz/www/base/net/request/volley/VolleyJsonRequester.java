@@ -29,7 +29,7 @@ class VolleyJsonRequester<RequestModel extends BaseModel,ResponseModel extends B
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                       parseResponse(response,200);
+                       parseResponse(response.getBytes(),200);
                     }
                 }, new Response.ErrorListener() {
             @Override

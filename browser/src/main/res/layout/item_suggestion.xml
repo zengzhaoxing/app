@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="50.5dp"
+    android:background="@color/white"
+    android:paddingLeft="20dp"
+    android:paddingRight="20dp">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/search"/>
+
+        <TextView
+            android:id="@+id/item_tv"
+            android:textColor="@color/text_black"
+            android:textSize="15sp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            tools:text="qq邮箱登陆登录"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/arrow_enter"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/line_gray"/>
+
+</LinearLayout>

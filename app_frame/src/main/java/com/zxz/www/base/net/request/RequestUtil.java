@@ -4,7 +4,7 @@ import com.android.volley.toolbox.JsonRequest;
 import com.zxz.www.base.model.BaseModel;
 import com.zxz.www.base.model.RequestModel;
 import com.zxz.www.base.model.ResponseModel;
-import com.zxz.www.base.net.request.okhttp.OkHttpJsonRequester;
+//import com.zxz.www.base.net.request.okhttp.OkHttpJsonRequester;
 import com.zxz.www.base.net.request.okhttp.OkHttpRequesterFactory;
 
 import java.util.ArrayList;

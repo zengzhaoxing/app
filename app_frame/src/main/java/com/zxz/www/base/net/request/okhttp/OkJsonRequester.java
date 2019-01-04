@@ -20,6 +20,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * Created by 10714 on 2017/12/2.
@@ -55,7 +56,7 @@ class OkJsonRequester extends JsonRequester {
             @Override
             public boolean handleMessage(Message msg) {
                 Bundle bundle = msg.getData();
-                parseResponse(bundle.getString(RESP_JSON),bundle.getInt(RESP_CODE));
+                parseResponse(bundle.getByteArray(RESP_BYTE),bundle.getInt(RESP_CODE));
                 return false;
             }
         });
@@ -65,20 +66,21 @@ class OkJsonRequester extends JsonRequester {
                 Message message = Message.obtain();
                 Bundle bundle = new Bundle();
                 bundle.putInt(RESP_CODE, 400);
-                bundle.putString(RESP_JSON,null);
+                bundle.putString(RESP_BYTE,null);
                 message.setData(bundle);
                 handler.sendMessage(message);
             }
 
             @Override
             public void onResponse(@NonNull Call call,@NonNull Response response) throws IOException {
-                String json = response.body() != null ?  response.body().string() : null;
+                ResponseBody body = response.body();
+                byte[] bytes = body != null ? body.bytes() : null;
                 int respCode = response.code();
                 response.close();
                 Message message = Message.obtain();
                 Bundle bundle = new Bundle();
                 bundle.putInt(RESP_CODE, respCode);
-                bundle.putString(RESP_JSON,json);
+                bundle.putByteArray(RESP_BYTE,bytes);
                 message.setData(bundle);
                 handler.sendMessage(message);
             }
@@ -87,7 +89,7 @@ class OkJsonRequester extends JsonRequester {
 
     private String RESP_CODE = "RESP_CODE";
 
-    private String RESP_JSON = "RESP_JSON";
+    private String RESP_BYTE = "RESP_BYTE";
 
     @Override
     public void stopRequest() {

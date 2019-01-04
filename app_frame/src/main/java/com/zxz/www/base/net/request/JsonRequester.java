@@ -8,6 +8,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
 import com.zxz.www.base.model.BaseModel;
+import com.zxz.www.base.net.request.parser.DefaultListModelParser;
+import com.zxz.www.base.net.request.parser.DefaultModelParser;
+import com.zxz.www.base.net.request.parser.IParser;
 import com.zxz.www.base.utils.StringUtil;
 
 import java.lang.reflect.Type;
@@ -45,15 +48,17 @@ public abstract class JsonRequester<RequestModel extends BaseModel, ResponseMode
 
     private RequestModel mRequestData;
 
-    private Class<ResponseModel> mResponseClass;
-
     protected HashMap<String, String> mHeader;
 
     protected int mRequestMethod;
 
     private String mUrl;
 
-    private Gson mGson;
+    public void setIParser(IParser IParser) {
+        mIParser = IParser;
+    }
+
+    private IParser mIParser;
 
     public void setIsRequestList(boolean isRequestList) {
         this.mIsRequestList = isRequestList;
@@ -65,9 +70,7 @@ public abstract class JsonRequester<RequestModel extends BaseModel, ResponseMode
         mUrl = url;
         mRequestData = request;
         mHeader = new HashMap<>();
-        mResponseClass = responseClass;
         mRequestMethod = requestMethod;
-        mGson = new Gson();
     }
 
     public void setListener(OnResponseListener listener) {
@@ -115,45 +118,6 @@ public abstract class JsonRequester<RequestModel extends BaseModel, ResponseMode
 
     public abstract void stopRequest();
 
-    protected final void parseResponse(String jsonResponse, int respCode) {
-        Log.d(TAG, " url : " + getUrl());
-        Log.d(TAG, " body : " + getBody());
-        Log.d(TAG, " header : " + mHeader.toString());
-        Log.d(TAG, " response : " + jsonResponse);
-        Log.d(TAG, " respCode : " + respCode);
-        if (!mIsRequestList) {
-            ResponseModel obj = null;
-            try {
-                obj = mGson.fromJson(jsonResponse, mResponseClass);
-            } catch (Exception e) {
-                if (mListener != null) {
-                    mListener.onResponse(null, respCode);
-                }
-            }
-            if (mListener != null) {
-                mListener.onResponse(obj, respCode);
-            }
-        } else {
-            ArrayList<ResponseModel> lcs = new ArrayList<ResponseModel>();
-            try {
-                Gson gson = new Gson();
-                JsonParser parser = new JsonParser();
-                JsonArray Jarray = parser.parse(jsonResponse).getAsJsonArray();
-                for (JsonElement obj : Jarray) {
-                    ResponseModel cse = gson.fromJson(obj, mResponseClass);
-                    lcs.add(cse);
-                }
-            }catch (Exception e) {
-                if (mListener != null) {
-                    mListener.onResponse(null, respCode);
-                }
-            }
-            if (mListener != null) {
-                mListener.onResponse(lcs, respCode);
-            }
-        }
-    }
-
     protected final String getBody() {
         if (!mHeader.containsKey(CONTENT_TYPE)) {
             mHeader.put(CONTENT_TYPE, CONTENT_TYPE_JSON);
@@ -173,6 +137,35 @@ public abstract class JsonRequester<RequestModel extends BaseModel, ResponseMode
 
     public interface OnResponseListener<T> {
         void onResponse(T response, int resCode);
+    }
+
+    protected final void parseResponse(byte[] bytes, int respCode) {
+//        Log.d(TAG, " url : " + getUrl());
+//        Log.d(TAG, " body : " + getBody());
+//        Log.d(TAG, " header : " + mHeader.toString());
+////        Log.d(TAG, " response : " + jsonResponse);
+//        Log.d(TAG, " respCode : " + respCode);
+        if (mIParser == null) {
+            if (mIsRequestList) {
+                mIParser = new DefaultListModelParser<ResponseModel>();
+            } else {
+                mIParser = new DefaultModelParser<ResponseModel>();
+            }
+        }
+        Object obj = null;
+        try {
+            obj = mIParser.parser(bytes);
+        } catch (Exception ignored) {
+
+        }finally {
+            callListener(obj,respCode);
+        }
+    }
+
+    private void callListener(Object o, int code) {
+        if (mListener != null) {
+            mListener.onResponse(o, code);
+        }
     }
 
 

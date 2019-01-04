@@ -1,7 +1,10 @@
 package com.zxz.www.base.model;
 
 import com.google.gson.Gson;
-public abstract class BaseModel{
+
+import java.io.Serializable;
+
+public abstract class BaseModel implements Serializable{
 
     public String toJson() {
         return new Gson().toJson(this);
