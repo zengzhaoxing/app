@@ -52,9 +52,13 @@ public abstract class BaseActivity extends AppCompatActivity implements UIPage{
         }
     }
 
+    public void exit() {
+        finish();
+    }
+
     public final void doGoBack() {
         if (isHome()) {
-            finish();
+            exit();
         } else {
             closeCurrentFragment();
         }
@@ -179,8 +183,7 @@ public abstract class BaseActivity extends AppCompatActivity implements UIPage{
             Bundle bundle = mCurrentFragment.onExit();
             Class cl = mCurrentFragment.getClass();
             mCurrentFragment = mCurrentFragment.mPreFragment;
-            mCurrentFragment.onTopFragmentExit(cl,bundle);
-            Log.i("zxz", mCurrentFragment.getClass().getSimpleName() + " mCurrentFragment.onTopFragmentExit");
+            mCurrentFragment.onTopFragmentExit(cl,bundle);;
             mFragmentManager.popBackStack();
         }
     }

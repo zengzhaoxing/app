@@ -30,11 +30,12 @@ public class MainActivity extends BaseActivity {
     private long mLastClickBackTime = 0;
 
     @Override
-    public void finish() {
+    public void exit() {
         long offsetTime = System.currentTimeMillis() - mLastClickBackTime;
         mLastClickBackTime = System.currentTimeMillis();
         if (offsetTime < 2000) {
-            moveTaskToBack(true);
+//            moveTaskToBack(true);
+            finish();
         } else {
             ToastUtil.toast("再按一次退出程序");
         }

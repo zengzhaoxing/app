@@ -1,52 +1,25 @@
 package com.zengzhaoxing.browser.ui.fragment;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.zengzhaoxing.browser.MainActivity;
 import com.zengzhaoxing.browser.R;
-import com.zengzhaoxing.browser.bean.BaiduSuggestion;
-import com.zengzhaoxing.browser.net.BaiduParser;
-import com.zengzhaoxing.browser.ui.adapter.BDSuggestionAdapter;
 import com.zengzhaoxing.browser.view.MyWebView;
 import com.zhaoxing.view.sharpview.SharpTextView;
 import com.zxz.www.base.app.BaseFragment;
-import com.zxz.www.base.app.MainFragment;
-import com.zxz.www.base.model.ResponseModel;
-import com.zxz.www.base.net.request.JsonRequester;
-import com.zxz.www.base.net.request.OnResponseListener;
-import com.zxz.www.base.net.request.RequestUtil;
-import com.zxz.www.base.net.request.RequesterFactory;
-import com.zxz.www.base.net.request.okhttp.OkHttpRequesterFactory;
-import com.zxz.www.base.utils.KeyBoardUtil;
 import com.zxz.www.base.utils.StringUtil;
-
-import java.util.LinkedList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,6 +30,7 @@ import static com.zengzhaoxing.browser.Constants.BLANK;
 import static com.zengzhaoxing.browser.Constants.DEFAULT_WEB;
 import static com.zengzhaoxing.browser.Constants.HTTP;
 import static com.zengzhaoxing.browser.Constants.HTTPS;
+import static com.zengzhaoxing.browser.Constants.getKeyWord;
 
 public class BrowserFragment extends BaseFragment {
 
@@ -76,12 +50,16 @@ public class BrowserFragment extends BaseFragment {
 
     Unbinder unbinder;
 
-    private String mUrl = DEFAULT_WEB;
+    private String mOriginUrl = DEFAULT_WEB;
+
+    private String mCurrUrl;
 
     MainActivity mMainActivity;
 
     //是否是重定向
-    private boolean mRedirect;
+    private long lastTime = 0;
+
+    private int duration = 1500;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -94,16 +72,14 @@ public class BrowserFragment extends BaseFragment {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if ((url.startsWith(HTTP) || url.startsWith(HTTPS))) {
-                    if (!mRedirect && StringUtil.isEqual(mUrl, url)) {
-                        BrowserFragment fragment = new BrowserFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(DEFAULT_WEB, url);
-                        fragment.setArguments(bundle);
-                        mMainActivity.mFragmentStack.removeAllElements();
-                        mBaseActivity.openNewFragment(fragment);
+                    long time = System.currentTimeMillis();
+                    if (time - lastTime > duration && !StringUtil.isEqual(url, view.getUrl())) {
+                       openNew(url);
                     } else {
+                        mCurrUrl = url;
                         view.loadUrl(url);
                     }
+                    lastTime = time;
                 }
                 return true;
             }
@@ -111,13 +87,6 @@ public class BrowserFragment extends BaseFragment {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                mRedirect = true;
-                view.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mRedirect = false;
-                    }
-                }, 500);
                 if (titleTv != null) {
                     errorLl.setVisibility(View.GONE);
                     titleTv.setText(url);
@@ -144,10 +113,12 @@ public class BrowserFragment extends BaseFragment {
         webView.setProgressBar(searchPb);
         Bundle bundle = getArguments();
         if (bundle != null && bundle.containsKey(DEFAULT_WEB)) {
-            mUrl = bundle.getString(DEFAULT_WEB);
+            mOriginUrl = bundle.getString(DEFAULT_WEB);
         }
-        webView.loadUrl(mUrl);
-        aheadIv.setImageResource(mMainActivity.mFragmentStack.isEmpty() ? R.drawable.arrow_right_gray : R.drawable.arrow_right_blue);
+        lastTime = System.currentTimeMillis();
+        mCurrUrl = mOriginUrl;
+        webView.loadUrl(mOriginUrl);
+        aheadIv.setEnabled(!mMainActivity.mFragmentStack.isEmpty());
         return view;
     }
 
@@ -168,12 +139,17 @@ public class BrowserFragment extends BaseFragment {
     }
 
     @Override
-    protected void onTopFragmentExit(Class<? extends BaseFragment> topFragmentClass, Bundle params) {
+    protected void onTopFragmentExit(Class<? extends BaseFragment> topFragmentClass, final Bundle params) {
         if (topFragmentClass == BrowserFragment.class) {
-            aheadIv.setImageResource(mMainActivity.mFragmentStack.isEmpty() ? R.drawable.arrow_right_gray : R.drawable.arrow_right_blue);
+            aheadIv.setEnabled(!mMainActivity.mFragmentStack.isEmpty());
         } else if (topFragmentClass == SearchFragment.class && params != null) {
-            mUrl = params.getString(DEFAULT_WEB);
-            webView.loadUrl(mUrl);
+            errorLl.post(new Runnable() {
+                @Override
+                public void run() {
+                    openNew(params.getString(DEFAULT_WEB));
+                }
+            });
+
         }
     }
 
@@ -183,21 +159,20 @@ public class BrowserFragment extends BaseFragment {
         return super.onExit();
     }
 
-    @OnClick({R.id.refresh_tv, R.id.reload_tv, R.id.back_iv, R.id.ahead_iv, R.id.home_iv, R.id.window_tv,R.id.search_srl})
+    @OnClick({R.id.refresh_tv, R.id.reload_tv, R.id.back_iv, R.id.ahead_iv, R.id.home_iv, R.id.window_tv,R.id.menu_iv,R.id.search_srl})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.refresh_tv:
             case R.id.reload_tv:
-                webView.loadUrl(mUrl);
+                webView.loadUrl(mOriginUrl);
                 break;
             case R.id.back_iv:
                 mBaseActivity.onBackPressed();
                 break;
-            case R.id.ahead_iv:
-                if (!mMainActivity.mFragmentStack.isEmpty()) {
-                    BaseFragment fragment = mMainActivity.mFragmentStack.pop();
-                    mBaseActivity.openNewFragment(fragment);
-                }
+            case R.id.ahead_iv:{
+                BaseFragment fragment = mMainActivity.mFragmentStack.pop();
+                mBaseActivity.openNewFragment(fragment);
+            }
                 break;
             case R.id.home_iv:
                 mBaseActivity.goHome();
@@ -205,14 +180,29 @@ public class BrowserFragment extends BaseFragment {
                 break;
             case R.id.window_tv:
                 break;
+            case R.id.menu_iv:
+                break;
             case R.id.search_srl:
                 SearchFragment fragment = new SearchFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString(DEFAULT_WEB, mUrl);
+                if (StringUtil.isEqual(mOriginUrl, mCurrUrl)) {
+                    bundle.putString(DEFAULT_WEB, getKeyWord(mOriginUrl));
+                } else {
+                    bundle.putString(DEFAULT_WEB, mCurrUrl);
+                }
                 fragment.setArguments(bundle);
                 mMainActivity.openNewFragment(fragment);
                 break;
         }
+    }
+
+    private void openNew(String url) {
+        BrowserFragment fragment = new BrowserFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(DEFAULT_WEB, url);
+        fragment.setArguments(bundle);
+        mMainActivity.mFragmentStack.removeAllElements();
+        mBaseActivity.openNewFragment(fragment);
     }
 
 }

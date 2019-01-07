@@ -22,7 +22,6 @@ public class WindowUtil {
         upProgress += lp.screenBrightness;
         upProgress = Math.min(upProgress,1f);
         upProgress = Math.max(upProgress,0f);
-        Log.i("zxz", upProgress + "");
         lp.screenBrightness = upProgress;
         activity.getWindow().setAttributes(lp);
     }

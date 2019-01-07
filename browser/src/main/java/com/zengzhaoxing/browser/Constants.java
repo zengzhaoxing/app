@@ -1,5 +1,7 @@
 package com.zengzhaoxing.browser;
 
+import com.zxz.www.base.utils.StringUtil;
+
 public class Constants {
 
     public static final String DEFAULT_WEB = "https://m.baidu.com/";
@@ -13,5 +15,12 @@ public class Constants {
     public static final String BAI_DU_SEARCH = "http://suggestion.baidu.com/su?wd=";
 
     public static final String BLANK = "about:blank";
+
+    public static final String getKeyWord(String url) {
+        if (url != null && url.contains(SEARCH_EXTRA)) {
+            return url.replace(SEARCH_EXTRA, "");
+        }
+        return url;
+    }
 
 }
