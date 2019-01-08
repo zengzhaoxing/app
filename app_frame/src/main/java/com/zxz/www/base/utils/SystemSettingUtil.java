@@ -24,7 +24,7 @@ public class SystemSettingUtil {
         return mAudioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
     }
 
-    public static float getMusicProgress() {
+    public static float getMusicVolumeProgress() {
         float current = getMusicVolume();
         float max = getMusicMaxVolume();
         return current / max;
@@ -38,7 +38,7 @@ public class SystemSettingUtil {
         mAudioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,AudioManager.ADJUST_LOWER,AudioManager.FLAG_PLAY_SOUND);
     }
 
-    public static void saveBrightness(float progress) {
+    public static void setBrightness(float progress) {
         int value = (int) (progress * 255);
         Uri uri = Settings.System.getUriFor(Settings.System.SCREEN_BRIGHTNESS);
         Settings.System.putInt(BaseApp.getContext().getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, value);
@@ -51,6 +51,8 @@ public class SystemSettingUtil {
         value = Math.max(0, value);
         mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC,value,AudioManager.FLAG_SHOW_UI | AudioManager.FLAG_PLAY_SOUND);
     }
+
+
 
 
 }

@@ -66,4 +66,5 @@ public class LoadingView extends LinearLayout {
         mTextView.setText(text);
     }
 
+
 }

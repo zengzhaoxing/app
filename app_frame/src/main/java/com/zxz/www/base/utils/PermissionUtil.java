@@ -54,6 +54,12 @@ public class PermissionUtil {
         });
     }
 
+    public static void requestPermission(Activity activity,String[] permission, final OnPermissionRequest onPermissionRequest) {
+        for (String s : permission) {
+            requestPermission(activity,s,onPermissionRequest);
+        }
+    }
+
     public interface OnPermissionRequest {
         void onResult(boolean isAllow);
     }

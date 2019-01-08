@@ -19,6 +19,7 @@ import android.widget.ProgressBar;
 
 import com.zengzhaoxing.browser.R;
 import com.zengzhaoxing.browser.ui.fragment.BrowserFragment;
+import com.zxz.www.base.view.LoadingView;
 
 public class MyWebView extends WebView {
 
@@ -113,10 +114,10 @@ public class MyWebView extends WebView {
             @Nullable
             @Override
             public View getVideoLoadingProgressView() {
-                FrameLayout frameLayout = new FrameLayout(mActivity);
-                frameLayout.setBackgroundResource(R.color.black);
-                frameLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                return frameLayout;
+                LoadingView loadingView = new LoadingView(mActivity);
+                loadingView.setBackgroundResource(R.color.transparent);
+                loadingView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+                return loadingView;
             }
 
             public void onReceivedTitle(WebView view, String title) {}
@@ -129,12 +130,12 @@ public class MyWebView extends WebView {
      **/
     private void showCustomView(View view, WebChromeClient.CustomViewCallback callback) {
         // if a view already exists then immediately terminate the new one
-        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
         if (customView != null) {
             callback.onCustomViewHidden();
             return;
         }
-
+        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         FrameLayout decor = (FrameLayout) mActivity.getWindow().getDecorView();
         decor.setBackgroundResource(android.R.color.black);
         fullscreenContainer = new FullscreenHolder(mActivity);
@@ -142,6 +143,7 @@ public class MyWebView extends WebView {
         decor.addView(fullscreenContainer, COVER_SCREEN_PARAMS);
         customView = view;
         setStatusBarVisibility(false);
+        setVisibility(View.INVISIBLE);
         customViewCallback = callback;
     }
 
