@@ -20,6 +20,7 @@
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity android:name=".MainActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleInstance"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:hardwareAccelerated="true">

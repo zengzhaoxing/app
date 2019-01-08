@@ -4,7 +4,7 @@ import com.zxz.www.base.utils.StringUtil;
 
 public class Constants {
 
-    public static final String DEFAULT_WEB = "https://m.baidu.com/";
+    public static final String DEFAULT_WEB = "https://www.sogou.com/";
 
     public static final String SEARCH_EXTRA = "https://www.baidu.com/s?ie=UTF-8&wd=";
 

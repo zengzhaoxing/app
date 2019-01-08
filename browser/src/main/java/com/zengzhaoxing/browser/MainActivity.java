@@ -11,13 +11,12 @@ import com.zxz.www.base.app.BaseFragment;
 import com.zxz.www.base.app.MainFragment;
 import com.zxz.www.base.utils.PermissionUtil;
 import com.zxz.www.base.utils.ToastUtil;
+import com.zxz.www.base.utils.ViewUtil;
 
 import java.util.LinkedList;
 import java.util.Stack;
 
 public class MainActivity extends BaseActivity {
-
-    public Stack<BaseFragment> mFragmentStack = new Stack<>();
 
     @Override
     protected MainFragment returnMainFragment() {
@@ -48,4 +47,9 @@ public class MainActivity extends BaseActivity {
     public void onNotify(Bundle bundle) {
 
     }
+
+    public void getBitmap() {
+        ViewUtil.getBackground(getCurrentFragment().getView());
+    }
+
 }

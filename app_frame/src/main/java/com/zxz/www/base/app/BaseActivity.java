@@ -1,9 +1,11 @@
 package com.zxz.www.base.app;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -125,7 +127,7 @@ public abstract class BaseActivity extends AppCompatActivity implements UIPage{
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mFragmentManager = getFragmentManager();
+        mFragmentManager = getSupportFragmentManager();
         SDKAgent.getInstance().doInMainActivityCreate(savedInstanceState,this);
         setContentView(R.layout.layout_app_frame);
         mLoadingView = (LoadingView) findViewById(R.id.loading_view);

@@ -1,5 +1,7 @@
 package com.example.admin.fastpay;
 
+import android.os.Bundle;
+
 import com.example.admin.fastpay.fragment.HomeFragment;
 import com.example.admin.fastpay.fragment.InviteFragment;
 import com.example.admin.fastpay.fragment.MainHomeFragment;
@@ -43,5 +45,8 @@ public class MainActivity extends BaseActivity {
     }
 
 
+    @Override
+    public void onNotify(Bundle bundle) {
 
+    }
 }

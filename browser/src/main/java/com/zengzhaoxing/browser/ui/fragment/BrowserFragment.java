@@ -48,6 +48,10 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
     @BindView(R.id.title_tv)
     TextView titleTv;
 
+    BrowserFragment mPreBrowserFragment;
+
+    WindowFragment mWindowFragment;
+
     Unbinder unbinder;
 
     private String mOriginUrl = DEFAULT_WEB;
@@ -67,14 +71,15 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
         final View view = inflater.inflate(R.layout.fra_main_browser, container, false);
         unbinder = ButterKnife.bind(this, view);
         mMainActivity = (MainActivity) mBaseActivity;
+        mWindowFragment = (WindowFragment) getParentFragment();
         //该方法解决的问题是打开浏览器不调用系统浏览器，直接用webview打开
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if ((url.startsWith(HTTP) || url.startsWith(HTTPS))) {
                     long time = System.currentTimeMillis();
-                    if (time - lastTime > duration && !StringUtil.isEqual(url, view.getUrl())) {
-                       openNew(url);
+                    if (time - lastTime > duration  && !StringUtil.isEqual(url, view.getUrl())) {
+                       mWindowFragment.openNew(url);
                     } else {
                         mCurrUrl = url;
                         view.loadUrl(url);
@@ -111,17 +116,12 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
             }
         });
         webView.setProgressBar(searchPb);
-        Bundle bundle = getArguments();
-        if (bundle != null && bundle.containsKey(DEFAULT_WEB)) {
-            mOriginUrl = bundle.getString(DEFAULT_WEB);
-        }
+        mOriginUrl = getArguments().getString(DEFAULT_WEB);
         lastTime = System.currentTimeMillis();
         mCurrUrl = mOriginUrl;
         webView.loadUrl(mOriginUrl);
-        aheadIv.setEnabled(!mMainActivity.mFragmentStack.isEmpty());
-
+        aheadIv.setEnabled(mWindowFragment.canGoAhead());
         webView.setOnLongClickListener(this);
-
         return view;
     }
 
@@ -144,12 +144,12 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
     @Override
     protected void onTopFragmentExit(Class<? extends BaseFragment> topFragmentClass, final Bundle params) {
         if (topFragmentClass == BrowserFragment.class) {
-            aheadIv.setEnabled(!mMainActivity.mFragmentStack.isEmpty());
+            aheadIv.setEnabled(mWindowFragment.canGoAhead());
         } else if (topFragmentClass == SearchFragment.class && params != null) {
             errorLl.post(new Runnable() {
                 @Override
                 public void run() {
-                    openNew(params.getString(DEFAULT_WEB));
+                    mWindowFragment.openNew(params.getString(DEFAULT_WEB));
                 }
             });
 
@@ -158,7 +158,6 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
 
     @Override
     protected Bundle onExit() {
-        mMainActivity.mFragmentStack.add(this);
         return super.onExit();
     }
 
@@ -172,40 +171,24 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
             case R.id.back_iv:
                 mBaseActivity.onBackPressed();
                 break;
-            case R.id.ahead_iv:{
-                BaseFragment fragment = mMainActivity.mFragmentStack.pop();
-                mBaseActivity.openNewFragment(fragment);
-            }
+            case R.id.ahead_iv:
+                mWindowFragment.goAhead();
                 break;
             case R.id.home_iv:
-                mBaseActivity.goHome();
-                mMainActivity.mFragmentStack.removeAllElements();
+                mWindowFragment.goHome();
                 break;
             case R.id.window_tv:
                 break;
             case R.id.menu_iv:
                 break;
             case R.id.search_srl:
-                SearchFragment fragment = new SearchFragment();
-                Bundle bundle = new Bundle();
                 if (StringUtil.isEqual(mOriginUrl, mCurrUrl)) {
-                    bundle.putString(DEFAULT_WEB, getKeyWord(mOriginUrl));
+                    mWindowFragment.openNew(getKeyWord(mOriginUrl));
                 } else {
-                    bundle.putString(DEFAULT_WEB, mCurrUrl);
+                    mWindowFragment.openNew(mCurrUrl);
                 }
-                fragment.setArguments(bundle);
-                mMainActivity.openNewFragment(fragment);
                 break;
         }
-    }
-
-    private void openNew(String url) {
-        BrowserFragment fragment = new BrowserFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(DEFAULT_WEB, url);
-        fragment.setArguments(bundle);
-        mMainActivity.mFragmentStack.removeAllElements();
-        mBaseActivity.openNewFragment(fragment);
     }
 
     @Override
