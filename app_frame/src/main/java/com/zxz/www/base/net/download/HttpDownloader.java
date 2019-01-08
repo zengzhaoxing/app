@@ -1,5 +1,6 @@
 package com.zxz.www.base.net.download;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -24,6 +25,7 @@ public class HttpDownloader extends Downloader {
 
     private AsyncTask mTask;
 
+    @SuppressLint("StaticFieldLeak")
     public HttpDownloader(String downloadUrl, String fileName) {
         super(downloadUrl, fileName);
         mTask = new AsyncTask<Object, Float, String>() {
@@ -63,24 +65,30 @@ public class HttpDownloader extends Downloader {
                     conn.disconnect();
                 } catch (Exception e) {
                     Log.i(TAG, e.toString());
-                    if (mDownloadListener != null) {
-                        mDownloadListener.onDownLoad(-1);
-                    }
+                    return null;
                 }
-                return null;
+                return getFileUrl();
             }
 
             @Override
             protected void onPostExecute(String url) {
                 if (mDownloadListener != null) {
-                    mDownloadListener.onDownLoad(100);
+                    if (url != null) {
+                        mDownloadListener.onDownLoad(100);
+                    } else {
+                        mDownloadListener.onDownLoad(DOWNLOAD_FAIL);
+                    }
                 }
             }
 
             @Override
             protected void onProgressUpdate(Float... values) {
                 if (mDownloadListener != null) {
-                    mDownloadListener.onDownLoad((float) mProgress / 100);
+                    if (values != null && values.length > 0 && values[0] == DOWNLOAD_FAIL) {
+                        mDownloadListener.onDownLoad(DOWNLOAD_FAIL);
+                    } else {
+                        mDownloadListener.onDownLoad((float) mProgress / 100);
+                    }
                 }
             }
         };

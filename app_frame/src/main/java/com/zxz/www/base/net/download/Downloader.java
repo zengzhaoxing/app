@@ -10,6 +10,8 @@ import java.util.HashMap;
 
 public abstract class Downloader {
 
+    public static final int DOWNLOAD_FAIL = -1;
+
     String mDownloadUrl;
 
     HashMap<String ,String> mHeader = new HashMap<>();

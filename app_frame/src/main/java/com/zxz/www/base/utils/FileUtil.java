@@ -1,10 +1,14 @@
 package com.zxz.www.base.utils;
 
+import android.Manifest;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+
+import com.zxz.www.base.net.download.Downloader;
+import com.zxz.www.base.net.download.HttpDownloader;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -13,6 +17,7 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -20,8 +25,6 @@ import java.util.List;
  */
 
 public class FileUtil {
-
-    BitmapFactory.Options opts = new BitmapFactory.Options();
 
     private static final String TAG = "FileUtil";
 
@@ -134,7 +137,7 @@ public class FileUtil {
         void onFileScanned(String url);
     }
 
-    public static Bitmap createImageThumbnail(String filePath){
+    public Bitmap createImageThumbnail(String filePath){
         Bitmap bitmap = null;
         BitmapFactory.Options opts = new BitmapFactory.Options();
         opts.inJustDecodeBounds = true;
@@ -151,7 +154,7 @@ public class FileUtil {
         return bitmap;
     }
 
-    public static int computeSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
+    public int computeSampleSize(BitmapFactory.Options options, int minSideLength, int maxNumOfPixels) {
         int initialSize = computeInitialSampleSize(options, minSideLength, maxNumOfPixels);
         int roundedSize;
         if (initialSize <= 8) {
@@ -165,7 +168,7 @@ public class FileUtil {
         return roundedSize;
     }
 
-    private static int computeInitialSampleSize(BitmapFactory.Options options,int minSideLength, int maxNumOfPixels) {
+    private int computeInitialSampleSize(BitmapFactory.Options options,int minSideLength, int maxNumOfPixels) {
         double w = options.outWidth;
         double h = options.outHeight;
         int lowerBound = (maxNumOfPixels == -1) ? 1 : (int) Math.ceil(Math.sqrt(w * h / maxNumOfPixels));
@@ -183,5 +186,25 @@ public class FileUtil {
         }
     }
 
+    public void saveImg(String url) {
+        if (PermissionUtil.havePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            Calendar calendar = Calendar.getInstance();
+            final String fileName = DateUtil.calendarToString(calendar, "yyyy-MM-dd HH:mm:ss") + ".jpg";
+            final HttpDownloader downloader = new HttpDownloader(url, fileName);
+            downloader.setDownloadListener(new Downloader.DownLoadListener() {
+                @Override
+                public void onDownLoad(float progress) {
+                    if (progress == -1) {
+                        ToastUtil.toast("保存失败");
+                    } else if (progress == 100) {
+                        ToastUtil.toast("保存成功: " + downloader.getFileUrl());
+                    }
+                }
+            });
+            downloader.starDownload();
+        } else {
+            ToastUtil.toast("保存失败");
+        }
+    }
 
 }

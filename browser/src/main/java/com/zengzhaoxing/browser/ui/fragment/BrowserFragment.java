@@ -32,7 +32,7 @@ import static com.zengzhaoxing.browser.Constants.HTTP;
 import static com.zengzhaoxing.browser.Constants.HTTPS;
 import static com.zengzhaoxing.browser.Constants.getKeyWord;
 
-public class BrowserFragment extends BaseFragment {
+public class BrowserFragment extends BaseFragment implements View.OnLongClickListener {
 
 
     @BindView(R.id.web_view)
@@ -119,6 +119,9 @@ public class BrowserFragment extends BaseFragment {
         mCurrUrl = mOriginUrl;
         webView.loadUrl(mOriginUrl);
         aheadIv.setEnabled(!mMainActivity.mFragmentStack.isEmpty());
+
+        webView.setOnLongClickListener(this);
+
         return view;
     }
 
@@ -205,4 +208,31 @@ public class BrowserFragment extends BaseFragment {
         mBaseActivity.openNewFragment(fragment);
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+        WebView.HitTestResult result = webView.getHitTestResult();
+        if (null == result)
+            return false;
+        int type = result.getType();
+        String url = result.getExtra();
+        switch (type) {
+            case WebView.HitTestResult.EDIT_TEXT_TYPE: // 选中的文字类型
+                break;
+            case WebView.HitTestResult.PHONE_TYPE: // 处理拨号
+                break;
+            case WebView.HitTestResult.EMAIL_TYPE: // 处理Email
+                break;
+            case WebView.HitTestResult.GEO_TYPE: // 　地图类型
+                break;
+            case WebView.HitTestResult.SRC_ANCHOR_TYPE: // 超链接
+                FunListFragment.open(mMainActivity,url,FunListFragment.FUN_OPEN_IN_BACKGROUND,
+                        FunListFragment.FUN_OPEN_IN_NEW_WINDOW,FunListFragment.FUN_COPY_URL, FunListFragment.FUN_SHARE_URL);
+                break;
+            case WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE: // 带有链接的图片类型
+            case WebView.HitTestResult.IMAGE_TYPE: // 处理长按图片的菜单项
+                FunListFragment.open(mMainActivity,url,FunListFragment.FUN_SAVE_IMG,FunListFragment.FUN_SHARE_IMG,FunListFragment.FUN_LOOK_IMG);
+                break;
+        }
+        return false;
+    }
 }

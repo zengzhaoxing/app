@@ -1,5 +1,7 @@
 package com.zengzhaoxing.browser.ui.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.DebugUtils;
 import android.view.Gravity;
@@ -13,6 +15,9 @@ import com.zhaoxing.view.sharpview.SharpLinearLayout;
 import com.zxz.www.base.app.BaseActivity;
 import com.zxz.www.base.app.SlideFragment;
 import com.zxz.www.base.utils.DensityUtil;
+import com.zxz.www.base.utils.EditorUtil;
+import com.zxz.www.base.utils.FileUtil;
+import com.zxz.www.base.utils.IntentUtil;
 import com.zxz.www.base.utils.ResUtil;
 
 public class FunListFragment extends SlideFragment implements View.OnClickListener {
@@ -31,6 +36,8 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
 
     public static final int FUN_SHARE_IMG = 7;
 
+    public static final int FUN_SHARE_URL = 8;
+
     private String getFunName(int fun) {
         switch (fun) {
             case FUN_OPEN_IN_BACKGROUND:
@@ -47,6 +54,8 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
                 return "查看图片";
             case FUN_SHARE_IMG:
                 return "分享图片";
+            case FUN_SHARE_URL:
+                return "分享连接";
             default:
                 return null;
         }
@@ -91,7 +100,7 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
             textView.setTextSize(14);
             textView.setTextColor(ResUtil.getColor(com.zxz.www.base.R.color.text_black));
             textView.setText(getFunName(funs[i]));
-            textView.setTag(getFunName(funs[i]));
+            textView.setTag(funs[i]);
             textView.setOnClickListener(this);
             linearLayout.addView(textView);
         }
@@ -108,17 +117,24 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
             case FUN_OPEN_IN_NEW_WINDOW:
                 break;
             case FUN_COPY_URL:
+                EditorUtil.copy(mUrl);
                 break;
             case FUN_SELECT_TEXT:
                 break;
             case FUN_SAVE_IMG:
+                FileUtil.getInstance().saveImg(mUrl);
                 break;
             case FUN_LOOK_IMG:
                 break;
             case FUN_SHARE_IMG:
+                IntentUtil.sendImg(mUrl,mBaseActivity);
+                break;
+            case FUN_SHARE_URL:
+                IntentUtil.sendText(mUrl,mBaseActivity);
                 break;
             default:
                 break;
         }
+        mBaseActivity.closeCurrentFragment();
     }
 }
