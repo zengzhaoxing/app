@@ -5,13 +5,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zengzhaoxing.browser.Constants;
@@ -22,8 +22,13 @@ import com.zengzhaoxing.browser.ui.adapter.BDSuggestionAdapter;
 import com.zxz.www.base.app.BaseFragment;
 import com.zxz.www.base.net.request.JsonRequester;
 import com.zxz.www.base.net.request.RequesterFactory;
+import com.zxz.www.base.utils.JsonUtil;
 import com.zxz.www.base.utils.KeyBoardUtil;
+import com.zxz.www.base.utils.SPUtil;
 import com.zxz.www.base.utils.StringUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +43,7 @@ import static com.zengzhaoxing.browser.Constants.SEARCH_EXTRA;
 
 public class SearchFragment extends BaseFragment {
 
+
     @BindView(R.id.search_et)
     EditText searchEt;
     @BindView(R.id.search_tv)
@@ -45,10 +51,18 @@ public class SearchFragment extends BaseFragment {
     @BindView(R.id.list_view)
     ListView listView;
     Unbinder unbinder;
+    @BindView(R.id.clear_ll)
+    LinearLayout clearLl;
+    @BindView(R.id.history_ll)
+    RelativeLayout historyLl;
 
     private String mUrl;
 
+    private String mAlternativeUrl;
+
     private BDSuggestionAdapter mBDSuggestionAdapter;
+
+    private List<String> mHistories;
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -67,21 +81,25 @@ public class SearchFragment extends BaseFragment {
                     String url = searchEt.getText().toString();
                     if (isHttpUrl(url)) {
                         searchTv.setText(R.string.enter);
-                        mUrl = url;
                     } else if (isUrlNotHttp(url)) {
                         searchTv.setText(R.string.enter);
-                        mUrl = HTTP + url;
                     } else {
                         searchTv.setText(R.string.search);
-                        mUrl = SEARCH_EXTRA + url;
                         final JsonRequester requester = RequesterFactory.getDefaultRequesterFactory()
-                                .createGetRequester(BAI_DU_SEARCH + searchEt.getText().toString(),null, BaiduSuggestion.class);
+                                .createGetRequester(BAI_DU_SEARCH + searchEt.getText().toString(), null, BaiduSuggestion.class);
                         requester.setIParser(new BaiduParser());
                         requester.setListener(new JsonRequester.OnResponseListener<BaiduSuggestion>() {
                             @Override
                             public void onResponse(BaiduSuggestion response, int resCode) {
-                                if (response != null) {
+                                if (historyLl == null) {
+                                    return;
+                                }
+                                if (response != null && response.getS() != null && response.getS().size() > 0) {
                                     mBDSuggestionAdapter.setStrings(response.getS());
+                                    historyLl.setVisibility(View.GONE);
+                                } else {
+                                    mBDSuggestionAdapter.setStrings(mHistories);
+                                    historyLl.setVisibility(View.VISIBLE);
                                 }
                             }
                         });
@@ -101,10 +119,14 @@ public class SearchFragment extends BaseFragment {
         searchEt.requestFocus();
         KeyBoardUtil.openKeyboard(searchEt);
         listView.setAdapter(mBDSuggestionAdapter);
+        mHistories = getHistories();
+        historyLl.setVisibility(mHistories.isEmpty() ? View.GONE : View.VISIBLE);
+        mBDSuggestionAdapter.setStrings(mHistories);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                search(SEARCH_EXTRA + mBDSuggestionAdapter.getItem(position));
+                String text = (String) mBDSuggestionAdapter.getItem(position);
+                search(text);
             }
         });
         return view;
@@ -116,13 +138,38 @@ public class SearchFragment extends BaseFragment {
         unbinder.unbind();
     }
 
-    @OnClick(R.id.search_tv)
-    public void onViewClicked() {
-        search(mUrl);
+    @OnClick({R.id.search_tv,R.id.clear_ll})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.search_tv:
+                search(searchEt.getText().toString());
+                break;
+            case R.id.clear_ll:
+                SPUtil.remove(SEARCH_HISTORY);
+                historyLl.setVisibility(View.GONE);
+                mBDSuggestionAdapter.setStrings(null);
+                break;
+        }
     }
 
-    private void search(String url) {
-        mUrl = url;
+    private void search(String text) {
+        String history;
+        mAlternativeUrl = SEARCH_EXTRA + text;
+        if (isHttpUrl(text)) {
+            mUrl = text;
+            history = text;
+        } else if (isUrlNotHttp(text)) {
+            mUrl = HTTP + text;
+            history = mUrl;
+        } else {
+            mUrl = SEARCH_EXTRA + text;
+            history = text;
+        }
+        if (mHistories.contains(history)) {
+            mHistories.remove(history);
+        }
+        mHistories.add(0,history);
+        SPUtil.put(SEARCH_HISTORY,JsonUtil.listToJson(mHistories));
         KeyBoardUtil.closeKeyboard(searchEt);
         goBack();
     }
@@ -138,7 +185,7 @@ public class SearchFragment extends BaseFragment {
     protected Bundle onExit() {
         if (mUrl != null) {
             Bundle bundle = new Bundle();
-            bundle.putString(Constants.DEFAULT_WEB,mUrl);
+            bundle.putStringArray(Constants.DEFAULT_WEB, new String[]{mUrl,mAlternativeUrl});
             return bundle;
         }
         return null;
@@ -151,5 +198,17 @@ public class SearchFragment extends BaseFragment {
     private boolean isUrlNotHttp(String url) {
         return !StringUtil.isBlank(url) && url.startsWith("www.") && url.length() > 5;
     }
+
+    private List<String> getHistories() {
+        String s = (String) SPUtil.get(SEARCH_HISTORY,"");
+        if (s.isEmpty()) {
+            return new ArrayList<>();
+        } else {
+            return JsonUtil.jsonToList(s);
+        }
+    }
+
+
+    private static final String SEARCH_HISTORY = "SEARCH_HISTORY";
 
 }

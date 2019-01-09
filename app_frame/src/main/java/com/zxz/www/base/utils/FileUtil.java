@@ -11,6 +11,7 @@ import com.zxz.www.base.net.download.Downloader;
 import com.zxz.www.base.net.download.HttpDownloader;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -202,6 +203,28 @@ public class FileUtil {
                 }
             });
             downloader.starDownload();
+        } else {
+            ToastUtil.toast("保存失败");
+        }
+    }
+
+    public void saveImg(final Bitmap bitmap) {
+        if (PermissionUtil.havePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        Calendar calendar = Calendar.getInstance();
+                        final String fileName = downLoadPath + DateUtil.calendarToString(calendar, "yyyy-MM-dd HH:mm:ss") + ".jpg";
+                        FileOutputStream fis = new FileOutputStream(fileName);
+                        fis.write(bitmap.getRowBytes());
+                        fis.close();
+                        ToastUtil.toast("保存成功: " + fileName);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
         } else {
             ToastUtil.toast("保存失败");
         }

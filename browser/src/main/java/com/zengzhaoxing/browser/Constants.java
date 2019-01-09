@@ -16,8 +16,8 @@ public class Constants {
 
     public static final String BLANK = "about:blank";
 
-    public static final String getKeyWord(String url) {
-        if (url != null && url.contains(SEARCH_EXTRA)) {
+    public static String getKeyWord(String url) {
+        if (url != null && url.startsWith(SEARCH_EXTRA)) {
             return url.replace(SEARCH_EXTRA, "");
         }
         return url;

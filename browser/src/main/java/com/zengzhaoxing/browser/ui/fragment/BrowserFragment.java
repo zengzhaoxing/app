@@ -3,10 +3,14 @@ package com.zengzhaoxing.browser.ui.fragment;
 import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -19,6 +23,7 @@ import com.zengzhaoxing.browser.R;
 import com.zengzhaoxing.browser.view.MyWebView;
 import com.zhaoxing.view.sharpview.SharpTextView;
 import com.zxz.www.base.app.BaseFragment;
+import com.zxz.www.base.utils.ResUtil;
 import com.zxz.www.base.utils.StringUtil;
 
 import butterknife.BindView;
@@ -41,10 +46,6 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
     ProgressBar searchPb;
     @BindView(R.id.error_ll)
     LinearLayout errorLl;
-    @BindView(R.id.ahead_iv)
-    ImageView aheadIv;
-    @BindView(R.id.reload_tv)
-    SharpTextView reloadTv;
     @BindView(R.id.title_tv)
     TextView titleTv;
 
@@ -56,9 +57,7 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
 
     private String mOriginUrl = DEFAULT_WEB;
 
-    private String mCurrUrl;
-
-    MainActivity mMainActivity;
+    private String mAlternativeUrl;
 
     //是否是重定向
     private long lastTime = 0;
@@ -70,7 +69,6 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fra_main_browser, container, false);
         unbinder = ButterKnife.bind(this, view);
-        mMainActivity = (MainActivity) mBaseActivity;
         mWindowFragment = (WindowFragment) getParentFragment();
         //该方法解决的问题是打开浏览器不调用系统浏览器，直接用webview打开
         webView.setWebViewClient(new WebViewClient() {
@@ -78,10 +76,9 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if ((url.startsWith(HTTP) || url.startsWith(HTTPS))) {
                     long time = System.currentTimeMillis();
-                    if (time - lastTime > duration  && !StringUtil.isEqual(url, view.getUrl())) {
-                       mWindowFragment.openNew(url);
+                    if (time - lastTime > duration && !StringUtil.isEqual(url, BLANK)) {
+                        mWindowFragment.openNew(new String[]{url, null});
                     } else {
-                        mCurrUrl = url;
                         view.loadUrl(url);
                     }
                     lastTime = time;
@@ -93,8 +90,14 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
                 if (titleTv != null) {
+                    if (mWindowFragment.isHome()) {
+                        titleTv.setText(R.string.input_key_work);
+                        titleTv.setTextColor(ResUtil.getColor(R.color.text_gray));
+                    } else {
+                        titleTv.setText(url);
+                        titleTv.setTextColor(ResUtil.getColor(R.color.text_black));
+                    }
                     errorLl.setVisibility(View.GONE);
-                    titleTv.setText(url);
                 }
             }
 
@@ -102,9 +105,16 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
             public void onPageFinished(WebView view, final String url) {
                 super.onPageFinished(view, url);
                 if (titleTv != null) {
-                    titleTv.setText(view.getTitle());
+                    if (mWindowFragment.isHome()) {
+                        titleTv.setText(R.string.input_key_work);
+                        titleTv.setTextColor(ResUtil.getColor(R.color.text_gray));
+                    } else {
+                        titleTv.setText(view.getTitle());
+                        titleTv.setTextColor(ResUtil.getColor(R.color.text_black));
+                    }
                 }
             }
+
 
             @Override
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
@@ -116,21 +126,14 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
             }
         });
         webView.setProgressBar(searchPb);
-        mOriginUrl = getArguments().getString(DEFAULT_WEB);
+        webView.setHome(mWindowFragment.isHome());
+        mOriginUrl = getArguments().getStringArray(DEFAULT_WEB)[0];
+        mAlternativeUrl = getArguments().getStringArray(DEFAULT_WEB)[1];
         lastTime = System.currentTimeMillis();
-        mCurrUrl = mOriginUrl;
         webView.loadUrl(mOriginUrl);
-        aheadIv.setEnabled(mWindowFragment.canGoAhead());
         webView.setOnLongClickListener(this);
         return view;
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
 
     @Override
     protected boolean handleBackEvent() {
@@ -143,16 +146,13 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
 
     @Override
     protected void onTopFragmentExit(Class<? extends BaseFragment> topFragmentClass, final Bundle params) {
-        if (topFragmentClass == BrowserFragment.class) {
-            aheadIv.setEnabled(mWindowFragment.canGoAhead());
-        } else if (topFragmentClass == SearchFragment.class && params != null) {
+        if (topFragmentClass == SearchFragment.class && params != null) {
             errorLl.post(new Runnable() {
                 @Override
                 public void run() {
-                    mWindowFragment.openNew(params.getString(DEFAULT_WEB));
+                    mWindowFragment.openNew(params.getStringArray(DEFAULT_WEB));
                 }
             });
-
         }
     }
 
@@ -161,61 +161,44 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
         return super.onExit();
     }
 
-    @OnClick({R.id.refresh_tv, R.id.reload_tv, R.id.back_iv, R.id.ahead_iv, R.id.home_iv, R.id.window_tv,R.id.menu_iv,R.id.search_srl})
+    @OnClick({R.id.refresh_tv, R.id.error_ll, R.id.search_srl})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.refresh_tv:
-            case R.id.reload_tv:
-                webView.loadUrl(mOriginUrl);
-                break;
-            case R.id.back_iv:
-                mBaseActivity.onBackPressed();
-                break;
-            case R.id.ahead_iv:
-                mWindowFragment.goAhead();
-                break;
-            case R.id.home_iv:
-                mWindowFragment.goHome();
-                break;
-            case R.id.window_tv:
-                break;
-            case R.id.menu_iv:
+            case R.id.error_ll:
+                webView.clearHistory();
+                webView.reload();
                 break;
             case R.id.search_srl:
-                if (StringUtil.isEqual(mOriginUrl, mCurrUrl)) {
-                    mWindowFragment.openNew(getKeyWord(mOriginUrl));
-                } else {
-                    mWindowFragment.openNew(mCurrUrl);
-                }
+                SearchFragment fragment = new SearchFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(DEFAULT_WEB, getKeyWord(mOriginUrl));
+                fragment.setArguments(bundle);
+                mBaseActivity.openNewFragment(fragment);
                 break;
         }
     }
 
     @Override
     public boolean onLongClick(View v) {
-        WebView.HitTestResult result = webView.getHitTestResult();
-        if (null == result)
-            return false;
-        int type = result.getType();
-        String url = result.getExtra();
-        switch (type) {
-            case WebView.HitTestResult.EDIT_TEXT_TYPE: // 选中的文字类型
-                break;
-            case WebView.HitTestResult.PHONE_TYPE: // 处理拨号
-                break;
-            case WebView.HitTestResult.EMAIL_TYPE: // 处理Email
-                break;
-            case WebView.HitTestResult.GEO_TYPE: // 　地图类型
-                break;
-            case WebView.HitTestResult.SRC_ANCHOR_TYPE: // 超链接
-                FunListFragment.open(mMainActivity,url,FunListFragment.FUN_OPEN_IN_BACKGROUND,
-                        FunListFragment.FUN_OPEN_IN_NEW_WINDOW,FunListFragment.FUN_COPY_URL, FunListFragment.FUN_SHARE_URL);
-                break;
-            case WebView.HitTestResult.SRC_IMAGE_ANCHOR_TYPE: // 带有链接的图片类型
-            case WebView.HitTestResult.IMAGE_TYPE: // 处理长按图片的菜单项
-                FunListFragment.open(mMainActivity,url,FunListFragment.FUN_SAVE_IMG,FunListFragment.FUN_SHARE_IMG,FunListFragment.FUN_LOOK_IMG);
-                break;
-        }
+        Message message = Message.obtain();
+        message.setTarget(new Handler(new Handler.Callback() {
+            @Override
+            public boolean handleMessage(Message msg) {
+                if (msg != null && msg.getData() != null && webView != null) {
+                    FunListFragment.open(mBaseActivity, msg.getData());
+                }
+                return false;
+            }
+        }));
+        webView.requestFocusNodeHref(message);
         return false;
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
+    }
+
 }

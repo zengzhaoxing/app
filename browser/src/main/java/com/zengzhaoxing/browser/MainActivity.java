@@ -29,6 +29,12 @@ public class MainActivity extends BaseActivity {
         PermissionUtil.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, null);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        hideLoadingView();
+    }
+
     private long mLastClickBackTime = 0;
 
     @Override
@@ -48,8 +54,8 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    public void getBitmap() {
-        ViewUtil.getBackground(getCurrentFragment().getView());
+    public HomeFragment getHome() {
+        return (HomeFragment) mMainFragment;
     }
 
 }

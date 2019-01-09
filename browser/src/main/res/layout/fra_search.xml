@@ -38,7 +38,7 @@
                 android:layout_toRightOf="@id/search_iv"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="输入网址或关键字"
+                android:hint="@string/input_key_work"
                 android:textSize="14sp"
                 android:singleLine="true"
                 android:paddingRight="5dp"
@@ -47,7 +47,8 @@
                 android:background="#00000000"
                 android:selectAllOnFocus="true"
                 android:textColor="@color/text_black"
-                android:textColorHint="@color/text_gray"/>
+                android:textColorHint="@color/text_gray"
+                android:inputType="text" />
 
             <com.zhaoxing.view.sharpview.SharpTextView
                 android:layout_width="35dp"
@@ -76,11 +77,61 @@
         android:layout_height="0.5dp"
         android:background="@color/line_gray"/>
 
+    <RelativeLayout
+        android:id="@+id/history_ll"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:textColor="@color/text_gray"
+            android:text="搜索历史"/>
+
+        <LinearLayout
+            android:id="@+id/clear_ll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:gravity="center_vertical"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/clean"
+                android:layout_marginRight="5dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:gravity="center"
+                android:textColor="@color/text_gray"
+                android:text="清空"/>
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/line_gray"/>
+
+    </RelativeLayout>
+
     <ListView
         android:id="@+id/list_view"
         android:background="@color/white"
         android:layout_width="match_parent"
         tools:visibility="gone"
         android:layout_height="match_parent"/>
+
+
 
 </LinearLayout>

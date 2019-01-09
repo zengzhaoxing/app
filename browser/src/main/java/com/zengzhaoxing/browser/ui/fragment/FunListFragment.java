@@ -20,6 +20,8 @@ import com.zxz.www.base.utils.FileUtil;
 import com.zxz.www.base.utils.IntentUtil;
 import com.zxz.www.base.utils.ResUtil;
 
+import java.util.ArrayList;
+
 public class FunListFragment extends SlideFragment implements View.OnClickListener {
 
     public static final int FUN_OPEN_IN_BACKGROUND = 1;
@@ -38,6 +40,8 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
 
     public static final int FUN_SHARE_URL = 8;
 
+    public static final int FUN_COPY_TEXT = 9;
+
     private String getFunName(int fun) {
         switch (fun) {
             case FUN_OPEN_IN_BACKGROUND:
@@ -45,7 +49,7 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
             case FUN_OPEN_IN_NEW_WINDOW:
                 return "新窗口打开";
             case FUN_COPY_URL:
-                return "复制网页链接";
+                return "复制链接地址";
             case FUN_SELECT_TEXT:
                 return "选择文本";
             case FUN_SAVE_IMG:
@@ -56,21 +60,24 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
                 return "分享图片";
             case FUN_SHARE_URL:
                 return "分享连接";
+            case FUN_COPY_TEXT:
+                return "复制链接文字";
             default:
                 return null;
         }
     }
 
-    public static void open(BaseActivity activity,String url,int... fun) {
+    public static void open(BaseActivity activity,Bundle bundle) {
         FunListFragment fragment = new FunListFragment();
-        Bundle bundle = new Bundle();
-        bundle.putIntArray(int[].class.getName(), fun);
-        bundle.putString(String.class.getName(), url);
         fragment.setArguments(bundle);
         activity.openNewFragment(fragment);
     }
 
     private String mUrl;
+
+    private String mTitle;
+
+    private String mSrc;
 
     @Override
     public View getSlideView(ViewGroup parent) {
@@ -82,16 +89,34 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
         linearLayout.getRenderProxy().setRadius(DensityUtil.dip2px(4));
         linearLayout.setOrientation(LinearLayout.VERTICAL);
         relativeLayout.addView(linearLayout);
-        int[] funs = getArguments().getIntArray(int[].class.getName());
-        mUrl = getArguments().getString(String.class.getName());
-        for (int i = 0; funs != null && i < funs.length; i++) {
-
+        Bundle bundle = getArguments();
+        mUrl = bundle.getString("url");
+        mTitle = bundle.getString("title");
+        mSrc = bundle.getString("src");
+        ArrayList<Integer> fun = new ArrayList<>();
+        if (mUrl != null) {
+            fun.add(FUN_OPEN_IN_NEW_WINDOW);
+            fun.add(FUN_OPEN_IN_BACKGROUND);
+            fun.add(FUN_SHARE_URL);
+            fun.add(FUN_COPY_URL);
+        }
+        if (mTitle != null) {
+            fun.add(FUN_COPY_TEXT);
+        }
+        if (mSrc != null) {
+            fun.add(FUN_SAVE_IMG);
+            fun.add(FUN_LOOK_IMG);
+            fun.add(FUN_SHARE_IMG);
+        }
+        if (fun.size() == 0) {
+            mBaseActivity.closeCurrentFragment();
+        }
+        for (int i = 0; i < fun.size(); i++) {
             if (i != 0) {
                 View view = new View(getActivity());
                 view.setBackgroundResource(com.zxz.www.base.R.color.text_mid_black);
                 linearLayout.addView(view,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,DensityUtil.dip2px(0.5F)));
             }
-
             TextView textView = new TextView(getActivity());
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(55));
             lp.leftMargin = DensityUtil.dip2px(20);
@@ -99,8 +124,8 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
             textView.setGravity(Gravity.CENTER_VERTICAL);
             textView.setTextSize(14);
             textView.setTextColor(ResUtil.getColor(com.zxz.www.base.R.color.text_black));
-            textView.setText(getFunName(funs[i]));
-            textView.setTag(funs[i]);
+            textView.setText(getFunName(fun.get(i)));
+            textView.setTag(fun.get(i));
             textView.setOnClickListener(this);
             linearLayout.addView(textView);
         }
@@ -119,15 +144,19 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
             case FUN_COPY_URL:
                 EditorUtil.copy(mUrl);
                 break;
+            case FUN_COPY_TEXT:
+                EditorUtil.copy(mTitle);
+                break;
             case FUN_SELECT_TEXT:
                 break;
             case FUN_SAVE_IMG:
-                FileUtil.getInstance().saveImg(mUrl);
+                FileUtil.getInstance().saveImg(mSrc);
                 break;
             case FUN_LOOK_IMG:
                 break;
             case FUN_SHARE_IMG:
-                IntentUtil.sendImg(mUrl,mBaseActivity);
+                mBaseActivity.showLoadingView(com.zxz.www.base.R.color.black_30);
+                IntentUtil.sendImg(mSrc,mBaseActivity);
                 break;
             case FUN_SHARE_URL:
                 IntentUtil.sendText(mUrl,mBaseActivity);

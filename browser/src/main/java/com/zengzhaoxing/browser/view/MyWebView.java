@@ -7,12 +7,9 @@ import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.webkit.URLUtil;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -20,14 +17,22 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 
 import com.zengzhaoxing.browser.R;
-import com.zengzhaoxing.browser.ui.fragment.BrowserFragment;
+import com.zxz.www.base.utils.NetUtil;
 import com.zxz.www.base.view.LoadingView;
 
-public class MyWebView extends WebView {
+public class MyWebView extends WebView implements NetUtil.OnNetSpeedListener {
 
     private Activity mActivity;
 
     ProgressBar mProgressBar;
+
+    public void setHome(boolean home) {
+        isHome = home;
+    }
+
+    private boolean isHome;
+
+    private LoadingView mLoadingView;
 
     /**
      * 视频全屏参数
@@ -57,6 +62,12 @@ public class MyWebView extends WebView {
     }
 
     @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        NetUtil.unRegisterNetSpeed(this);
+    }
+
+    @Override
     public boolean canGoBack() {
         return customView != null;
     }
@@ -68,6 +79,12 @@ public class MyWebView extends WebView {
 
     private void init() {
         mActivity = (Activity) getContext();
+
+        mLoadingView = new LoadingView(mActivity);
+        mLoadingView.setBackgroundResource(R.color.transparent);
+        mLoadingView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        NetUtil.registerNetSpeed(this);
+
         WebSettings webSettings = getSettings();
         webSettings.setDomStorageEnabled(true);//主要是这句
         webSettings.setJavaScriptEnabled(true);//启用js
@@ -83,7 +100,7 @@ public class MyWebView extends WebView {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
-        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE); // 不加载缓存内容
+        webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
         //该方法解决的问题是打开浏览器不调用系统浏览器，直接用webview打开
         setWebChromeClient(new WebChromeClient() {
             @Override
@@ -91,7 +108,7 @@ public class MyWebView extends WebView {
                 if (mProgressBar == null) {
                     return;
                 }
-                if (newProgress == 100) {
+                if (newProgress == 100 || isHome) {
                     mProgressBar.setVisibility(View.GONE);
                     mProgressBar.setProgress(0);
                 } else {
@@ -116,10 +133,7 @@ public class MyWebView extends WebView {
             @Nullable
             @Override
             public View getVideoLoadingProgressView() {
-                LoadingView loadingView = new LoadingView(mActivity);
-                loadingView.setBackgroundResource(R.color.transparent);
-                loadingView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-                return loadingView;
+                return mLoadingView;
             }
 
             public void onReceivedTitle(WebView view, String title) {}
@@ -166,6 +180,11 @@ public class MyWebView extends WebView {
         setVisibility(View.VISIBLE);
     }
 
+    @Override
+    public void onSpeed(String speed) {
+        mLoadingView.setLoadingText(speed);
+    }
+
 
     /**
      * 全屏容器界面
@@ -185,8 +204,8 @@ public class MyWebView extends WebView {
     }
 
     private void setStatusBarVisibility(boolean visible) {
-        int flag = visible ? 0 : WindowManager.LayoutParams.FLAG_FULLSCREEN;
-        mActivity.getWindow().setFlags(flag, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+//        int flag = visible ? 0 : WindowManager.LayoutParams.FLAG_FULLSCREEN;
+//        mActivity.getWindow().setFlags(flag, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
 }

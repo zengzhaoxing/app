@@ -24,7 +24,7 @@ public abstract class BaseActivity extends AppCompatActivity implements UIPage{
 
     private FragmentManager mFragmentManager;
 
-    private MainFragment mMainFragment;
+    protected MainFragment mMainFragment;
 
     private FragmentRouter mFragmentRouter;
 
@@ -194,6 +194,12 @@ public abstract class BaseActivity extends AppCompatActivity implements UIPage{
         mLoadingView.setVisibility(View.VISIBLE);
         mLoadingView.setLoadingText(text);
     }
+
+    public void showLoadingView(int colorId) {
+        mLoadingView.setVisibility(View.VISIBLE);
+        mLoadingView.setBackgroundResource(colorId);
+    }
+
 
     public void hideLoadingView() {
         mLoadingView.setVisibility(View.GONE);
