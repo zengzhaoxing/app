@@ -109,7 +109,7 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
                         titleTv.setText(R.string.input_key_work);
                         titleTv.setTextColor(ResUtil.getColor(R.color.text_gray));
                     } else {
-                        titleTv.setText(view.getTitle());
+                        titleTv.setText(getTitle());
                         titleTv.setTextColor(ResUtil.getColor(R.color.text_black));
                     }
                 }
@@ -199,6 +199,13 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    public String getTitle() {
+        if (errorLl.isShown()) {
+            return "出错了";
+        }
+        return webView.getTitle();
     }
 
 }

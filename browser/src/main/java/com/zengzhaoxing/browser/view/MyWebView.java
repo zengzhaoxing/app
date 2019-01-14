@@ -108,7 +108,7 @@ public class MyWebView extends WebView implements NetUtil.OnNetSpeedListener {
                 if (mProgressBar == null) {
                     return;
                 }
-                if (newProgress == 100 || isHome) {
+                if (newProgress == 100) {
                     mProgressBar.setVisibility(View.GONE);
                     mProgressBar.setProgress(0);
                 } else {

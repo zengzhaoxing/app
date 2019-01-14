@@ -81,7 +81,10 @@ public class ViewUtil {
         }
         v.setDrawingCacheEnabled(true);
         v.buildDrawingCache();
-        Bitmap bitmap = Bitmap.createBitmap(v.getDrawingCache());
+        Bitmap bitmap = v.getDrawingCache();
+        if (bitmap != null) {
+            bitmap = Bitmap.createBitmap(bitmap);
+        }
         v.setDrawingCacheEnabled(false);
         v.buildDrawingCache(false);
         return bitmap;

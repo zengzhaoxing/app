@@ -94,12 +94,14 @@ public class SearchFragment extends BaseFragment {
                                 if (historyLl == null) {
                                     return;
                                 }
+                                historyLl.setVisibility(View.GONE);
                                 if (response != null && response.getS() != null && response.getS().size() > 0) {
                                     mBDSuggestionAdapter.setStrings(response.getS());
-                                    historyLl.setVisibility(View.GONE);
-                                } else {
+                                } else if (mHistories != null && !mHistories.isEmpty()) {
                                     mBDSuggestionAdapter.setStrings(mHistories);
                                     historyLl.setVisibility(View.VISIBLE);
+                                } else {
+                                    mBDSuggestionAdapter.setStrings(null);
                                 }
                             }
                         });

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@android:color/black">
 
     <FrameLayout
@@ -19,5 +19,13 @@
         android:visibility="gone">
 
     </com.zxz.www.base.view.LoadingView>
+
+    <com.zxz.www.base.view.gallery.GalleryView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:allowAuto="false"
+        app:allowManual="false"
+        app:showDot="false"/>
+
 
 </FrameLayout>

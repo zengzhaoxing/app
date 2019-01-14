@@ -19,6 +19,8 @@ public class Constants {
     public static String getKeyWord(String url) {
         if (url != null && url.startsWith(SEARCH_EXTRA)) {
             return url.replace(SEARCH_EXTRA, "");
+        } else if (StringUtil.isEqual(url, DEFAULT_WEB)) {
+            return null;
         }
         return url;
     }
