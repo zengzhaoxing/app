@@ -11,13 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/window_frame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </FrameLayout>
-
         <RelativeLayout
             android:id="@+id/switch_rl"
             android:layout_width="match_parent"
@@ -61,6 +54,13 @@
                 android:layout_marginTop="50dp"/>
 
         </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/window_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </FrameLayout>
 
     </RelativeLayout>
 

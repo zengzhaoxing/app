@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -132,6 +133,9 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
         lastTime = System.currentTimeMillis();
         webView.loadUrl(mOriginUrl);
         webView.setOnLongClickListener(this);
+        if (mWindowFragment.isHome()) {
+            ((MainActivity) getActivity()).getHome().onFirstBrowserCreate(mWindowFragment);
+        }
         return view;
     }
 
@@ -159,6 +163,11 @@ public class BrowserFragment extends BaseFragment implements View.OnLongClickLis
     @Override
     protected Bundle onExit() {
         return super.onExit();
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @OnClick({R.id.refresh_tv, R.id.error_ll, R.id.search_srl})

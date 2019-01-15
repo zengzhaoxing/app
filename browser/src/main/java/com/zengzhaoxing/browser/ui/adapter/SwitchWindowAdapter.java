@@ -79,7 +79,6 @@ public class SwitchWindowAdapter extends PagerAdapter implements View.OnClickLis
             int pi = p + i - index;
             if (pi < getCount()) {
                 Bitmap bitmap = mWindowFragments.get(pi).getBitmap();
-                Log.i("zxz", bitmap+"dd");
                 if (bitmap != null) {
                     mImageViews[i].setImageBitmap(bitmap);
                 } else {

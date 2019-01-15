@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.zengzhaoxing.browser.MainActivity;
 import com.zhaoxing.view.sharpview.SharpLinearLayout;
 import com.zxz.www.base.app.BaseActivity;
 import com.zxz.www.base.app.SlideFragment;
@@ -138,8 +139,10 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
         int fun = (int) v.getTag();
         switch (fun) {
             case FUN_OPEN_IN_BACKGROUND:
+                ((MainActivity)mBaseActivity).getHome().openBackWindow(mUrl);
                 break;
             case FUN_OPEN_IN_NEW_WINDOW:
+                ((MainActivity)mBaseActivity).getHome().openNewWindow(mUrl);
                 break;
             case FUN_COPY_URL:
                 EditorUtil.copy(mUrl);

@@ -1,6 +1,7 @@
 package com.zengzhaoxing.browser.ui.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -28,6 +29,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static com.zengzhaoxing.browser.Constants.DEFAULT_WEB;
 
 public class HomeFragment extends MainFragment {
 
@@ -101,19 +104,28 @@ public class HomeFragment extends MainFragment {
 
     public void showSwitchWindow(boolean isSwitch) {
         if (isSwitch) {
-            mWindowFrame.animate().scaleX(SCALE).scaleY(SCALE).setDuration(DURATION).withEndAction(new Runnable() {
+            mWindowFrame.animate().scaleX(SCALE).scaleY(SCALE).setDuration(DURATION).withStartAction(new Runnable() {
                 @Override
                 public void run() {
-                    mSwitchWindowAdapter.refresh(switchViewPager.getCurrentItem());
                     switchRl.setVisibility(View.VISIBLE);
                 }
+            }).withEndAction(new Runnable() {
+                @Override
+                public void run() {
+                    mWindowFrame.setVisibility(View.INVISIBLE);
+                    mSwitchWindowAdapter.refresh(switchViewPager.getCurrentItem());
+                }
             }).start();
+
         } else {
             switchRl.setVisibility(View.GONE);
-            mWindowFrame.animate().scaleX(1).scaleY(1).setDuration(DURATION).start();
-        }
-        for (WindowFragment fragment : mWindowFragments) {
-            fragment.setWindowCount(mWindowFragments.size());
+            mWindowFrame.setVisibility(View.VISIBLE);
+            mWindowFrame.animate().scaleX(1).scaleY(1).setDuration(DURATION).withEndAction(new Runnable() {
+                @Override
+                public void run() {
+
+                }
+            }).start();
         }
     }
 
@@ -121,20 +133,17 @@ public class HomeFragment extends MainFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.add_iv:
-                if (mWindowFragments.size() == 10) {
-                    mWindowFragments.remove(9);
-                }
-                mWindowFragments.add(new WindowFragment());
-                mSwitchWindowAdapter.notifyDataSetChanged();
-                switchWindow(mWindowFragments.size() - 1);
-                switchViewPager.setCurrentItem(mWindowFragments.size() - 1);
+                openNewWindow();
                 showSwitchWindow(false);
                 break;
             case R.id.clean_iv:
-                mWindowFragments = new ArrayList<>();
+                mWindowFragments.clear();
                 mWindowFragments.add(new WindowFragment());
                 setPagerAdapter();
                 showSwitchWindow(false);
+                for (WindowFragment fragment1 : mWindowFragments) {
+                    fragment1.setWindowCount(mWindowFragments.size());
+                }
                 break;
         }
     }
@@ -151,12 +160,18 @@ public class HomeFragment extends MainFragment {
         switchViewPager.setOffscreenPageLimit(5);
         mSwitchWindowAdapter.setOnItemClickListener(new SwitchWindowAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position) {
+            public void onItemClick(final int position) {
                 if (switchViewPager.getCurrentItem() != position) {
                     switchViewPager.setCurrentItem(position);
                 }
-                switchWindow(position);
-                showSwitchWindow(false);
+                mWindowFrame.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        switchWindow(position);
+                        showSwitchWindow(false);
+                    }
+                },100);
+
             }
         });
         FragmentTransaction fm = getChildFragmentManager().beginTransaction();
@@ -186,5 +201,63 @@ public class HomeFragment extends MainFragment {
             fm.commitAllowingStateLoss();
         }
     }
+
+    public void openNewWindow() {
+        openNewWindow(DEFAULT_WEB);
+    }
+
+    public void openNewWindow(String url) {
+        if (mWindowFragments.size() == 10) {
+            mWindowFragments.remove(9);
+        }
+        WindowFragment fragment = new WindowFragment();
+        Bundle bundle = new Bundle();
+        bundle.putStringArray(DEFAULT_WEB,new String[]{url,null});
+        fragment.setArguments(bundle);
+        mWindowFragments.add(fragment);
+        mSwitchWindowAdapter.notifyDataSetChanged();
+        switchViewPager.setCurrentItem(mWindowFragments.size() - 1);
+        switchWindow(mWindowFragments.size() - 1);
+        for (WindowFragment fragment1 : mWindowFragments) {
+            fragment1.setWindowCount(mWindowFragments.size());
+        }
+    }
+
+    public void openBackWindow(String url) {
+        if (mWindowFragments.size() == 10) {
+            mWindowFragments.remove(9);
+        }
+        WindowFragment fragment = new WindowFragment();
+        mTemp = fragment;
+        Bundle bundle = new Bundle();
+        bundle.putStringArray(DEFAULT_WEB,new String[]{url,null});
+        fragment.setArguments(bundle);
+        mWindowFragments.add(fragment);
+        mSwitchWindowAdapter.notifyDataSetChanged();
+        FragmentTransaction fm = getChildFragmentManager().beginTransaction();
+        fm.add(R.id.window_frame, fragment);
+        fm.commitAllowingStateLoss();
+        for (WindowFragment fragment1 : mWindowFragments) {
+            fragment1.setWindowCount(mWindowFragments.size());
+        }
+    }
+
+    WindowFragment mTemp;
+
+    public void onFirstBrowserCreate(final WindowFragment fragment) {
+        if (mWindowFragments.contains(fragment) && fragment.isAdded() && fragment == mTemp) {
+            mWindowFrame.post(new Runnable() {
+                @Override
+                public void run() {
+                    FragmentTransaction fm = getChildFragmentManager().beginTransaction();
+                    fm.hide(fragment);
+                    fm.commitAllowingStateLoss();
+                    mTemp = null;
+                }
+            });
+
+        }
+    }
+
 
 }

@@ -30,7 +30,6 @@ public class MyView extends TextView {
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         boolean b = super.onTouchEvent(ev);
-        Log.i("zxz", "MyView onTouchEvent " + b);
         return b;
     }
 

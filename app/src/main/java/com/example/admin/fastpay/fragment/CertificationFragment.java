@@ -62,7 +62,6 @@ public class CertificationFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.merchants_btn:
                 StringBuffer s = new StringBuffer("dddd");
-                Log.i("zxz", s.toString());
                 ShopInfoFragment shopInfoFragment = new ShopInfoFragment();
                 mBaseActivity.openNewFragmentWithAnim(shopInfoFragment,R.animator.enter_rotation,R.animator.exit_rotation);
                 break;

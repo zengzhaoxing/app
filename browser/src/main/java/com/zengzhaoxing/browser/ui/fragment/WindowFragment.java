@@ -42,7 +42,11 @@ public class WindowFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_window, container, false);
         unbinder = ButterKnife.bind(this, mRootView);
-        openNew(new String[]{Constants.DEFAULT_WEB, null});
+        if (getArguments() != null) {
+            openNew(getArguments());
+        } else {
+            openNew(new String[]{Constants.DEFAULT_WEB,null});
+        }
         windowTv.setText(((HomeFragment)getParentFragment()).getWindowCount() + "");
         return mRootView;
     }
@@ -77,6 +81,13 @@ public class WindowFragment extends BaseFragment {
         BrowserFragment browserFragment = new BrowserFragment();
         Bundle bundle = new Bundle();
         bundle.putStringArray(Constants.DEFAULT_WEB, url);
+        browserFragment.setArguments(bundle);
+        openNew(browserFragment);
+    }
+
+    public void openNew(Bundle bundle) {
+        mFragmentStack.removeAllElements();
+        BrowserFragment browserFragment = new BrowserFragment();
         browserFragment.setArguments(bundle);
         openNew(browserFragment);
     }
@@ -149,7 +160,6 @@ public class WindowFragment extends BaseFragment {
 
     public Bitmap getBitmap() {
         if (mRootView == null) {
-            Log.i("zxz", mRootView+"");
             return null;
         }
         return ViewUtil.getBackground(getView());
