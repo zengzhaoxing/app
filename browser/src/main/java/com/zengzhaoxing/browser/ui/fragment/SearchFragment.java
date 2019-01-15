@@ -116,8 +116,10 @@ public class SearchFragment extends BaseFragment {
             }
         });
         mBDSuggestionAdapter = new BDSuggestionAdapter();
-        mUrl = getArguments().getString(DEFAULT_WEB);
-        searchEt.setText(mUrl);
+        if (getArguments() != null) {
+            mUrl = getArguments().getString(DEFAULT_WEB);
+            searchEt.setText(mUrl);
+        }
         searchEt.requestFocus();
         KeyBoardUtil.openKeyboard(searchEt);
         listView.setAdapter(mBDSuggestionAdapter);

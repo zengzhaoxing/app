@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/window_item_view"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:background="@color/black">
+
+    <TextView
+        android:id="@+id/window_title_tv"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/window_title_height"
+        android:gravity="center_vertical"
+        android:textSize="15sp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textColor="@color/white"
+        tools:text="dsfdfssfsdsdfs"/>
+
+    <ImageView
+        android:id="@+id/window_iv"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/title_tv"
+        android:scaleType="fitXY"
+        android:layout_marginTop="@dimen/window_title_height"/>
+
+
+    <com.zengzhaoxing.browser.view.WindowCloseView
+        android:id="@+id/close_iv"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/window_title_height"/>
+
+
+</RelativeLayout>

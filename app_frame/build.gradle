@@ -52,4 +52,6 @@ dependencies {
     compile 'com.github.zengzhaoxing:SharpView:v2.4.5'
     compile 'com.soundcloud.android:android-crop:1.0.1@aar'
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+
 }

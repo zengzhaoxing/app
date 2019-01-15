@@ -64,6 +64,87 @@
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/white_view"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_margin="15dp">
+
+            <com.zhaoxing.view.sharpview.SharpRelativeLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="30dp"
+                android:orientation="horizontal"
+                app:radius="15dp"
+                android:gravity="center_vertical"
+                app:backgroundColor="@color/line_gray">
+
+                <ImageView
+                    android:id="@+id/search_iv"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
+                    android:src="@drawable/search"/>
+
+                <TextView
+                    android:id="@+id/title_tv"
+                    android:enabled="false"
+                    android:layout_toRightOf="@id/search_iv"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:textSize="14sp"
+                    android:singleLine="true"
+                    android:paddingRight="5dp"
+                    android:ellipsize="end"
+                    android:gravity="left|center"
+                    android:background="#00000000"
+                    android:textColor="@color/text_black"/>
+
+                <com.zhaoxing.view.sharpview.SharpTextView
+                    android:layout_width="35dp"
+                    android:layout_height="match_parent"
+                    app:right_bottom_radius="15dp"
+                    app:right_top_radius="15dp"
+                    android:layout_alignParentRight="true"
+                    app:startBgColor="#afE6E6E6"
+                    app:endBgColor="#ffE6E6E6"/>
+
+            </com.zhaoxing.view.sharpview.SharpRelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/blue"
+                android:layout_marginLeft="15dp"
+                android:textSize="15sp"
+                android:text="@string/refresh"/>
+
+        </LinearLayout>
+
+        <ProgressBar
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:progress="20"
+            android:layout_height="2dp"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/line_gray"/>
+
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/bg_iv"
         android:layout_width="match_parent"

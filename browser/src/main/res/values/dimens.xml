@@ -1,0 +1,6 @@
+<resources>
+    <dimen name="menu_item_size">34dp</dimen>
+    <dimen name="menu_bar_height">44dp</dimen>
+    <dimen name="window_title_height">30dp</dimen>
+
+</resources>

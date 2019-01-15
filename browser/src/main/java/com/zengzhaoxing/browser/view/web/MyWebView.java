@@ -1,4 +1,4 @@
-package com.zengzhaoxing.browser.view;
+package com.zengzhaoxing.browser.view.web;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -24,14 +24,6 @@ public class MyWebView extends WebView implements NetUtil.OnNetSpeedListener {
 
     private Activity mActivity;
 
-    ProgressBar mProgressBar;
-
-    public void setHome(boolean home) {
-        isHome = home;
-    }
-
-    private boolean isHome;
-
     private LoadingView mLoadingView;
 
     /**
@@ -41,10 +33,6 @@ public class MyWebView extends WebView implements NetUtil.OnNetSpeedListener {
     private View customView;
     private FrameLayout fullscreenContainer;
     private WebChromeClient.CustomViewCallback customViewCallback;
-
-    public void setProgressBar(ProgressBar progressBar) {
-        mProgressBar = progressBar;
-    }
 
     public MyWebView(Context context) {
         super(context);
@@ -74,7 +62,11 @@ public class MyWebView extends WebView implements NetUtil.OnNetSpeedListener {
 
     @Override
     public void goBack() {
-        hideCustomView();
+        if (customView != null) {
+            hideCustomView();
+        } else {
+            super.goBack();
+        }
     }
 
     private void init() {
@@ -96,28 +88,19 @@ public class MyWebView extends WebView implements NetUtil.OnNetSpeedListener {
         webSettings.setAllowFileAccess(true); // 允许访问文件
         webSettings.setSupportZoom(true); // 支持缩放
         webSettings.setLoadWithOverviewMode(true);
-        setWebChromeClient(new WebChromeClient());
+        super.setWebChromeClient(new WebChromeClient());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
         //该方法解决的问题是打开浏览器不调用系统浏览器，直接用webview打开
-        setWebChromeClient(new WebChromeClient() {
+        super.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (mProgressBar == null) {
-                    return;
+                if (newProgress < 10) {
+                    newProgress += 1;
                 }
-                if (newProgress == 100) {
-                    mProgressBar.setVisibility(View.GONE);
-                    mProgressBar.setProgress(0);
-                } else {
-                    mProgressBar.setVisibility(View.VISIBLE);
-                    if (newProgress < 5) {
-                        newProgress = mProgressBar.getProgress() + 1;
-                    }
-                    mProgressBar.setProgress(newProgress);
-                }
+                mClient.onProgressChanged(view,newProgress);
             }
 
             @Override
@@ -136,10 +119,22 @@ public class MyWebView extends WebView implements NetUtil.OnNetSpeedListener {
                 return mLoadingView;
             }
 
-            public void onReceivedTitle(WebView view, String title) {}
+            public void onReceivedTitle(WebView view, String title) {
+                if (mClient != null) {
+                    mClient.onReceivedTitle(view,title);
+                }
+            }
 
         });
     }
+
+    private WebChromeClient mClient;
+
+    @Override
+    public void setWebChromeClient(WebChromeClient client) {
+        mClient = client;
+    }
+
 
     /**
      * 视频播放全屏
@@ -207,5 +202,9 @@ public class MyWebView extends WebView implements NetUtil.OnNetSpeedListener {
 //        int flag = visible ? 0 : WindowManager.LayoutParams.FLAG_FULLSCREEN;
 //        mActivity.getWindow().setFlags(flag, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
+
+
+
+
 
 }

@@ -1,10 +1,7 @@
 package com.zengzhaoxing.browser.ui.fragment;
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
@@ -15,11 +12,14 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 import com.zengzhaoxing.browser.R;
+import com.zengzhaoxing.browser.bean.UrlBean;
 import com.zengzhaoxing.browser.ui.adapter.SwitchWindowAdapter;
 import com.zxz.www.base.app.BaseFragment;
 import com.zxz.www.base.app.MainFragment;
 import com.zxz.www.base.utils.DensityUtil;
 import com.zxz.www.base.utils.DeviceInfoUtil;
+import com.zxz.www.base.utils.ResUtil;
+import com.zxz.www.base.utils.StringUtil;
 import com.zxz.www.base.utils.ViewUtil;
 
 import java.util.ArrayList;
@@ -44,9 +44,10 @@ public class HomeFragment extends MainFragment {
     RelativeLayout switchRl;
     @BindView(R.id.switch_view_pager)
     ViewPager switchViewPager;
+    @BindView(R.id.white_view)
+    View whiteView;
 
     SwitchWindowAdapter mSwitchWindowAdapter;
-
 
     private List<WindowFragment> mWindowFragments = new ArrayList<>();
 
@@ -60,7 +61,6 @@ public class HomeFragment extends MainFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fra_home, container, false);
         unbinder = ButterKnife.bind(this, view);
-
         mBaseActivity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         bg.postDelayed(new Runnable() {
             @Override
@@ -71,29 +71,23 @@ public class HomeFragment extends MainFragment {
                 }
             }
         }, 2000);
-
-        setPagerAdapter();
-        int height = DeviceInfoUtil.getScreenHeight(getActivity()) - ViewUtil.getNavigationBarHeight(getActivity());
-        int py = (int) (height * (1 - SCALE) / 2);
-        int px = (int) (DeviceInfoUtil.getScreenWidth() * (1 - SCALE) / 2);
-        switchViewPager.setPadding(px,py,px,py);
-        switchViewPager.setPageMargin(DensityUtil.dip2px(25));
+        initFirstWindow();
         return view;
     }
 
     @Override
     protected boolean handleBackEvent() {
         if (switchRl.isShown()) {
-            switchWindow(switchViewPager.getCurrentItem());
+            switchWindow(mWindowFragments.get(switchViewPager.getCurrentItem()));
             showSwitchWindow(false);
             return true;
         }
-        return mWindowFragments.get(mCurrWindow).handleBackEvent();
+        return mCurrFragment.handleBackEvent();
     }
 
     @Override
     protected void onTopFragmentExit(Class<? extends BaseFragment> topFragmentClass, Bundle params) {
-        mWindowFragments.get(mCurrWindow).onTopFragmentExit(topFragmentClass, params);
+        mWindowFragments.get(getCurrWindowIndex()).onTopFragmentExit(topFragmentClass, params);
     }
 
     @Override
@@ -103,6 +97,12 @@ public class HomeFragment extends MainFragment {
     }
 
     public void showSwitchWindow(boolean isSwitch) {
+        if (switchViewPager.getPageMargin() != DensityUtil.dip2px(25)) {
+            int py = (int) (mWindowFrame.getHeight() * (1 - SCALE) / 2);
+            int px = (int) (mWindowFrame.getWidth() * (1 - SCALE) / 2);
+            switchViewPager.setPadding(px, (int) (py - ResUtil.getDimension(R.dimen.window_title_height)), px, py);
+            switchViewPager.setPageMargin(DensityUtil.dip2px(25));
+        }
         if (isSwitch) {
             mWindowFrame.animate().scaleX(SCALE).scaleY(SCALE).setDuration(DURATION).withStartAction(new Runnable() {
                 @Override
@@ -137,25 +137,26 @@ public class HomeFragment extends MainFragment {
                 showSwitchWindow(false);
                 break;
             case R.id.clean_iv:
-                mWindowFragments.clear();
-                mWindowFragments.add(new WindowFragment());
-                setPagerAdapter();
+                initFirstWindow();
                 showSwitchWindow(false);
-                for (WindowFragment fragment1 : mWindowFragments) {
-                    fragment1.setWindowCount(mWindowFragments.size());
-                }
                 break;
         }
     }
 
-    public int getWindowCount() {
-        return mWindowFragments.size();
+
+    private void initFirstWindow() {
+        mWindowFragments.clear();
+        mCurrFragment = new WindowFragment();
+        mWindowFragments.add(mCurrFragment);
+        reSetAdapter();
+        FragmentTransaction fm = getChildFragmentManager().beginTransaction();
+        fm.replace(R.id.window_frame, mWindowFragments.get(0));
+        fm.commitAllowingStateLoss();
+        refreshWindowCount();
     }
 
-    private void setPagerAdapter() {
-        mWindowFragments.clear();
-        mWindowFragments.add(new WindowFragment());
-        mSwitchWindowAdapter = new SwitchWindowAdapter(mWindowFragments,getActivity());
+    private void reSetAdapter() {
+        mSwitchWindowAdapter = new SwitchWindowAdapter(mWindowFragments, getActivity());
         switchViewPager.setAdapter(mSwitchWindowAdapter);
         switchViewPager.setOffscreenPageLimit(5);
         mSwitchWindowAdapter.setOnItemClickListener(new SwitchWindowAdapter.OnItemClickListener() {
@@ -167,42 +168,48 @@ public class HomeFragment extends MainFragment {
                 mWindowFrame.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        switchWindow(position);
+                        switchWindow(mWindowFragments.get(position));
                         showSwitchWindow(false);
                     }
-                },100);
+                }, 100);
 
+            }
+
+            @Override
+            public void onCloseClick(int position) {
+                WindowFragment fragment =  mWindowFragments.remove(position);
+                if (fragment.isAdded()) {
+                    FragmentTransaction fm = getChildFragmentManager().beginTransaction();
+                    fm.remove(fragment);
+                    fm.commitAllowingStateLoss();
+                }
+                refreshWindowCount();
+                reSetAdapter();
             }
         });
-        FragmentTransaction fm = getChildFragmentManager().beginTransaction();
-        fm.replace(R.id.window_frame, mWindowFragments.get(0));
-        mCurrWindow = 0;
-        fm.commitAllowingStateLoss();
     }
 
-    private int mCurrWindow;
+    private int getCurrWindowIndex() {
+        return mWindowFragments.indexOf(mCurrFragment);
+    }
 
-    private void switchWindow(int index) {
-        if (mCurrWindow != index) {
-            mCurrWindow = index;
+    private WindowFragment mCurrFragment;
+
+    private void switchWindow(WindowFragment fragment) {
+        if (mCurrFragment != fragment && mWindowFragments.contains(fragment)) {
             FragmentTransaction fm = getChildFragmentManager().beginTransaction();
-            for (int i = 0; i < mWindowFragments.size(); i++) {
-                WindowFragment fragment = mWindowFragments.get(i);
-                if (i == index) {
-                    if (fragment.isAdded()) {
-                        fm.show(fragment);
-                    } else {
-                        fm.add(R.id.window_frame, fragment);
-                    }
-                } else if (fragment.isAdded()) {
-                    fm.hide(fragment);
-                }
+            fm.hide(mCurrFragment);
+            if (fragment.isAdded()) {
+                fm.show(fragment);
+            } else {
+                fm.add(R.id.window_frame, fragment);
             }
+            mCurrFragment = fragment;
             fm.commitAllowingStateLoss();
         }
     }
 
-    public void openNewWindow() {
+    private void openNewWindow() {
         openNewWindow(DEFAULT_WEB);
     }
 
@@ -212,15 +219,16 @@ public class HomeFragment extends MainFragment {
         }
         WindowFragment fragment = new WindowFragment();
         Bundle bundle = new Bundle();
-        bundle.putStringArray(DEFAULT_WEB,new String[]{url,null});
+        bundle.putStringArray(DEFAULT_WEB, new String[]{url, null});
         fragment.setArguments(bundle);
         mWindowFragments.add(fragment);
         mSwitchWindowAdapter.notifyDataSetChanged();
         switchViewPager.setCurrentItem(mWindowFragments.size() - 1);
-        switchWindow(mWindowFragments.size() - 1);
-        for (WindowFragment fragment1 : mWindowFragments) {
-            fragment1.setWindowCount(mWindowFragments.size());
+        if (!StringUtil.isEqual(url,DEFAULT_WEB)) {
+            fragment.mPreWindow = mCurrFragment;
         }
+        switchWindow(fragment);
+        refreshWindowCount();
     }
 
     public void openBackWindow(String url) {
@@ -230,21 +238,48 @@ public class HomeFragment extends MainFragment {
         WindowFragment fragment = new WindowFragment();
         mTemp = fragment;
         Bundle bundle = new Bundle();
-        bundle.putStringArray(DEFAULT_WEB,new String[]{url,null});
+        bundle.putStringArray(DEFAULT_WEB, new String[]{url, null});
         fragment.setArguments(bundle);
         mWindowFragments.add(fragment);
         mSwitchWindowAdapter.notifyDataSetChanged();
         FragmentTransaction fm = getChildFragmentManager().beginTransaction();
         fm.add(R.id.window_frame, fragment);
         fm.commitAllowingStateLoss();
-        for (WindowFragment fragment1 : mWindowFragments) {
-            fragment1.setWindowCount(mWindowFragments.size());
+        whiteView.setVisibility(View.VISIBLE);
+        float py = mWindowFrame.getHeight() - ResUtil.getDimension(R.dimen.menu_bar_height) / 2 - mWindowFrame.getHeight()/2;
+        float m = ResUtil.getDimension(R.dimen.menu_item_size);
+        float px = ((mWindowFrame.getWidth() - 5 * m) / 6 + m) * 5 - m / 2 - mWindowFrame.getWidth()/2;
+        whiteView.setScaleX(0.5f);
+        whiteView.setScaleY(0.5f);
+        whiteView.animate().scaleX(0).scaleY(0).translationX(px).translationY(py).setDuration(300).withEndAction(new Runnable() {
+            @Override
+            public void run() {
+                whiteView.setScaleX(0.5f);
+                whiteView.setScaleY(0.5f);
+                whiteView.setTranslationY(0);
+                whiteView.setTranslationX(0);
+                whiteView.setVisibility(View.GONE);
+                refreshWindowCount();
+            }
+        }).setStartDelay(400).start();
+    }
+
+    public void deleteCurrWindow(WindowFragment newCurr) {
+        if (mWindowFragments.contains(newCurr) && newCurr != mCurrFragment) {
+            mWindowFragments.remove(mCurrFragment);
+            FragmentTransaction fm = getChildFragmentManager().beginTransaction();
+            fm.remove(mCurrFragment);
+            fm.show(newCurr);
+            fm.commitAllowingStateLoss();
+            mCurrFragment = newCurr;
+            reSetAdapter();
+            refreshWindowCount();
         }
     }
 
     WindowFragment mTemp;
 
-    public void onFirstBrowserCreate(final WindowFragment fragment) {
+    public void onBrowserCreate(final WindowFragment fragment) {
         if (mWindowFragments.contains(fragment) && fragment.isAdded() && fragment == mTemp) {
             mWindowFrame.post(new Runnable() {
                 @Override
@@ -259,5 +294,14 @@ public class HomeFragment extends MainFragment {
         }
     }
 
+    private void refreshWindowCount() {
+        for (WindowFragment fragment1 : mWindowFragments) {
+            fragment1.setWindowCount(mWindowFragments.size());
+        }
+    }
+
+    public UrlBean getUrlBean() {
+        return mCurrFragment.getUrlBean();
+    }
 
 }
