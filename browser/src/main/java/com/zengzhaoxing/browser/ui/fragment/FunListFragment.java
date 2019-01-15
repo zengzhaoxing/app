@@ -12,6 +12,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zengzhaoxing.browser.MainActivity;
+import com.zengzhaoxing.browser.bean.UrlBean;
+import com.zengzhaoxing.browser.presenter.UrlCollectPresenter;
 import com.zhaoxing.view.sharpview.SharpLinearLayout;
 import com.zxz.www.base.app.BaseActivity;
 import com.zxz.www.base.app.SlideFragment;
@@ -20,6 +22,7 @@ import com.zxz.www.base.utils.EditorUtil;
 import com.zxz.www.base.utils.FileUtil;
 import com.zxz.www.base.utils.IntentUtil;
 import com.zxz.www.base.utils.ResUtil;
+import com.zxz.www.base.utils.ToastUtil;
 
 import java.util.ArrayList;
 
@@ -43,6 +46,12 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
 
     public static final int FUN_COPY_TEXT = 9;
 
+    public static final int FUN_DELETE_HISTORY = 10;
+
+    public static final int FUN_DELETE_COLLECT = 11;
+
+    public static final int FUN_ADD_COLLECT = 12;
+
     private String getFunName(int fun) {
         switch (fun) {
             case FUN_OPEN_IN_BACKGROUND:
@@ -63,6 +72,12 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
                 return "分享连接";
             case FUN_COPY_TEXT:
                 return "复制链接文字";
+            case FUN_DELETE_HISTORY:
+                return "删除该历史记录";
+            case FUN_DELETE_COLLECT:
+                return "删除该收藏";
+            case FUN_ADD_COLLECT:
+                return "添至收藏";
             default:
                 return null;
         }
@@ -80,6 +95,8 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
 
     private String mSrc;
 
+    private UrlBean mUrlBean;
+
     @Override
     public View getSlideView(ViewGroup parent) {
         RelativeLayout relativeLayout = new RelativeLayout(getActivity());
@@ -94,6 +111,7 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
         mUrl = bundle.getString("url");
         mTitle = bundle.getString("title");
         mSrc = bundle.getString("src");
+        mUrlBean = (UrlBean) bundle.getSerializable(UrlBean.class.getName());
         ArrayList<Integer> fun = new ArrayList<>();
         if (mUrl != null) {
             fun.add(FUN_OPEN_IN_NEW_WINDOW);
@@ -108,6 +126,17 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
             fun.add(FUN_SAVE_IMG);
             fun.add(FUN_LOOK_IMG);
             fun.add(FUN_SHARE_IMG);
+        }
+        if (mUrlBean != null) {
+            fun.add(FUN_OPEN_IN_BACKGROUND);
+            fun.add(FUN_SHARE_URL);
+            fun.add(FUN_COPY_URL);
+            if (mUrlBean.isCollect()) {
+                fun.add(FUN_DELETE_COLLECT);
+            } else {
+                fun.add(FUN_ADD_COLLECT);
+                fun.add(FUN_DELETE_HISTORY);
+            }
         }
         if (fun.size() == 0) {
             mBaseActivity.closeCurrentFragment();
@@ -139,10 +168,15 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
         int fun = (int) v.getTag();
         switch (fun) {
             case FUN_OPEN_IN_BACKGROUND:
-                ((MainActivity)mBaseActivity).getHome().openBackWindow(mUrl);
+                ((MainActivity)mBaseActivity).getHome().openBackWindow(mUrlBean);
+                if (mUrlBean != null) {
+                    ToastUtil.toast("已在后台中打开");
+                }
                 break;
             case FUN_OPEN_IN_NEW_WINDOW:
-                ((MainActivity)mBaseActivity).getHome().openNewWindow(mUrl);
+                UrlBean bean = new UrlBean();
+                bean.setUrl(mUrl);
+                ((MainActivity)mBaseActivity).getHome().openNewWindow(bean);
                 break;
             case FUN_COPY_URL:
                 EditorUtil.copy(mUrl);
@@ -164,8 +198,14 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
             case FUN_SHARE_URL:
                 IntentUtil.sendText(mUrl,mBaseActivity);
                 break;
-            default:
+            case FUN_DELETE_HISTORY:
+            case FUN_DELETE_COLLECT:
+                UrlCollectPresenter.getInstance().delete(mUrlBean);
                 break;
+            case FUN_ADD_COLLECT:
+                UrlCollectPresenter.getInstance().addCollect(mUrlBean);
+                break;
+            default:
         }
         mBaseActivity.closeCurrentFragment();
     }

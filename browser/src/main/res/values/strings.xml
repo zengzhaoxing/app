@@ -5,4 +5,14 @@
     <string name="search">搜索</string>
     <string name="refresh">刷新</string>
     <string name="input_key_work">输入网址或关键字</string>
+    <string name="menu_add_collect">添加收藏</string>
+    <string name="menu_collect">收藏</string>
+    <string name="menu_history">历史</string>
+    <string name="menu_download">下载</string>
+    <string name="menu_clean">清除数据</string>
+    <string name="menu_exit">退出</string>
+    <string name="clean">清除</string>
+    <string name="q_clean_all">确定删除所有记录吗?</string>
+    <string name="yes">确定</string>
+    <string name="no">取消</string>
 </resources>

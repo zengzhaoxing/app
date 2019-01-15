@@ -46,7 +46,8 @@
                 android:ellipsize="end"
                 android:gravity="left|center"
                 android:background="#00000000"
-                android:textColor="@color/text_black"/>
+                android:text="@string/input_key_work"
+                android:textColor="@color/text_gray"/>
 
             <com.zhaoxing.view.sharpview.SharpTextView
                 android:layout_width="35dp"
@@ -66,7 +67,7 @@
             android:textColor="@color/blue"
             android:layout_marginLeft="15dp"
             android:textSize="15sp"
-            android:text="@string/refresh"/>
+            android:text="@string/search"/>
 
     </LinearLayout>
 
@@ -75,50 +76,10 @@
         android:layout_height="0.5dp"
         android:background="@color/line_gray"/>
 
-    <ProgressBar
-        android:id="@+id/search_pb"
-        style="?android:attr/progressBarStyleHorizontal"
+    <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"/>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.zengzhaoxing.browser.view.web.MyWebView
-            android:id="@+id/web_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
-
-        <LinearLayout
-            android:id="@+id/error_ll"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@color/white"
-            android:visibility="gone"
-            android:gravity="center"
-            android:paddingBottom="150dp">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/signal"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="出错了，点击重试"
-                android:textColor="@color/text_black"
-                android:textSize="13sp"/>
-
-
-
-        </LinearLayout>
-
-
-    </FrameLayout>
-
-
+        android:layout_height="0.5dp"
+        android:layout_weight="1"
+        android:background="@color/red"/>
 
 </LinearLayout>

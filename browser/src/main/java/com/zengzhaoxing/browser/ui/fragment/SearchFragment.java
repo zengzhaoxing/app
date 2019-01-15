@@ -14,11 +14,13 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.zengzhaoxing.browser.Constants;
 import com.zengzhaoxing.browser.R;
 import com.zengzhaoxing.browser.bean.BaiduSuggestion;
+import com.zengzhaoxing.browser.bean.UrlBean;
 import com.zengzhaoxing.browser.net.BaiduParser;
 import com.zengzhaoxing.browser.ui.adapter.BDSuggestionAdapter;
+import com.zengzhaoxing.browser.ui.dialog.NoticeDialog;
+import com.zxz.www.base.app.BaseActivity;
 import com.zxz.www.base.app.BaseFragment;
 import com.zxz.www.base.net.request.JsonRequester;
 import com.zxz.www.base.net.request.RequesterFactory;
@@ -36,13 +38,20 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 import static com.zengzhaoxing.browser.Constants.BAI_DU_SEARCH;
-import static com.zengzhaoxing.browser.Constants.DEFAULT_WEB;
 import static com.zengzhaoxing.browser.Constants.HTTP;
 import static com.zengzhaoxing.browser.Constants.HTTPS;
 import static com.zengzhaoxing.browser.Constants.SEARCH_EXTRA;
 
 public class SearchFragment extends BaseFragment {
 
+
+    public static void show(BaseActivity activity,String defaultStr) {
+        SearchFragment fragment = new SearchFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(String.class.getName(), defaultStr);
+        fragment.setArguments(bundle);
+        activity.openNewFragment(fragment);
+    }
 
     @BindView(R.id.search_et)
     EditText searchEt;
@@ -57,8 +66,6 @@ public class SearchFragment extends BaseFragment {
     RelativeLayout historyLl;
 
     private String mUrl;
-
-    private String mAlternativeUrl;
 
     private BDSuggestionAdapter mBDSuggestionAdapter;
 
@@ -116,8 +123,10 @@ public class SearchFragment extends BaseFragment {
             }
         });
         mBDSuggestionAdapter = new BDSuggestionAdapter();
-        mUrl = getArguments().getString(DEFAULT_WEB);
-        searchEt.setText(mUrl);
+        if (getArguments() != null) {
+            mUrl = getArguments().getString(String.class.getName());
+            searchEt.setText(mUrl);
+        }
         searchEt.requestFocus();
         KeyBoardUtil.openKeyboard(searchEt);
         listView.setAdapter(mBDSuggestionAdapter);
@@ -147,16 +156,20 @@ public class SearchFragment extends BaseFragment {
                 search(searchEt.getText().toString());
                 break;
             case R.id.clear_ll:
-                SPUtil.remove(SEARCH_HISTORY);
-                historyLl.setVisibility(View.GONE);
-                mBDSuggestionAdapter.setStrings(null);
+                new NoticeDialog(mBaseActivity).show(R.string.q_clean_all, new NoticeDialog.OnDialogClickListener() {
+                    @Override
+                    public void onOkClick() {
+                        SPUtil.remove(SEARCH_HISTORY);
+                        historyLl.setVisibility(View.GONE);
+                        mBDSuggestionAdapter.setStrings(null);
+                    }
+                });
                 break;
         }
     }
 
     private void search(String text) {
         String history;
-        mAlternativeUrl = SEARCH_EXTRA + text;
         if (isHttpUrl(text)) {
             mUrl = text;
             history = text;
@@ -187,7 +200,9 @@ public class SearchFragment extends BaseFragment {
     protected Bundle onExit() {
         if (mUrl != null) {
             Bundle bundle = new Bundle();
-            bundle.putStringArray(Constants.DEFAULT_WEB, new String[]{mUrl,mAlternativeUrl});
+            UrlBean urlBean = new UrlBean();
+            urlBean.setUrl(mUrl);
+            bundle.putSerializable(UrlBean.class.getName(),urlBean);
             return bundle;
         }
         return null;

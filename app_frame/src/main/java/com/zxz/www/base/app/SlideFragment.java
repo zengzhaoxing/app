@@ -15,7 +15,7 @@ public abstract class SlideFragment extends BaseFragment {
 
     private View mSlideView;
 
-    private static final int DURATION = 300;
+    private static final int DURATION = 250;
 
 
     @Nullable
@@ -23,8 +23,14 @@ public abstract class SlideFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         RelativeLayout relativeLayout = new RelativeLayout(getActivity());
         relativeLayout.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-        relativeLayout.setBackgroundResource(R.color.black_40);
+        relativeLayout.setBackgroundResource(R.color.black_20);
         mSlideView = getSlideView(relativeLayout);
+        mSlideView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         relativeLayout.addView(mSlideView, lp);

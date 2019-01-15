@@ -5,9 +5,14 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.Handler;
+import android.support.annotation.DrawableRes;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
+import com.zxz.www.base.app.BaseApp;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -110,6 +115,9 @@ public class ViewUtil {
         }
     }
 
+    public static void LoadImg(ImageView imageView, String imgUrl, @DrawableRes int id) {
+        Picasso.with(BaseApp.getContext()).load(imgUrl).error(id).placeholder(id).into(imageView);
+    }
 
 
 }
