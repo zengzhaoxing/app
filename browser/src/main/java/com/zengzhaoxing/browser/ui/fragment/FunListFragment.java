@@ -168,9 +168,13 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
         int fun = (int) v.getTag();
         switch (fun) {
             case FUN_OPEN_IN_BACKGROUND:
-                ((MainActivity)mBaseActivity).getHome().openBackWindow(mUrlBean);
                 if (mUrlBean != null) {
+                    ((MainActivity) mBaseActivity).getHome().openBackWindow(mUrlBean);
                     ToastUtil.toast("已在后台中打开");
+                } else {
+                    UrlBean bean = new UrlBean();
+                    bean.setUrl(mUrl);
+                    ((MainActivity) mBaseActivity).getHome().openBackWindow(bean);
                 }
                 break;
             case FUN_OPEN_IN_NEW_WINDOW:
