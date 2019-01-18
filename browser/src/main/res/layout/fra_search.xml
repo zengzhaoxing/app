@@ -68,7 +68,7 @@
             android:textColor="@color/blue"
             android:layout_marginLeft="15dp"
             android:textSize="15sp"
-            android:text="进入"/>
+            android:text="@string/search"/>
 
     </LinearLayout>
 

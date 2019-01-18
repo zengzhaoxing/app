@@ -13,6 +13,8 @@
     <string name="menu_exit">退出</string>
     <string name="clean">清除</string>
     <string name="q_clean_all">确定删除所有记录吗?</string>
+    <string name="clean_all">全部清空</string>
+    <string name="q_clean_collect">确定删除所有收藏吗?</string>
     <string name="yes">确定</string>
     <string name="no">取消</string>
 </resources>

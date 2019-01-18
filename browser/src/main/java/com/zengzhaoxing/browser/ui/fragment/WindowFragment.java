@@ -1,15 +1,16 @@
 package com.zengzhaoxing.browser.ui.fragment;
 
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.zengzhaoxing.browser.Constants;
 import com.zengzhaoxing.browser.MainActivity;
 import com.zengzhaoxing.browser.R;
 import com.zengzhaoxing.browser.bean.UrlBean;
@@ -33,6 +34,8 @@ public class WindowFragment extends BaseFragment {
     Unbinder unbinder;
     @BindView(R.id.window_tv)
     TextView windowTv;
+    @BindView(R.id.iv)
+    ImageView iv;
     private Stack<WindowChildFragment> mFragmentStack = new Stack<>();
 
     private View mRootView;
@@ -64,7 +67,9 @@ public class WindowFragment extends BaseFragment {
             return true;
         }
         if (!isHandle && mPreWindow != null) {
-            ((MainActivity)mBaseActivity).getHome().deleteCurrWindow(mPreWindow);
+            iv.setVisibility(View.VISIBLE);
+            iv.setImageBitmap(getBitmap());
+            ((MainActivity) mBaseActivity).getHome().deleteCurrWindow(mPreWindow);
             return true;
         }
         return isHandle;
@@ -86,7 +91,7 @@ public class WindowFragment extends BaseFragment {
         UrlBean bean = new UrlBean();
         bean.setUrl(url);
         Bundle bundle = new Bundle();
-        bundle.putSerializable(UrlBean.class.getName(),url);
+        bundle.putSerializable(UrlBean.class.getName(), bean);
         openNew(bundle);
     }
 

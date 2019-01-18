@@ -13,6 +13,7 @@ import com.zengzhaoxing.browser.R;
 import com.zengzhaoxing.browser.bean.UrlBean;
 import com.zengzhaoxing.browser.presenter.UrlCollectPresenter;
 import com.zengzhaoxing.browser.ui.adapter.UrlItemAdapter;
+import com.zengzhaoxing.browser.ui.dialog.NoticeDialog;
 import com.zxz.www.base.app.BaseActivity;
 import com.zxz.www.base.app.BaseFragment;
 import com.zxz.www.base.app.TitleFragment;
@@ -54,9 +55,25 @@ public class UrlCollectFragment extends TitleFragment {
     @Override
     public void refreshTitle(TitleView titleView) {
         titleView.getTitleTv().setText(mIsCollect ? R.string.menu_collect : R.string.menu_history);
-        titleView.getRightTv().setText(R.string.menu_clean);
+        titleView.getRightTv().setText(R.string.clean_all);
         titleView.getRightTv().setVisibility(View.VISIBLE);
         titleView.getRightTv().setTextColor(ResUtil.getColor(R.color.blue));
+        titleView.getRightTv().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new NoticeDialog(mBaseActivity).show(mIsCollect ? R.string.q_clean_collect : R.string.q_clean_all, new NoticeDialog.OnDialogClickListener() {
+                    @Override
+                    public void onOkClick() {
+                        mUrlItemAdapter.setUrlBeans(null);
+                        if (mIsCollect) {
+                            UrlCollectPresenter.getInstance().deleteAllCollect();
+                        } else {
+                            UrlCollectPresenter.getInstance().deleteAllHistory();
+                        }
+                    }
+                });
+            }
+        });
     }
 
     @Override

@@ -197,14 +197,16 @@ public class HomeFragment extends MainFragment {
     private void switchWindow(WindowFragment fragment) {
         if (mCurrFragment != fragment && mWindowFragments.contains(fragment)) {
             FragmentTransaction fm = getChildFragmentManager().beginTransaction();
-            fm.hide(mCurrFragment);
             if (fragment.isAdded()) {
                 fm.show(fragment);
+                fm.hide(mCurrFragment);
+                fm.commitAllowingStateLoss();
             } else {
+                fm.setCustomAnimations(R.anim.open_window, 0, 0, 0);
                 fm.add(R.id.window_frame, fragment);
+                fm.commitAllowingStateLoss();
             }
             mCurrFragment = fragment;
-            fm.commitAllowingStateLoss();
         }
     }
 
@@ -220,6 +222,9 @@ public class HomeFragment extends MainFragment {
         Bundle bundle = new Bundle();
         bundle.putSerializable(UrlBean.class.getName(),bean);
         fragment.setArguments(bundle);
+        if (bean != null) {
+            fragment.mPreWindow = mCurrFragment;
+        }
         mWindowFragments.add(fragment);
         mSwitchWindowAdapter.notifyDataSetChanged();
         switchViewPager.setCurrentItem(mWindowFragments.size() - 1);
@@ -264,8 +269,8 @@ public class HomeFragment extends MainFragment {
         if (mWindowFragments.contains(newCurr) && newCurr != mCurrFragment) {
             mWindowFragments.remove(mCurrFragment);
             FragmentTransaction fm = getChildFragmentManager().beginTransaction();
+            fm.setCustomAnimations(0, R.anim.close_window, 0, R.anim.close_window);
             fm.remove(mCurrFragment);
-            fm.show(newCurr);
             fm.commitAllowingStateLoss();
             mCurrFragment = newCurr;
             reSetAdapter();

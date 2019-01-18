@@ -49,7 +49,7 @@ public class NoticeDialog extends Dialog {
         ((TextView)findViewById(R.id.title_tv)).setText(msg);
     }
 
-    OnDialogClickListener mListener;
+    private OnDialogClickListener mListener;
 
     private int msg;
 
