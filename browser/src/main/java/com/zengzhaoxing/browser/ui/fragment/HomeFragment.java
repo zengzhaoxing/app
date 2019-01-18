@@ -247,22 +247,25 @@ public class HomeFragment extends MainFragment {
         fm.add(R.id.window_frame, fragment);
         fm.commitAllowingStateLoss();
         whiteView.setVisibility(View.VISIBLE);
-        float py = mWindowFrame.getHeight() - ResUtil.getDimension(R.dimen.menu_bar_height) / 2 - mWindowFrame.getHeight()/2;
+        whiteView.setScaleX(0);
+        whiteView.setScaleY(0);
+        final float py = mWindowFrame.getHeight() - ResUtil.getDimension(R.dimen.menu_bar_height) / 2 - mWindowFrame.getHeight()/2;
         float m = ResUtil.getDimension(R.dimen.menu_item_size);
-        float px = ((mWindowFrame.getWidth() - 5 * m) / 6 + m) * 5 - m / 2 - mWindowFrame.getWidth()/2;
-        whiteView.setScaleX(0.5f);
-        whiteView.setScaleY(0.5f);
-        whiteView.animate().scaleX(0).scaleY(0).translationX(px).translationY(py).setDuration(300).withEndAction(new Runnable() {
+        final float px = ((mWindowFrame.getWidth() - 5 * m) / 6 + m) * 5 - m / 2 - mWindowFrame.getWidth()/2;
+        whiteView.animate().scaleX(0.5f).scaleY(0.5f).setDuration(300).withEndAction(new Runnable() {
             @Override
             public void run() {
-                whiteView.setScaleX(0.5f);
-                whiteView.setScaleY(0.5f);
-                whiteView.setTranslationY(0);
-                whiteView.setTranslationX(0);
-                whiteView.setVisibility(View.GONE);
-                refreshWindowCount();
+                whiteView.animate().scaleX(0).scaleY(0).translationX(px).translationY(py).setDuration(300).withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+                        whiteView.setTranslationY(0);
+                        whiteView.setTranslationX(0);
+                        whiteView.setVisibility(View.GONE);
+                        refreshWindowCount();
+                    }
+                }).start();
             }
-        }).setStartDelay(400).start();
+        }).start();
     }
 
     public void deleteCurrWindow(WindowFragment newCurr) {
