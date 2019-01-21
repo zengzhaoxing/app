@@ -124,19 +124,24 @@ public class WindowFragment extends BaseFragment {
             Bundle bundle = mCurrFragment.onExit();
             Class cl = mCurrFragment.getClass();
             mCurrFragment = mCurrFragment.mPreFragment;
-            mCurrFragment.onTopFragmentExit(cl, bundle);
+            if (mCurrFragment != null) {
+                mCurrFragment.onTopFragmentExit(cl, bundle);
+            }
             getChildFragmentManager().popBackStack();
         }
         aheadIv.setEnabled(!mFragmentStack.isEmpty());
     }
 
     public final void goHome() {
-        int count = getChildFragmentManager().getBackStackEntryCount();
-        while (count > 0) {
-            getChildFragmentManager().popBackStack();
-            count--;
+        while (mCurrFragment.mPreFragment != null) {
+            closeCurr();
         }
-        openNew(new WindowHomeFragment());
+        if (mCurrFragment == null) {
+            openNew(new WindowHomeFragment());
+        } else if (!(mCurrFragment instanceof WindowHomeFragment)) {
+            closeCurr();
+            openNew(new WindowHomeFragment());
+        }
         mFragmentStack.removeAllElements();
         aheadIv.setEnabled(!mFragmentStack.isEmpty());
     }

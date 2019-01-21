@@ -128,7 +128,7 @@ public class BrowserFragment extends WindowChildFragment implements View.OnLongC
 
     @Override
     protected boolean handleBackEvent() {
-        if (webView.canGoBack()) {
+        if (webView != null && webView.canGoBack()) {
             webView.goBack();
             return true;
         }

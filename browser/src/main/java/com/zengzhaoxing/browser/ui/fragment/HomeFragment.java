@@ -202,7 +202,9 @@ public class HomeFragment extends MainFragment {
                 fm.hide(mCurrFragment);
                 fm.commitAllowingStateLoss();
             } else {
-                fm.setCustomAnimations(R.anim.open_window, 0, 0, 0);
+                if (fragment.getArguments() != null) {
+                    fm.setCustomAnimations(R.anim.open_window, 0, 0, 0);
+                }
                 fm.add(R.id.window_frame, fragment);
                 fm.commitAllowingStateLoss();
             }
@@ -219,10 +221,10 @@ public class HomeFragment extends MainFragment {
             mWindowFragments.remove(9);
         }
         WindowFragment fragment = new WindowFragment();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(UrlBean.class.getName(),bean);
-        fragment.setArguments(bundle);
         if (bean != null) {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(UrlBean.class.getName(),bean);
+            fragment.setArguments(bundle);
             fragment.mPreWindow = mCurrFragment;
         }
         mWindowFragments.add(fragment);

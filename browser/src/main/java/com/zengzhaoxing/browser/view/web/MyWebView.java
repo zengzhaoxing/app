@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -199,8 +200,8 @@ public class MyWebView extends WebView implements NetUtil.OnNetSpeedListener {
     }
 
     private void setStatusBarVisibility(boolean visible) {
-//        int flag = visible ? 0 : WindowManager.LayoutParams.FLAG_FULLSCREEN;
-//        mActivity.getWindow().setFlags(flag, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        int flag = visible ? 0 : WindowManager.LayoutParams.FLAG_FULLSCREEN;
+        mActivity.getWindow().setFlags(flag, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
 
 
