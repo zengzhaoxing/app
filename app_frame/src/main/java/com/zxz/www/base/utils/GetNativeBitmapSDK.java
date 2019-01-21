@@ -9,7 +9,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 
-import com.soundcloud.android.crop.Crop;
+//import com.soundcloud.android.crop.Crop;
 import com.zxz.www.base.app.BaseApp;
 import com.zxz.www.base.app.SDKConnector;
 
@@ -124,19 +124,19 @@ public class GetNativeBitmapSDK extends SDKConnector{
                     }
                 }
                 break;
-            case Crop.REQUEST_CROP:
-                final Bitmap bitmap = FileUtil.getInstance().getBitmap(PROFILE);
-                if (mCropFinishListener != null) {
-                    mCropFinishListener.onCropFinish(bitmap);
-                    mCropFinishListener = null;
-                }
-                break;
+//            case Crop.REQUEST_CROP:
+//                final Bitmap bitmap = FileUtil.getInstance().getBitmap(PROFILE);
+//                if (mCropFinishListener != null) {
+//                    mCropFinishListener.onCropFinish(bitmap);
+//                    mCropFinishListener = null;
+//                }
+//                break;
         }
     }
 
     private void cropImage(Uri uri) {
         Uri outputUri = Uri.fromFile(FileUtil.getInstance().createFile(PROFILE));
-        Crop.of(uri, outputUri).asSquare().start(mActivity);
+//        Crop.of(uri, outputUri).asSquare().start(mActivity);
     }
 
 

@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Scroller;
 
-import com.bumptech.glide.Glide;
+
 import com.zxz.www.base.app.BaseApp;
 import com.zxz.www.base.R;
 import com.zxz.www.base.adapter.ViewPagerAdapter;
@@ -180,10 +180,10 @@ public class GalleryView extends RelativeLayout {
         ViewGroup.LayoutParams lp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         iv.setLayoutParams(lp);
         iv.setScaleType(ImageView.ScaleType.FIT_XY);
-        Glide.with(BaseApp.getContext()).load(networkUrl).error(localUrl).placeholder(localUrl).into(iv);
+        ViewUtil.LoadImg(iv,networkUrl,localUrl);
         iv1.setLayoutParams(lp);
         iv1.setScaleType(ImageView.ScaleType.FIT_XY);
-        Glide.with(BaseApp.getContext()).load(networkUrl).error(localUrl).placeholder(localUrl).into(iv1);
+        ViewUtil.LoadImg(iv1,networkUrl,localUrl);
         views.add(iv);
         views1.add(iv1);
     }

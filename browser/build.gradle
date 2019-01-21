@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 android {
     compileSdkVersion 28
-    buildToolsVersion "26.0.0"
+    buildToolsVersion "27.0.3"
     defaultConfig {
         applicationId "com.zengzhaoxing.browser"
         minSdkVersion 17
@@ -10,10 +10,23 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
+    signingConfigs {
+        release {
+            keyAlias "zengzhaoxing"
+            keyPassword "zengzhaoxing2006"
+            storeFile file(getProjectDir().getAbsolutePath() + "//zengzhaoxing.jks")
+            storePassword "zengzhaoxing2006"
+        }
+    }
+
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+//            minifyEnabled false
+            zipAlignEnabled true
+//            shrinkResources true
+            signingConfig signingConfigs.release
+//            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }

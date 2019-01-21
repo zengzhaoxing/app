@@ -1,6 +1,6 @@
 package com.zxz.www.base.net.request;
 
-import com.android.volley.toolbox.JsonRequest;
+
 import com.zxz.www.base.model.BaseModel;
 import com.zxz.www.base.net.request.okhttp.OkHttpRequesterFactory;
 

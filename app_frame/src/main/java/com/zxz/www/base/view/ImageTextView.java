@@ -11,8 +11,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.makeramen.roundedimageview.RoundedImageView;
+
 import com.zhaoxing.view.sharpview.SharpImageView;
 import com.zhaoxing.view.sharpview.SharpTextView;
 import com.zxz.www.base.R;
@@ -184,7 +183,7 @@ public class ImageTextView extends RelativeLayout {
     }
 
     public void setImageUrl(String url) {
-        Glide.with(getContext()).load(url).into(mRoundedImageView);
+        ViewUtil.LoadImg(mRoundedImageView,url,0);
     }
 
     public void setText(@StringRes int resId) {

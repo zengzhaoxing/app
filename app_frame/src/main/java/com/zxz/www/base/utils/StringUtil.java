@@ -2,7 +2,6 @@ package com.zxz.www.base.utils;
 
 
 import android.content.Context;
-import android.support.design.widget.TextInputLayout;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.util.Log;

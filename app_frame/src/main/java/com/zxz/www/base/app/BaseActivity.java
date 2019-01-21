@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 
 import com.zxz.www.base.R;
+//import com.zxz.www.base.utils.GetNativeBitmapSDK;
 import com.zxz.www.base.utils.GetNativeBitmapSDK;
 import com.zxz.www.base.utils.KeyBoardUtil;
 import com.zxz.www.base.utils.MathUtil;
