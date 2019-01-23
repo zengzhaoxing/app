@@ -11,9 +11,9 @@ import com.zxz.www.base.view.TitleView;
 
 public abstract class TitleFragment extends BaseFragment {
 
-    public abstract int getContentLayoutId();
+    protected abstract int getContentLayoutId();
 
-    public abstract void refreshTitle(TitleView titleView);
+    protected abstract void refreshTitle(TitleView titleView);
 
     @Nullable
     @Override

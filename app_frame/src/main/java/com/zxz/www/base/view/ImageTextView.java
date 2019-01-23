@@ -86,7 +86,7 @@ public class ImageTextView extends RelativeLayout {
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ImageTextView, defStyleAttr, defStyleAttr);
-        mImageRes = a.getResourceId(R.styleable.ImageTextView_image, R.drawable.age_check);
+        mImageRes = a.getResourceId(R.styleable.ImageTextView_image, R.drawable.bs_black_back);
         mDisableImageRes = a.getResourceId(R.styleable.ImageTextView_disable_image, mImageRes);
         String text = a.getString(R.styleable.ImageTextView_text);
         mTextColor = a.getColor(R.styleable.ImageTextView_textColor, 0);

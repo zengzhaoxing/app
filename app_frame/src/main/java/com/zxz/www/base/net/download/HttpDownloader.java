@@ -10,6 +10,7 @@ import com.zxz.www.base.utils.FileUtil;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Iterator;
@@ -25,82 +26,107 @@ public class HttpDownloader extends Downloader {
 
     private AsyncTask mTask;
 
-    @SuppressLint("StaticFieldLeak")
+    private void initLength() {
+        MyTask task = new MyTask();
+        task.execute(getFileUrl(), "init");
+    }
+
     public HttpDownloader(String downloadUrl, String fileName) {
         super(downloadUrl, fileName);
-        mTask = new AsyncTask<Object, Float, String>() {
-
-            int mProgress = 0;
-
-            @Override
-            protected String doInBackground(Object... params) {
-                try {
-                    URL url = new URL(mDownloadUrl);
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    for (Object o : mHeader.entrySet()) {
-                        Map.Entry entry = (Map.Entry) o;
-                        String key = (String) entry.getKey();
-                        String val = (String) entry.getValue();
-                        conn.setRequestProperty(key, val);
-                    }
-                    InputStream is = conn.getInputStream();
-                    FileOutputStream fos = new FileOutputStream(getFileUrl());
-                    byte[] buf = new byte[256];
-                    conn.connect();
-                    int total = conn.getContentLength();
-                    int size;
-                    int sum = 0;
-                    while ((size = is.read(buf)) != -1) {
-                        sum += size;
-                        fos.write(buf, 0, size);
-                        int progress = (int) ((float)sum / (float)total * 100);
-                        if (progress > mProgress) {
-                            mProgress = progress;
-                            publishProgress();
-                        }
-                    }
-                    fos.close();
-                    is.close();
-                    Log.i(TAG, conn.getResponseMessage());
-                    conn.disconnect();
-                } catch (Exception e) {
-                    Log.i(TAG, e.toString());
-                    return null;
-                }
-                return getFileUrl();
-            }
-
-            @Override
-            protected void onPostExecute(String url) {
-                if (mDownloadListener != null) {
-                    if (url != null) {
-                        mDownloadListener.onDownLoad(100);
-                    } else {
-                        mDownloadListener.onDownLoad(DOWNLOAD_FAIL);
-                    }
-                }
-            }
-
-            @Override
-            protected void onProgressUpdate(Float... values) {
-                if (mDownloadListener != null) {
-                    if (values != null && values.length > 0 && values[0] == DOWNLOAD_FAIL) {
-                        mDownloadListener.onDownLoad(DOWNLOAD_FAIL);
-                    } else {
-                        mDownloadListener.onDownLoad((float) mProgress / 100);
-                    }
-                }
-            }
-        };
+        initLength();
     }
 
     @Override
     public void starDownload() {
+        mTask = new MyTask();
         mTask.execute(getFileUrl());
     }
 
     @Override
     public void stopDownload() {
         mTask.cancel(true);
+        mTask = null;
     }
+
+
+
+    @Override
+    public boolean isPause() {
+        return mTask == null && !isComplete();
+    }
+
+    public class MyTask extends AsyncTask<Object, Float, Object> {
+
+        int mProgress;
+
+        @Override
+        protected String doInBackground(Object... params) {
+            try {
+                URL url = new URL(mDownloadUrl);
+                File file = new File(getFileUrl());
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                if (file.exists() && file.length() > 0) {
+                    mDownLoadLength = file.length();
+                    conn.setRequestProperty("Range", "bytes=" + mDownLoadLength + "-" + (mContentLength - 1));
+                } else {
+                    mDownLoadLength = 0;
+                    mContentLength = conn.getContentLength();
+                }
+                mProgress = getCurrProgress();
+                if (params.length == 2) {
+                    publishProgress();
+                    cancel(true);
+                }
+
+                for (Object o : mHeader.entrySet()) {
+                    Map.Entry entry = (Map.Entry) o;
+                    String key = (String) entry.getKey();
+                    String val = (String) entry.getValue();
+                    conn.setRequestProperty(key, val);
+                }
+                InputStream is = conn.getInputStream();
+                RandomAccessFile out = new RandomAccessFile(getFileUrl(),"rw");
+                out.seek(mDownLoadLength);
+                byte[] buf = new byte[256];
+                conn.connect();
+                int size;
+                while ((size = is.read(buf)) != -1) {
+                    mDownLoadLength += size;
+                    out.write(buf, 0, size);
+                    int progress = (int) ((float)mDownLoadLength / (float)mContentLength * 100);
+                    if (progress > mProgress) {
+                        mProgress = progress;
+                        publishProgress();
+                    }
+                }
+                out.close();
+                is.close();
+                Log.i(TAG, conn.getResponseMessage());
+                conn.disconnect();
+            } catch (Exception e) {
+                Log.i(TAG, e.toString());
+                return null;
+            }
+            return getFileUrl();
+        }
+
+        @Override
+        protected void onPostExecute(Object url) {
+            if (mDownloadListener != null) {
+                if (url != null) {
+                    mDownloadListener.onDownLoad(100,HttpDownloader.this);
+                } else {
+                    mDownloadListener.onDownLoad(DOWNLOAD_FAIL,HttpDownloader.this);
+                }
+            }
+        }
+
+        @Override
+        protected void onProgressUpdate(Float... values) {
+            if (mDownloadListener != null) {
+                mDownloadListener.onDownLoad(mProgress,HttpDownloader.this);
+            }
+        }
+    }
+
 }

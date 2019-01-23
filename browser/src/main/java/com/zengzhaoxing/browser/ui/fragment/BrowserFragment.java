@@ -1,6 +1,7 @@
 package com.zengzhaoxing.browser.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -8,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -17,10 +19,14 @@ import android.widget.TextView;
 
 import com.zengzhaoxing.browser.MainActivity;
 import com.zengzhaoxing.browser.R;
+import com.zengzhaoxing.browser.bean.FileBean;
 import com.zengzhaoxing.browser.bean.UrlBean;
+import com.zengzhaoxing.browser.presenter.DownLoadPresenter;
 import com.zengzhaoxing.browser.presenter.UrlCollectPresenter;
+import com.zengzhaoxing.browser.ui.dialog.NoticeDialog;
 import com.zengzhaoxing.browser.view.web.MyWebView;
 import com.zxz.www.base.app.BaseFragment;
+import com.zxz.www.base.utils.ResUtil;
 import com.zxz.www.base.utils.StringUtil;
 
 import butterknife.BindView;
@@ -33,7 +39,7 @@ import static com.zengzhaoxing.browser.Constants.HTTP;
 import static com.zengzhaoxing.browser.Constants.HTTPS;
 import static com.zengzhaoxing.browser.Constants.getKeyWord;
 
-public class BrowserFragment extends WindowChildFragment implements View.OnLongClickListener {
+public class BrowserFragment extends WindowChildFragment implements View.OnLongClickListener, DownloadListener {
 
 
     @BindView(R.id.web_view)
@@ -123,6 +129,7 @@ public class BrowserFragment extends WindowChildFragment implements View.OnLongC
         webView.loadUrl(mUrlBean.getUrl());
         webView.setOnLongClickListener(this);
         ((MainActivity) getActivity()).getHome().onBrowserCreate(mWindowFragment);
+        webView.setDownloadListener(this);
         return view;
     }
 
@@ -186,6 +193,30 @@ public class BrowserFragment extends WindowChildFragment implements View.OnLongC
         return webView.getTitle();
     }
 
+    private NoticeDialog mDialog;
 
+    @Override
+    public void onDownloadStart(final String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+
+        String name = url.substring(url.lastIndexOf('/') + 1);
+        if (name.contains("?")) {
+            name = name.substring(0, name.indexOf('?'));
+        }
+        if (mDialog == null) {
+            mDialog = new NoticeDialog(getActivity());
+        }
+        if (!mDialog.isShowing()) {
+            final String finalName = name;
+            mDialog.show(String.format(ResUtil.getString(R.string.q_download), name), new NoticeDialog.OnDialogClickListener() {
+                @Override
+                public void onOkClick() {
+                    FileBean bean = new FileBean();
+                    bean.setUrl(url);
+                    bean.setName(finalName);
+                    DownLoadPresenter.getInstance().startNew(bean);
+                }
+            });
+        }
+    }
 
 }

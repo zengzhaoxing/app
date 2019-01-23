@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import com.zengzhaoxing.browser.R;
+import com.zxz.www.base.utils.ResUtil;
 
 public class NoticeDialog extends Dialog {
 
@@ -51,11 +52,17 @@ public class NoticeDialog extends Dialog {
 
     private OnDialogClickListener mListener;
 
-    private int msg;
+    private String msg;
 
     public void show(int msgID,OnDialogClickListener listener) {
         mListener = listener;
-        msg = msgID;
+        msg = ResUtil.getString(msgID);
+        super.show();
+    }
+
+    public void show(String msg,OnDialogClickListener listener) {
+        mListener = listener;
+        this.msg = msg;
         super.show();
     }
 

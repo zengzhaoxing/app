@@ -8,15 +8,6 @@
     android:paddingRight="20dp"
     android:orientation="horizontal">
 
-    <com.zhaoxing.view.sharpview.SharpImageView
-        android:id="@+id/url_iv"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
-        app:radius="8dp"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="10dp"
-        tools:src="@mipmap/icon"/>
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -25,7 +16,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/url_title_tv"
+            android:id="@+id/title_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/text_black"
@@ -36,7 +27,7 @@
             tools:text="dddddddddddddddddddddddddddd"/>
 
         <TextView
-            android:id="@+id/url_tv"
+            android:id="@+id/desc_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/text_gray"
@@ -52,5 +43,13 @@
         android:layout_height="0.5dp"
         android:layout_alignParentBottom="true"
         android:background="@color/line_gray"/>
+
+    <com.zengzhaoxing.browser.view.ProgressView
+        android:id="@+id/download_pv"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"/>
+
 
 </RelativeLayout>

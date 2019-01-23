@@ -39,7 +39,7 @@ public class OkDownloader extends Downloader {
             @Override
             public boolean handleMessage(Message msg) {
                 if (mDownloadListener != null) {
-                    mDownloadListener.onDownLoad(msg.what);
+                    mDownloadListener.onDownLoad(msg.what,OkDownloader.this);
                 }
                 return false;
             }
@@ -83,5 +83,10 @@ public class OkDownloader extends Downloader {
         if (mCall != null) {
             mCall.cancel();
         }
+    }
+
+    @Override
+    public boolean isPause() {
+        return false;
     }
 }

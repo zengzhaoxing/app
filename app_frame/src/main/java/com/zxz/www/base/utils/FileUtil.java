@@ -3,23 +3,15 @@ package com.zxz.www.base.utils;
 import android.Manifest;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.os.Environment;
-import android.util.Log;
 
 import com.zxz.www.base.net.download.Downloader;
 import com.zxz.www.base.net.download.HttpDownloader;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 /**
  * Created by igola on 2017/9/19.
@@ -191,10 +183,10 @@ public class FileUtil {
         if (PermissionUtil.havePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             Calendar calendar = Calendar.getInstance();
             final String fileName = DateUtil.calendarToString(calendar, "yyyy-MM-dd HH:mm:ss") + ".jpg";
-            final HttpDownloader downloader = new HttpDownloader(url, fileName);
+            final Downloader downloader = new HttpDownloader(url, fileName);
             downloader.setDownloadListener(new Downloader.DownLoadListener() {
                 @Override
-                public void onDownLoad(float progress) {
+                public void onDownLoad(int progress,Downloader downloader1) {
                     if (progress == -1) {
                         ToastUtil.toast("保存失败");
                     } else if (progress == 100) {
@@ -204,7 +196,7 @@ public class FileUtil {
             });
             downloader.starDownload();
         } else {
-            ToastUtil.toast("保存失败");
+            ToastUtil.toast("无权限");
         }
     }
 

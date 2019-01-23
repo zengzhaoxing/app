@@ -1,38 +1,26 @@
 package com.zengzhaoxing.browser.ui.fragment;
 
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.TextView;
 
-import com.zengzhaoxing.browser.MainActivity;
 import com.zengzhaoxing.browser.R;
 import com.zengzhaoxing.browser.bean.UrlBean;
 import com.zengzhaoxing.browser.presenter.UrlCollectPresenter;
-import com.zengzhaoxing.browser.ui.adapter.UrlItemAdapter;
 import com.zengzhaoxing.browser.ui.dialog.NoticeDialog;
+import com.zhaoxing.view.sharpview.SharpImageView;
 import com.zxz.www.base.app.BaseActivity;
 import com.zxz.www.base.app.BaseFragment;
-import com.zxz.www.base.app.TitleFragment;
-import com.zxz.www.base.utils.DensityUtil;
+import com.zxz.www.base.app.ListFragment;
 import com.zxz.www.base.utils.ResUtil;
+import com.zxz.www.base.utils.ViewUtil;
 import com.zxz.www.base.view.TitleView;
-
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
-public class UrlCollectFragment extends TitleFragment {
-
-
-    @BindView(R.id.url_collect_lv)
-    ListView urlCollectLv;
-    Unbinder unbinder;
+public class UrlCollectFragment extends ListFragment<UrlBean,UrlCollectFragment.ViewHolder> {
 
     public static void show(BaseActivity activity, boolean isCollect) {
         UrlCollectFragment fragment = new UrlCollectFragment();
@@ -44,16 +32,23 @@ public class UrlCollectFragment extends TitleFragment {
 
     private boolean mIsCollect;
 
-    private UrlItemAdapter mUrlItemAdapter;
 
     @Override
-    public int getContentLayoutId() {
-        mIsCollect = getArguments().getBoolean(boolean.class.getName());
-        return R.layout.fra_url_collect;
+    protected void onBindViewHolder(UrlCollectFragment.ViewHolder viewHolder, UrlBean bean, int position) {
+        viewHolder.urlTv.setText(bean.getUrl());
+        viewHolder.urlTitleTv.setText(bean.getTitle());
+        ViewUtil.LoadImg(viewHolder.urlIv, bean.getIconUrl(), R.mipmap.icon);
     }
 
     @Override
-    public void refreshTitle(TitleView titleView) {
+    protected int getItemLayoutId() {
+        return R.layout.item_url;
+    }
+
+    @Override
+    protected void refreshTitle(TitleView titleView) {
+        mIsCollect = getArguments().getBoolean(boolean.class.getName());
+        setList(mIsCollect ? UrlCollectPresenter.getInstance().getAllCollect() : UrlCollectPresenter.getInstance().getAllHistory());
         titleView.getTitleTv().setText(mIsCollect ? R.string.menu_collect : R.string.menu_history);
         titleView.getRightTv().setText(R.string.clean_all);
         titleView.getRightTv().setVisibility(View.VISIBLE);
@@ -64,7 +59,7 @@ public class UrlCollectFragment extends TitleFragment {
                 new NoticeDialog(mBaseActivity).show(mIsCollect ? R.string.q_clean_collect : R.string.q_clean_all, new NoticeDialog.OnDialogClickListener() {
                     @Override
                     public void onOkClick() {
-                        mUrlItemAdapter.setUrlBeans(null);
+                        setList(null);
                         if (mIsCollect) {
                             UrlCollectPresenter.getInstance().deleteAllCollect();
                         } else {
@@ -77,42 +72,22 @@ public class UrlCollectFragment extends TitleFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
-        View rootView = super.onCreateView(inflater, container, savedInstanceState);
-        unbinder = ButterKnife.bind(this, rootView);
-        mUrlItemAdapter = new UrlItemAdapter(mIsCollect ? UrlCollectPresenter.getInstance().getAllCollect() : UrlCollectPresenter.getInstance().getAllHistory());
-        urlCollectLv.setAdapter(mUrlItemAdapter);
-        urlCollectLv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                UrlBean bean = (UrlBean) mUrlItemAdapter.getItem(position);
-                mBaseActivity.closeCurrentFragment();
-                ((MainActivity)mBaseActivity).getHome().openNewWindow(bean);
-            }
-        });
-        urlCollectLv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                UrlBean bean = (UrlBean) mUrlItemAdapter.getItem(position);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable(UrlBean.class.getName(), bean);
-                FunListFragment.open(mBaseActivity,bundle);
-                return true;
-            }
-        });
-        return rootView;
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
-    @Override
     protected void onTopFragmentExit(Class<? extends BaseFragment> topFragmentClass, Bundle params) {
         super.onTopFragmentExit(topFragmentClass, params);
-        mUrlItemAdapter.setUrlBeans(mIsCollect ? UrlCollectPresenter.getInstance().getAllCollect() : UrlCollectPresenter.getInstance().getAllHistory());
+        setList(null);
+    }
+
+    static class ViewHolder extends RecyclerView.ViewHolder{
+        @BindView(R.id.url_iv)
+        SharpImageView urlIv;
+        @BindView(R.id.url_title_tv)
+        TextView urlTitleTv;
+        @BindView(R.id.url_tv)
+        TextView urlTv;
+
+        ViewHolder(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
     }
 }

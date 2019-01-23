@@ -12,6 +12,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.util.Log;
 
+import com.zxz.www.base.app.BaseActivity;
 import com.zxz.www.base.app.BaseApp;
 import com.zxz.www.base.net.download.Downloader;
 import com.zxz.www.base.net.download.HttpDownloader;
@@ -99,16 +100,17 @@ public class IntentUtil {
         }
     }
 
-    public static void sendImg(final String url, final Activity activity) {
+    public static void sendImg(final String url, final BaseActivity activity) {
         if (PermissionUtil.havePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             Calendar calendar = Calendar.getInstance();
             final String fileName = DateUtil.calendarToString(calendar, "yyyy-MM-dd HH:mm:ss") + ".jpg";
             final HttpDownloader downloader = new HttpDownloader(url, fileName);
             downloader.setDownloadListener(new Downloader.DownLoadListener() {
                 @Override
-                public void onDownLoad(float progress) {
+                public void onDownLoad(int progress,Downloader downloader1) {
                     if (progress == -1) {
                         ToastUtil.toast("分享失败");
+                        activity.hideLoadingView();
                     } else if (progress == 100) {
                         Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_SEND);
