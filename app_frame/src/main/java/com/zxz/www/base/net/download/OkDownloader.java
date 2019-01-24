@@ -1,5 +1,6 @@
 package com.zxz.www.base.net.download;
 
+import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
@@ -26,13 +27,14 @@ public class OkDownloader extends Downloader {
 
     private Call mCall;
 
-    public OkDownloader(String downloadUrl, String fileName) {
-        super(downloadUrl, fileName);
+    OkDownloader(String downloadUrl, String fileName, boolean publicProgress, Activity activity) {
+        super(downloadUrl, fileName, publicProgress, activity);
         mOkHttpClient = new OkHttpClient();
     }
 
+
     @Override
-    public void starDownload() {
+    public void starDownloadImpl() {
         Request request = new Request.Builder().url(mDownloadUrl).headers(Headers.of(mHeader)).build();
         mCall = mOkHttpClient.newCall(request);
         final Handler handler = new Handler(new Handler.Callback() {
@@ -79,7 +81,7 @@ public class OkDownloader extends Downloader {
     }
 
     @Override
-    public void stopDownload() {
+    public void stopDownloadImpl() {
         if (mCall != null) {
             mCall.cancel();
         }

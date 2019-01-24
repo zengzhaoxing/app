@@ -1,11 +1,9 @@
 package com.zengzhaoxing.browser.ui.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,11 +19,10 @@ import com.zengzhaoxing.browser.MainActivity;
 import com.zengzhaoxing.browser.R;
 import com.zengzhaoxing.browser.bean.FileBean;
 import com.zengzhaoxing.browser.bean.UrlBean;
-import com.zengzhaoxing.browser.presenter.DownLoadPresenter;
+import com.zengzhaoxing.browser.presenter.DownPresenter;
 import com.zengzhaoxing.browser.presenter.UrlCollectPresenter;
 import com.zengzhaoxing.browser.ui.dialog.NoticeDialog;
 import com.zengzhaoxing.browser.view.web.MyWebView;
-import com.zxz.www.base.app.BaseFragment;
 import com.zxz.www.base.utils.ResUtil;
 import com.zxz.www.base.utils.StringUtil;
 
@@ -82,9 +79,6 @@ public class BrowserFragment extends WindowChildFragment implements View.OnLongC
                         if (titleTv != null) {
                             titleTv.setText(url);
                         }
-                        if (!StringUtil.isEqual(url, BLANK) && errorLl!= null) {
-                            errorLl.setVisibility(View.GONE);
-                        }
                     }
                     lastTime = time;
                 }
@@ -117,6 +111,7 @@ public class BrowserFragment extends WindowChildFragment implements View.OnLongC
                 UrlCollectPresenter.getInstance().addHistory(mUrlBean);
                 if (titleTv != null) {
                     titleTv.setText(title);
+                    errorLl.setVisibility(View.GONE);
                 }
             }
         });
@@ -197,10 +192,18 @@ public class BrowserFragment extends WindowChildFragment implements View.OnLongC
 
     @Override
     public void onDownloadStart(final String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
-
-        String name = url.substring(url.lastIndexOf('/') + 1);
-        if (name.contains("?")) {
-            name = name.substring(0, name.indexOf('?'));
+        String name;
+        if (!StringUtil.isBlank(contentDisposition) && contentDisposition.contains("filename=")) {
+            name = contentDisposition.split("filename=")[1];
+            if (name.contains(";")) {
+                name = name.substring(0, name.indexOf(";"));
+            }
+            name = name.replace("\"", "");
+        } else {
+            name = url.substring(url.lastIndexOf('/') + 1);
+            if (name.contains("?")) {
+                name = name.substring(0, name.indexOf('?'));
+            }
         }
         if (mDialog == null) {
             mDialog = new NoticeDialog(getActivity());
@@ -213,7 +216,7 @@ public class BrowserFragment extends WindowChildFragment implements View.OnLongC
                     FileBean bean = new FileBean();
                     bean.setUrl(url);
                     bean.setName(finalName);
-                    DownLoadPresenter.getInstance().startNew(bean);
+                    DownPresenter.getInstance(getActivity()).startNew(bean);
                 }
             });
         }

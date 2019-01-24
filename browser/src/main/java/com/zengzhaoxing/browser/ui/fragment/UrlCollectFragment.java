@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
 
+import com.zengzhaoxing.browser.MainActivity;
 import com.zengzhaoxing.browser.R;
 import com.zengzhaoxing.browser.bean.UrlBean;
 import com.zengzhaoxing.browser.presenter.UrlCollectPresenter;
@@ -46,6 +47,22 @@ public class UrlCollectFragment extends ListFragment<UrlBean,UrlCollectFragment.
     }
 
     @Override
+    public boolean onLongClick(View v) {
+        UrlBean bean = (UrlBean) v.getTag();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(UrlBean.class.getName(), bean);
+        FunListFragment.open(mBaseActivity,bundle);
+        return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        UrlBean bean = (UrlBean) v.getTag();
+        mBaseActivity.closeCurrentFragment();
+        ((MainActivity)mBaseActivity).getHome().openNewWindow(bean);
+    }
+
+    @Override
     protected void refreshTitle(TitleView titleView) {
         mIsCollect = getArguments().getBoolean(boolean.class.getName());
         setList(mIsCollect ? UrlCollectPresenter.getInstance().getAllCollect() : UrlCollectPresenter.getInstance().getAllHistory());
@@ -74,7 +91,7 @@ public class UrlCollectFragment extends ListFragment<UrlBean,UrlCollectFragment.
     @Override
     protected void onTopFragmentExit(Class<? extends BaseFragment> topFragmentClass, Bundle params) {
         super.onTopFragmentExit(topFragmentClass, params);
-        setList(null);
+        setList(mIsCollect ? UrlCollectPresenter.getInstance().getAllCollect() : UrlCollectPresenter.getInstance().getAllHistory());
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{

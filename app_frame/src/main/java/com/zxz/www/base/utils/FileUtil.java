@@ -183,10 +183,10 @@ public class FileUtil {
         if (PermissionUtil.havePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             Calendar calendar = Calendar.getInstance();
             final String fileName = DateUtil.calendarToString(calendar, "yyyy-MM-dd HH:mm:ss") + ".jpg";
-            final Downloader downloader = new HttpDownloader(url, fileName);
+            final Downloader downloader = new HttpDownloader(url, fileName,false,null);
             downloader.setDownloadListener(new Downloader.DownLoadListener() {
                 @Override
-                public void onDownLoad(int progress,Downloader downloader1) {
+                public void onDownLoad(float progress,Downloader downloader1) {
                     if (progress == -1) {
                         ToastUtil.toast("保存失败");
                     } else if (progress == 100) {

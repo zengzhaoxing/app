@@ -52,6 +52,8 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
 
     public static final int FUN_ADD_COLLECT = 12;
 
+    public static final int FUN_DELETE_DOWNLOAD = 13;
+
     private String getFunName(int fun) {
         switch (fun) {
             case FUN_OPEN_IN_BACKGROUND:

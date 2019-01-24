@@ -1,9 +1,14 @@
 package com.zxz.www.base.net.download;
 
+import android.app.Activity;
+import android.util.Log;
+
 import com.zxz.www.base.model.BaseModel;
 import com.zxz.www.base.utils.FileUtil;
+import com.zxz.www.base.utils.MyTask;
 
 import java.util.HashMap;
+import java.util.TimerTask;
 
 /**
  * Created by igola on 2017/9/18.
@@ -59,31 +64,80 @@ public abstract class Downloader{
 
     private String mFileName;
 
-    Downloader(String downloadUrl, String fileName) {
+    private Activity mActivity;
+
+    private boolean mPublicProgress;
+
+    Downloader(String downloadUrl, String fileName, boolean publicProgress, Activity activity) {
         mDownloadUrl = downloadUrl;
         mFileName = fileName;
+        mActivity = activity;
+        mPublicProgress = publicProgress;
     }
 
-    public abstract void starDownload();
+    public boolean isPause(){
+        return !isStart && !isComplete();
+    }
 
-    public abstract void stopDownload();
+    private boolean isStart;
 
-    public abstract boolean isPause();
-
-    public int getCurrProgress() {
-        return (int) (mDownLoadLength / mContentLength * 100);
+    public float getCurrProgress() {
+        return (float)mDownLoadLength / (float)mContentLength;
     }
 
     public interface DownLoadListener {
 
-        void onDownLoad(int progress,Downloader downloader);
+        void onDownLoad(float progress,Downloader downloader);
     }
 
     public void setDownloadListener(DownLoadListener downloadListener) {
         mDownloadListener = downloadListener;
+        if (mDownloadListener == null) {
+            mMyTask.stop();
+        } else {
+            publicProgress();
+        }
     }
 
     DownLoadListener mDownloadListener;
+
+    protected MyTask mMyTask = new MyTask();
+
+    private void publicProgress() {
+        if (mDownloadListener != null && mActivity != null && mPublicProgress) {
+            mMyTask.start(new TimerTask() {
+                @Override
+                public void run() {
+                    mActivity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            mDownloadListener.onDownLoad(getCurrProgress(), Downloader.this);
+                        }
+                    });
+                }
+            }, 0, 1000);
+        }
+    }
+
+    final public void starDownload(){
+        if (!isStart) {
+            isStart = true;
+            starDownloadImpl();
+            publicProgress();
+        }
+    }
+
+    final public void stopDownload(){
+        if (isStart) {
+            isStart = false;
+            stopDownloadImpl();
+            mMyTask.stop();
+        }
+    }
+
+    protected abstract void starDownloadImpl();
+
+    protected abstract void stopDownloadImpl();
 
 
 }

@@ -1,6 +1,7 @@
 package com.zxz.www.base.net.download;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -26,38 +27,25 @@ public class HttpDownloader extends Downloader {
 
     private AsyncTask mTask;
 
-    private void initLength() {
-        MyTask task = new MyTask();
-        task.execute(getFileUrl(), "init");
+    public HttpDownloader(String downloadUrl, String fileName, boolean publicProgress, Activity activity) {
+        super(downloadUrl, fileName, publicProgress, activity);
     }
 
-    public HttpDownloader(String downloadUrl, String fileName) {
-        super(downloadUrl, fileName);
-        initLength();
-    }
 
     @Override
-    public void starDownload() {
+    public void starDownloadImpl() {
         mTask = new MyTask();
         mTask.execute(getFileUrl());
     }
 
     @Override
-    public void stopDownload() {
+    public void stopDownloadImpl() {
+        Log.i("zxz", "stopDownloadImpl ");
         mTask.cancel(true);
         mTask = null;
     }
 
-
-
-    @Override
-    public boolean isPause() {
-        return mTask == null && !isComplete();
-    }
-
     public class MyTask extends AsyncTask<Object, Float, Object> {
-
-        int mProgress;
 
         @Override
         protected String doInBackground(Object... params) {
@@ -65,6 +53,7 @@ public class HttpDownloader extends Downloader {
                 URL url = new URL(mDownloadUrl);
                 File file = new File(getFileUrl());
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                Log.i("zxz", "isDeleteFile " + file.exists() +  " " +  file.length());
                 if (file.exists() && file.length() > 0) {
                     mDownLoadLength = file.length();
                     conn.setRequestProperty("Range", "bytes=" + mDownLoadLength + "-" + (mContentLength - 1));
@@ -72,12 +61,6 @@ public class HttpDownloader extends Downloader {
                     mDownLoadLength = 0;
                     mContentLength = conn.getContentLength();
                 }
-                mProgress = getCurrProgress();
-                if (params.length == 2) {
-                    publishProgress();
-                    cancel(true);
-                }
-
                 for (Object o : mHeader.entrySet()) {
                     Map.Entry entry = (Map.Entry) o;
                     String key = (String) entry.getKey();
@@ -93,11 +76,6 @@ public class HttpDownloader extends Downloader {
                 while ((size = is.read(buf)) != -1) {
                     mDownLoadLength += size;
                     out.write(buf, 0, size);
-                    int progress = (int) ((float)mDownLoadLength / (float)mContentLength * 100);
-                    if (progress > mProgress) {
-                        mProgress = progress;
-                        publishProgress();
-                    }
                 }
                 out.close();
                 is.close();
@@ -112,20 +90,8 @@ public class HttpDownloader extends Downloader {
 
         @Override
         protected void onPostExecute(Object url) {
-            if (mDownloadListener != null) {
-                if (url != null) {
-                    mDownloadListener.onDownLoad(100,HttpDownloader.this);
-                } else {
-                    mDownloadListener.onDownLoad(DOWNLOAD_FAIL,HttpDownloader.this);
-                }
-            }
-        }
-
-        @Override
-        protected void onProgressUpdate(Float... values) {
-            if (mDownloadListener != null) {
-                mDownloadListener.onDownLoad(mProgress,HttpDownloader.this);
-            }
+            mMyTask.stop();
+            mDownloadListener.onDownLoad(getCurrProgress(),HttpDownloader.this);
         }
     }
 

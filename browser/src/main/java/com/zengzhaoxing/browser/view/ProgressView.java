@@ -22,7 +22,9 @@ public class ProgressView extends View {
 
     RectF mRectF = new RectF();
 
-    Rect mRect = new Rect();
+    Rect mRectDsc = new Rect();
+
+    Rect mRectSrc = new Rect();
 
     Bitmap mPauseBitmap = BitmapFactory.decodeResource(App.getContext().getResources(), R.drawable.pause);
 
@@ -42,38 +44,28 @@ public class ProgressView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
+        canvas.drawColor(ResUtil.getColor(R.color.white));
         float mid = getWidth() / 2;
-        mRectF.set(0,0,getWidth(),getHeight());
-        mRect.set(0,0,getWidth(),getHeight());
+        int _41mid = (int) (mid/2);
+        int strokeWidth = DensityUtil.dip2px(1.5f);
+        mRectF.set(strokeWidth,strokeWidth,getWidth() - strokeWidth,getHeight() - strokeWidth);
+        mRectSrc.set(0,0,getWidth(),getHeight());
+        mRectDsc.set(_41mid + strokeWidth,_41mid + strokeWidth,getWidth() - _41mid - strokeWidth,getHeight() - _41mid - strokeWidth);
         mPaint.setAntiAlias(true);
-        mPaint.setStrokeWidth(DensityUtil.dip2px(2));
-        Bitmap bitmap = mIsPause ? mPauseBitmap : mStartBitmap;
-        canvas.drawBitmap(bitmap,mRect,mRect,mPaint);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeWidth(strokeWidth);
+        Bitmap bitmap = mIsPause ? mStartBitmap : mPauseBitmap;
+        canvas.drawBitmap(bitmap,mRectSrc,mRectDsc,mPaint);
         mPaint.setColor(ResUtil.getColor(R.color.line_gray));
-        canvas.drawCircle(mid,mid,mid,mPaint);
+        canvas.drawCircle(mid,mid,mid - strokeWidth,mPaint);
         mPaint.setColor(ResUtil.getColor(mIsPause ? R.color.text_gray : R.color.blue));
-        float sweepAngle = mProgress / 100f * 360;
-        canvas.drawArc(mRectF, 90, sweepAngle, false, mPaint);
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        if (mPauseBitmap != null && !mPauseBitmap.isRecycled()) {
-            mPauseBitmap.recycle();
-        }
-        if (mStartBitmap != null && !mStartBitmap.isRecycled()) {
-            mStartBitmap.recycle();
-        }
+        float sweepAngle = mProgress * 360;
+        canvas.drawArc(mRectF, -90, sweepAngle, false, mPaint);
     }
 
     private boolean mIsPause;
 
-    public void setPaint(Paint paint) {
-        mPaint = paint;
-    }
-
-    private int mProgress;
+    private float mProgress;
 
     public void pause() {
         mIsPause = true;
@@ -85,8 +77,8 @@ public class ProgressView extends View {
         invalidate();
     }
 
-    public void setProgress(int progress) {
-        if (progress == 100) {
+    public void setProgress(float progress) {
+        if (progress == 1) {
             setVisibility(INVISIBLE);
             mProgress = 0;
         } else {

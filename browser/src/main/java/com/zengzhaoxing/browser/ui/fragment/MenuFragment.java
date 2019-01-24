@@ -62,7 +62,7 @@ public class MenuFragment extends SlideFragment {
                 break;
             case R.id.download_view:
                 mBaseActivity.closeCurrentFragment();
-                mBaseActivity.openNewFragmentWithDefaultAnim(new DownLoadFragment());
+                mBaseActivity.openNewFragmentWithDefaultAnim(new DownFragment());
                 break;
             case R.id.clean_view:
                 break;

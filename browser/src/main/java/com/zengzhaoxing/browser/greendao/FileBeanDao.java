@@ -27,9 +27,11 @@ public class FileBeanDao extends AbstractDao<FileBean, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Url = new Property(1, String.class, "url", false, "URL");
         public final static Property Name = new Property(2, String.class, "name", false, "NAME");
-        public final static Property Type = new Property(3, String.class, "type", false, "TYPE");
-        public final static Property Dir = new Property(4, String.class, "dir", false, "DIR");
-        public final static Property Time = new Property(5, long.class, "time", false, "TIME");
+        public final static Property MContentLength = new Property(3, long.class, "mContentLength", false, "M_CONTENT_LENGTH");
+        public final static Property MDownLoadLength = new Property(4, long.class, "mDownLoadLength", false, "M_DOWN_LOAD_LENGTH");
+        public final static Property Type = new Property(5, String.class, "type", false, "TYPE");
+        public final static Property Dir = new Property(6, String.class, "dir", false, "DIR");
+        public final static Property Time = new Property(7, long.class, "time", false, "TIME");
     }
 
 
@@ -48,9 +50,11 @@ public class FileBeanDao extends AbstractDao<FileBean, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"URL\" TEXT," + // 1: url
                 "\"NAME\" TEXT," + // 2: name
-                "\"TYPE\" TEXT," + // 3: type
-                "\"DIR\" TEXT," + // 4: dir
-                "\"TIME\" INTEGER NOT NULL );"); // 5: time
+                "\"M_CONTENT_LENGTH\" INTEGER NOT NULL ," + // 3: mContentLength
+                "\"M_DOWN_LOAD_LENGTH\" INTEGER NOT NULL ," + // 4: mDownLoadLength
+                "\"TYPE\" TEXT," + // 5: type
+                "\"DIR\" TEXT," + // 6: dir
+                "\"TIME\" INTEGER NOT NULL );"); // 7: time
     }
 
     /** Drops the underlying database table. */
@@ -77,17 +81,19 @@ public class FileBeanDao extends AbstractDao<FileBean, Long> {
         if (name != null) {
             stmt.bindString(3, name);
         }
+        stmt.bindLong(4, entity.getMContentLength());
+        stmt.bindLong(5, entity.getMDownLoadLength());
  
         String type = entity.getType();
         if (type != null) {
-            stmt.bindString(4, type);
+            stmt.bindString(6, type);
         }
  
         String dir = entity.getDir();
         if (dir != null) {
-            stmt.bindString(5, dir);
+            stmt.bindString(7, dir);
         }
-        stmt.bindLong(6, entity.getTime());
+        stmt.bindLong(8, entity.getTime());
     }
 
     @Override
@@ -108,17 +114,19 @@ public class FileBeanDao extends AbstractDao<FileBean, Long> {
         if (name != null) {
             stmt.bindString(3, name);
         }
+        stmt.bindLong(4, entity.getMContentLength());
+        stmt.bindLong(5, entity.getMDownLoadLength());
  
         String type = entity.getType();
         if (type != null) {
-            stmt.bindString(4, type);
+            stmt.bindString(6, type);
         }
  
         String dir = entity.getDir();
         if (dir != null) {
-            stmt.bindString(5, dir);
+            stmt.bindString(7, dir);
         }
-        stmt.bindLong(6, entity.getTime());
+        stmt.bindLong(8, entity.getTime());
     }
 
     @Override
@@ -132,9 +140,11 @@ public class FileBeanDao extends AbstractDao<FileBean, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // url
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // name
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // type
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // dir
-            cursor.getLong(offset + 5) // time
+            cursor.getLong(offset + 3), // mContentLength
+            cursor.getLong(offset + 4), // mDownLoadLength
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // type
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // dir
+            cursor.getLong(offset + 7) // time
         );
         return entity;
     }
@@ -144,9 +154,11 @@ public class FileBeanDao extends AbstractDao<FileBean, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setUrl(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setType(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setDir(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setTime(cursor.getLong(offset + 5));
+        entity.setMContentLength(cursor.getLong(offset + 3));
+        entity.setMDownLoadLength(cursor.getLong(offset + 4));
+        entity.setType(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setDir(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setTime(cursor.getLong(offset + 7));
      }
     
     @Override

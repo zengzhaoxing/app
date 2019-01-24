@@ -104,10 +104,10 @@ public class IntentUtil {
         if (PermissionUtil.havePermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             Calendar calendar = Calendar.getInstance();
             final String fileName = DateUtil.calendarToString(calendar, "yyyy-MM-dd HH:mm:ss") + ".jpg";
-            final HttpDownloader downloader = new HttpDownloader(url, fileName);
+            final HttpDownloader downloader = new HttpDownloader(url, fileName,false,activity);
             downloader.setDownloadListener(new Downloader.DownLoadListener() {
                 @Override
-                public void onDownLoad(int progress,Downloader downloader1) {
+                public void onDownLoad(float progress,Downloader downloader1) {
                     if (progress == -1) {
                         ToastUtil.toast("分享失败");
                         activity.hideLoadingView();
