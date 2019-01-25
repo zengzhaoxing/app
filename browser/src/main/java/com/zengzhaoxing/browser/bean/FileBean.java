@@ -54,7 +54,7 @@ public class FileBean extends BaseModel {
 
     private String type;
 
-    private String dir;
+    private String dir = FileUtil.getInstance().getDownLoadPath();
 
     private long time = System.currentTimeMillis();
 
@@ -132,7 +132,7 @@ public class FileBean extends BaseModel {
     }
 
     public void appendName(String s) {
-        name = getPrefix() + s + "." + getSuffix();
+        name = getPrefix() + s + getSuffix();
     }
 
     public long getMContentLength() {

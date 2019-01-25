@@ -16,6 +16,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.concurrent.Executors;
 
 /**
  * Created by igola on 2017/9/26.
@@ -35,12 +36,11 @@ public class HttpDownloader extends Downloader {
     @Override
     public void starDownloadImpl() {
         mTask = new MyTask();
-        mTask.execute(getFileUrl());
+        mTask.execute(Executors.newCachedThreadPool(),getFileUrl());
     }
 
     @Override
     public void stopDownloadImpl() {
-        Log.i("zxz", "stopDownloadImpl ");
         mTask.cancel(true);
         mTask = null;
     }
@@ -53,7 +53,6 @@ public class HttpDownloader extends Downloader {
                 URL url = new URL(mDownloadUrl);
                 File file = new File(getFileUrl());
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                Log.i("zxz", "isDeleteFile " + file.exists() +  " " +  file.length());
                 if (file.exists() && file.length() > 0) {
                     mDownLoadLength = file.length();
                     conn.setRequestProperty("Range", "bytes=" + mDownLoadLength + "-" + (mContentLength - 1));
@@ -73,9 +72,14 @@ public class HttpDownloader extends Downloader {
                 byte[] buf = new byte[256];
                 conn.connect();
                 int size;
-                while ((size = is.read(buf)) != -1) {
-                    mDownLoadLength += size;
-                    out.write(buf, 0, size);
+                while (!isCancelled()) {
+                    size = is.read(buf);
+                    if (size != -1) {
+                        mDownLoadLength += size;
+                        out.write(buf, 0, size);
+                    } else {
+                        break;
+                    }
                 }
                 out.close();
                 is.close();

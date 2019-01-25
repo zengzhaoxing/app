@@ -20,6 +20,7 @@
     <string name="no">取消</string>
     <string name="delete">删除</string>
     <string name="download_exit">下载已存在</string>
+    <string name="downloading">开始下载..</string>
     <string name="q_delete_down">删除所选下载项？</string>
     <string name="q_delete_all_down">删除所有下载项？</string>
     <string name="delete_file">同时删除源文件</string>

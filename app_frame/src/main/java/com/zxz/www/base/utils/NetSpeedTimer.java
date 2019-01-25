@@ -89,8 +89,7 @@ class NetSpeedTimer {
                 } else {
                     obtainMessage.what = NET_SPEED_TIMER_DEFAULT;
                 }
-                obtainMessage.obj = mNetSpeed.getNetSpeed(mContext
-                        .getApplicationInfo().uid);
+                obtainMessage.obj = mNetSpeed.getNetSpeed();
                 mHandler.sendMessage(obtainMessage);
             }
         }

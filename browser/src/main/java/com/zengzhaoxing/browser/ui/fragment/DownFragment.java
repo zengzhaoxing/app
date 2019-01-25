@@ -13,6 +13,7 @@ import com.zengzhaoxing.browser.ui.dialog.DelDownDlg;
 import com.zengzhaoxing.browser.view.ProgressView;
 import com.zxz.www.base.app.ListFragment;
 import com.zxz.www.base.utils.MathUtil;
+import com.zxz.www.base.utils.NetSpeed;
 import com.zxz.www.base.utils.ResUtil;
 import com.zxz.www.base.utils.ViewUtil;
 import com.zxz.www.base.view.TitleView;
@@ -22,9 +23,13 @@ import butterknife.ButterKnife;
 
 public class DownFragment extends ListFragment<FileBean,DownFragment.ViewHolder> implements  DownPresenter.OnUpDateUiListener, DialogInterface.OnDismissListener {
 
+    NetSpeed mNetSpeed;
 
     @Override
     protected void onBindViewHolder(ViewHolder viewHolder, FileBean bean, int position) {
+        if (mNetSpeed == null) {
+            mNetSpeed = new NetSpeed();
+        }
         viewHolder.titleTv.setText(bean.getName());
         String sum = MathUtil.getFormatSize(bean.getContentLength());
         String curr = MathUtil.getFormatSize(bean.getDownLoadLength());
@@ -32,7 +37,7 @@ public class DownFragment extends ListFragment<FileBean,DownFragment.ViewHolder>
         if (bean.isComplete()) {
             viewHolder.descTv.setText(sum);
         } else {
-            viewHolder.descTv.setText(curr + "/" + sum);
+            viewHolder.descTv.setText(curr + "/" + sum + "  |  " + mNetSpeed.getNetSpeed());
         }
         if (DownPresenter.getInstance(getActivity()).isDowning(bean)) {
             viewHolder.downloadPv.start();

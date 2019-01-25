@@ -30,6 +30,10 @@ public abstract class Downloader{
         return mDownLoadLength;
     }
 
+    public void setContentLength(long contentLength) {
+        mContentLength = contentLength;
+    }
+
     long mContentLength = -100;
 
     long mDownLoadLength;

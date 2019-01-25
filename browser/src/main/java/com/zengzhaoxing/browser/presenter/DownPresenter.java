@@ -13,12 +13,13 @@ import com.zxz.www.base.utils.ToastUtil;
 
 import org.greenrobot.greendao.query.QueryBuilder;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DownPresenter implements Downloader.DownLoadListener {
 
-    private static final int MAX_DOWNLOAD_TASK = 300;
+    private static final int MAX_DOWNLOAD_TASK = 2;
 
 
     public List<FileBean> getFileBeans() {
@@ -51,26 +52,32 @@ public class DownPresenter implements Downloader.DownLoadListener {
 
     public void startNew(FileBean bean) {
         boolean isExist = false;
-        int sameFileCount = 0;
         for (FileBean fileBean : mFileBeans) {
             if (fileBean.getName().contains(bean.getPrefix())) {
                 if (!fileBean.isComplete()) {
                     isExist = true;
                     break;
                 }
-                sameFileCount++;
             }
         }
 
         if (isExist) {
             ToastUtil.toast(R.string.download_exit);
         } else {
+            int sameFileCount = 0;
+            File file = new File(bean.getDir());
+            for (File file1 : file.listFiles()) {
+                if (!file1.isDirectory() && file1.getName().contains(bean.getPrefix())) {
+                    sameFileCount++;
+                }
+            }
             if (sameFileCount > 0) {
                 bean.appendName("(" + sameFileCount + ")");
             }
             App.getDaoSession().insertOrReplace(bean);
             mFileBeans.add(0,bean);
             newDownLoad(bean);
+            ToastUtil.toast(R.string.downloading);
         }
     }
 
@@ -79,21 +86,24 @@ public class DownPresenter implements Downloader.DownLoadListener {
             stop(mCurrBean.get(0));
         }
         HttpDownloader httpDownloader = new HttpDownloader(bean.getUrl(),bean.getName(),true,mActivity);
-        bean.setDir(httpDownloader.getFileDir());
         httpDownloader.setDownloadListener(this);
         mDownloaders.add(httpDownloader);
         mCurrBean.add(bean);
+        httpDownloader.setContentLength(bean.getContentLength());
         httpDownloader.starDownload();
     }
 
 
     @Override
     public void onDownLoad(float progress, Downloader downloader) {
-        FileBean b = mCurrBean.get(mDownloaders.indexOf(downloader));
-        b.setContentLength(downloader.getContentLength());
-        b.setDownLoadLength(downloader.getDownLoadLength());
-        App.getDaoSession().update(b);
-        callUpData(b);
+        int index = mDownloaders.indexOf(downloader);
+        if (index >= 0) {
+            FileBean b = mCurrBean.get(index);
+            b.setContentLength(downloader.getContentLength());
+            b.setDownLoadLength(downloader.getDownLoadLength());
+            App.getDaoSession().update(b);
+            callUpData(b);
+        }
     }
 
     public interface OnUpDateUiListener {
@@ -112,16 +122,17 @@ public class DownPresenter implements Downloader.DownLoadListener {
 
     public void exChangeDownStatus(FileBean bean) {
         if (isDowning(bean)) {
-            newDownLoad(bean);
-        } else {
             stop(bean);
+        } else {
+            newDownLoad(bean);
         }
         callUpData(bean);
     }
 
     private void stop(FileBean bean) {
+
         int index = mCurrBean.indexOf(bean);
-        if (index > 0) {
+        if (index >= 0) {
             mDownloaders.get(index).stopDownload();
             mDownloaders.remove(index);
             mCurrBean.remove(index);

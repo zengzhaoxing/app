@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.zengzhaoxing.browser.Constants;
 import com.zengzhaoxing.browser.MainActivity;
 import com.zengzhaoxing.browser.R;
 import com.zengzhaoxing.browser.bean.FileBean;
@@ -110,7 +111,9 @@ public class BrowserFragment extends WindowChildFragment implements View.OnLongC
                 mUrlBean.setTitle(title);
                 UrlCollectPresenter.getInstance().addHistory(mUrlBean);
                 if (titleTv != null) {
-                    titleTv.setText(title);
+                    if (!Constants.BLANK.equals(title)) {
+                        titleTv.setText(title);
+                    }
                     errorLl.setVisibility(View.GONE);
                 }
             }
