@@ -1,9 +1,6 @@
 package com.zengzhaoxing.browser.ui.fragment;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.DebugUtils;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,8 +9,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zengzhaoxing.browser.MainActivity;
+import com.zengzhaoxing.browser.bean.FileBean;
 import com.zengzhaoxing.browser.bean.UrlBean;
+import com.zengzhaoxing.browser.presenter.DownPresenter;
 import com.zengzhaoxing.browser.presenter.UrlCollectPresenter;
+import com.zengzhaoxing.browser.ui.dialog.DelDownDlg;
 import com.zhaoxing.view.sharpview.SharpLinearLayout;
 import com.zxz.www.base.app.BaseActivity;
 import com.zxz.www.base.app.SlideFragment;
@@ -54,6 +54,16 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
 
     public static final int FUN_DELETE_DOWNLOAD = 13;
 
+    public static final int FUN_OPEN_FILE_DIR = 14;
+
+    public static final int FUN_FILE_DETAIL = 15;
+
+    public static final int FUN_FILE_RENAME = 16;
+
+    public static final int FUN_COPY_DOWN_URL = 17;
+
+    public static final int FUN_RE_DOWN = 18;
+
     private String getFunName(int fun) {
         switch (fun) {
             case FUN_OPEN_IN_BACKGROUND:
@@ -80,12 +90,25 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
                 return "删除该收藏";
             case FUN_ADD_COLLECT:
                 return "添至收藏";
+            case FUN_DELETE_DOWNLOAD:
+                return "删除";
+            case FUN_OPEN_FILE_DIR:
+                return "打开文件位置";
+            case FUN_FILE_DETAIL:
+                return "详情";
+            case FUN_FILE_RENAME:
+                return "重命名";
+            case FUN_COPY_DOWN_URL:
+                return "复制下载链接";
+            case FUN_RE_DOWN:
+                return "重新下载";
+
             default:
                 return null;
         }
     }
 
-    public static void open(BaseActivity activity,Bundle bundle) {
+    public static void open(BaseActivity activity, Bundle bundle) {
         FunListFragment fragment = new FunListFragment();
         fragment.setArguments(bundle);
         activity.openNewFragment(fragment);
@@ -99,11 +122,13 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
 
     private UrlBean mUrlBean;
 
+    private FileBean mFileBean;
+
     @Override
     public View getSlideView(ViewGroup parent) {
         RelativeLayout relativeLayout = new RelativeLayout(getActivity());
         int padding = DensityUtil.dip2px(10);
-        relativeLayout.setPadding(padding,padding,padding,padding);
+        relativeLayout.setPadding(padding, padding, padding, padding);
         SharpLinearLayout linearLayout = new SharpLinearLayout(getActivity());
         linearLayout.getRenderProxy().setBackgroundColor(ResUtil.getColor(com.zxz.www.base.R.color.white));
         linearLayout.getRenderProxy().setRadius(DensityUtil.dip2px(4));
@@ -114,6 +139,7 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
         mTitle = bundle.getString("title");
         mSrc = bundle.getString("src");
         mUrlBean = (UrlBean) bundle.getSerializable(UrlBean.class.getName());
+        mFileBean = (FileBean) bundle.getSerializable(FileBean.class.getName());
         ArrayList<Integer> fun = new ArrayList<>();
         if (mUrl != null) {
             fun.add(FUN_OPEN_IN_NEW_WINDOW);
@@ -140,6 +166,13 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
                 fun.add(FUN_DELETE_HISTORY);
             }
         }
+        if (mFileBean != null) {
+            fun.add(FUN_OPEN_FILE_DIR);
+            fun.add(FUN_FILE_DETAIL);
+            fun.add(FUN_COPY_DOWN_URL);
+            fun.add(FUN_DELETE_DOWNLOAD);
+            fun.add(FUN_RE_DOWN);
+        }
         if (fun.size() == 0) {
             mBaseActivity.closeCurrentFragment();
         }
@@ -147,7 +180,7 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
             if (i != 0) {
                 View view = new View(getActivity());
                 view.setBackgroundResource(com.zxz.www.base.R.color.text_mid_black);
-                linearLayout.addView(view,new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,DensityUtil.dip2px(0.5F)));
+                linearLayout.addView(view, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(0.5F)));
             }
             TextView textView = new TextView(getActivity());
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, DensityUtil.dip2px(55));
@@ -178,41 +211,77 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
                     bean.setUrl(mUrl);
                     ((MainActivity) mBaseActivity).getHome().openBackWindow(bean);
                 }
+                mBaseActivity.closeCurrentFragment();
                 break;
             case FUN_OPEN_IN_NEW_WINDOW:
                 UrlBean bean = new UrlBean();
                 bean.setUrl(mUrl);
-                ((MainActivity)mBaseActivity).getHome().openNewWindow(bean);
+                ((MainActivity) mBaseActivity).getHome().openNewWindow(bean);
+                mBaseActivity.closeCurrentFragment();
                 break;
             case FUN_COPY_URL:
                 EditorUtil.copy(mUrl);
+                mBaseActivity.closeCurrentFragment();
                 break;
             case FUN_COPY_TEXT:
                 EditorUtil.copy(mTitle);
+                mBaseActivity.closeCurrentFragment();
                 break;
             case FUN_SELECT_TEXT:
                 break;
             case FUN_SAVE_IMG:
                 FileUtil.getInstance().saveImg(mSrc);
+                mBaseActivity.closeCurrentFragment();
                 break;
             case FUN_LOOK_IMG:
+                mBaseActivity.closeCurrentFragment();
+                ImageLookerFragment fragment = new ImageLookerFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(String.class.getName(), mSrc);
+                fragment.setArguments(bundle);
+                mBaseActivity.openNewFragmentWithDefaultAnim(fragment);
                 break;
             case FUN_SHARE_IMG:
                 mBaseActivity.showLoadingView(com.zxz.www.base.R.color.black_30);
-                IntentUtil.sendImg(mSrc,mBaseActivity);
+                IntentUtil.sendImg(mSrc, mBaseActivity);
+                mBaseActivity.closeCurrentFragment();
                 break;
             case FUN_SHARE_URL:
-                IntentUtil.sendText(mUrl,mBaseActivity);
+                IntentUtil.sendText(mUrl, mBaseActivity);
+                mBaseActivity.closeCurrentFragment();
                 break;
             case FUN_DELETE_HISTORY:
             case FUN_DELETE_COLLECT:
                 UrlCollectPresenter.getInstance().delete(mUrlBean);
+                mBaseActivity.closeCurrentFragment();
                 break;
             case FUN_ADD_COLLECT:
                 UrlCollectPresenter.getInstance().addCollect(mUrlBean);
+                mBaseActivity.closeCurrentFragment();
+                break;
+            case FUN_DELETE_DOWNLOAD:
+                DelDownDlg del = new DelDownDlg(mBaseActivity);
+                del.show(DownPresenter.getInstance(mBaseActivity).getFileBeans().indexOf(mFileBean));
+                mBaseActivity.closeCurrentFragment();
+                break;
+            case FUN_OPEN_FILE_DIR:
+                IntentUtil.openDir(mBaseActivity,mFileBean.getDir());
+                mBaseActivity.closeCurrentFragment();
+                break;
+            case FUN_FILE_DETAIL:
+                break;
+            case FUN_FILE_RENAME:
+                break;
+            case FUN_COPY_DOWN_URL:
+                EditorUtil.copy(mFileBean.getUrl());
+                mBaseActivity.closeCurrentFragment();
+                break;
+            case FUN_RE_DOWN:
+                DownPresenter.getInstance(mBaseActivity).reDown(mFileBean);
+                mBaseActivity.closeCurrentFragment();
                 break;
             default:
         }
-        mBaseActivity.closeCurrentFragment();
+
     }
 }

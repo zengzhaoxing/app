@@ -168,4 +168,9 @@ public class DownPresenter implements Downloader.DownLoadListener {
         mFileBeans.remove(bean);
     }
 
+    public void reDown(FileBean bean) {
+        delete(bean, true);
+        startNew(bean);
+    }
+
 }

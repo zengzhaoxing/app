@@ -111,7 +111,7 @@ public class IntentUtil {
                     if (progress == -1) {
                         ToastUtil.toast("分享失败");
                         activity.hideLoadingView();
-                    } else if (progress == 100) {
+                    } else if (progress == 1) {
                         Intent intent = new Intent();
                         intent.setAction(Intent.ACTION_SEND);
                         intent.setType("image/*");
@@ -148,6 +148,15 @@ public class IntentUtil {
                 cameraPhoto);
         takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
         activity.startActivity(takePhotoIntent);
+    }
+
+    public static void openDir(Activity activity,String dir) {
+        File file = new File(dir);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Uri uri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".fileprovider", file);
+        intent.setDataAndType(uri, "*/*");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        activity.startActivity(intent);
     }
 
 

@@ -189,7 +189,7 @@ public class FileUtil {
                 public void onDownLoad(float progress,Downloader downloader1) {
                     if (progress == -1) {
                         ToastUtil.toast("保存失败");
-                    } else if (progress == 100) {
+                    } else if (progress == 1) {
                         ToastUtil.toast("保存成功: " + downloader.getFileUrl());
                     }
                 }

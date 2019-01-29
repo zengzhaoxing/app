@@ -176,14 +176,19 @@ public class HomeFragment extends MainFragment {
 
             @Override
             public void onCloseClick(int position) {
-                WindowFragment fragment =  mWindowFragments.remove(position);
-                if (fragment.isAdded()) {
-                    FragmentTransaction fm = getChildFragmentManager().beginTransaction();
-                    fm.remove(fragment);
-                    fm.commitAllowingStateLoss();
+                if (mSwitchWindowAdapter.getCount() > 1) {
+                    WindowFragment fragment =  mWindowFragments.remove(position);
+                    if (fragment.isAdded()) {
+                        FragmentTransaction fm = getChildFragmentManager().beginTransaction();
+                        fm.remove(fragment);
+                        fm.commitAllowingStateLoss();
+                    }
+                    refreshWindowCount();
+                    reSetAdapter();
+                } else {
+                    initFirstWindow();
+                    showSwitchWindow(false);
                 }
-                refreshWindowCount();
-                reSetAdapter();
             }
         });
     }

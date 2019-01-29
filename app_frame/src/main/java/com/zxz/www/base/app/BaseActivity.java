@@ -46,6 +46,7 @@ public abstract class BaseActivity extends AppCompatActivity implements UIPage{
 
     @Override
     public void onBackPressed() {
+        hideLoadingView();
         pressBackKey();
     }
 
