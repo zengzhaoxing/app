@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class WindowHomeFragment extends WindowChildFragment {
+public class WindowHomeFragment extends WindowChildFragment implements View.OnClickListener {
 
     Unbinder unbinder;
     @BindView(R.id.url_gv)
@@ -61,6 +61,8 @@ public class WindowHomeFragment extends WindowChildFragment {
                     convertView = LayoutInflater.from(mBaseActivity).inflate(R.layout.item_url_icon,parent,false);
                 }
                 UrlBean bean = beans.get(position);
+                convertView.setTag(bean);
+                convertView.setOnClickListener(WindowHomeFragment.this);
                 ImageView imageView = convertView.findViewById(R.id.url_iv);
                 TextView textView = convertView.findViewById(R.id.title_tv);
                 Picasso.with(BaseApp.getContext()).load(bean.getIconUrl()).error(R.mipmap.icon).into(imageView);
@@ -84,4 +86,8 @@ public class WindowHomeFragment extends WindowChildFragment {
     }
 
 
+    @Override
+    public void onClick(View v) {
+        mWindowFragment.openNew(((UrlBean) v.getTag()).getUrl());
+    }
 }

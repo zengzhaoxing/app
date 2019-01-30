@@ -56,8 +56,7 @@ public class UrlCollectFragment extends ListFragment<UrlBean,UrlCollectFragment.
     }
 
     @Override
-    public void onClick(View v) {
-        UrlBean bean = (UrlBean) v.getTag();
+    protected void onItemClick(UrlBean bean) {
         mBaseActivity.closeCurrentFragment();
         ((MainActivity)mBaseActivity).getHome().openNewWindow(bean);
     }

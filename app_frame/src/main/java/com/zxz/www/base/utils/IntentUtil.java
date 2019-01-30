@@ -49,7 +49,6 @@ public class IntentUtil {
         }
     }
 
-
     public static void send(ArrayList<Uri> uris) {
         try {
             Intent intent = new Intent(Intent.ACTION_SEND_MULTIPLE);
@@ -158,6 +157,24 @@ public class IntentUtil {
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         activity.startActivity(intent);
     }
+
+    public static void openFile(Activity activity,File file) {
+        if (file.getName().endsWith(".apk")) {
+            installApk(file,activity);
+        } else{
+            Uri photoUri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", file);
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            MediaFileUtil.MediaFileType type = MediaFileUtil.getFileType(file.getName());
+            if (type != null) {
+                intent.setDataAndType(photoUri, type.mimeType);
+            } else {
+                intent.setDataAndType(photoUri, "*/*");
+            }
+            activity.startActivity(intent);
+        }
+    }
+
 
 
 }

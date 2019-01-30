@@ -6,17 +6,22 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
+import com.zengzhaoxing.browser.MainActivity;
 import com.zengzhaoxing.browser.R;
 import com.zengzhaoxing.browser.bean.FileBean;
+import com.zengzhaoxing.browser.bean.UrlBean;
 import com.zengzhaoxing.browser.presenter.DownPresenter;
 import com.zengzhaoxing.browser.ui.dialog.DelDownDlg;
 import com.zengzhaoxing.browser.view.ProgressView;
 import com.zxz.www.base.app.ListFragment;
+import com.zxz.www.base.utils.IntentUtil;
 import com.zxz.www.base.utils.MathUtil;
 import com.zxz.www.base.utils.NetSpeed;
 import com.zxz.www.base.utils.ResUtil;
 import com.zxz.www.base.utils.ViewUtil;
 import com.zxz.www.base.view.TitleView;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,12 +59,12 @@ public class DownFragment extends ListFragment<FileBean,DownFragment.ViewHolder>
     }
 
     @Override
-    public void onClick(View v) {
-        if (ViewUtil.isDoubleRequest(v)) {
-            return;
+    protected void onItemClick(FileBean bean) {
+        if (bean.isComplete()) {
+            IntentUtil.openFile(mBaseActivity,new File(bean.getDir() + "/" + bean.getName()));
+        } else {
+            DownPresenter.getInstance(getActivity()).exChangeDownStatus(bean);
         }
-        FileBean bean = (FileBean) v.getTag();
-        DownPresenter.getInstance(getActivity()).exChangeDownStatus(bean);
     }
 
     @Override
@@ -83,6 +88,7 @@ public class DownFragment extends ListFragment<FileBean,DownFragment.ViewHolder>
     @Override
     public void onUpDateUi(FileBean bean) {
         if (mAdapter != null && mList != null) {
+            mRecyclerView.getItemAnimator().setChangeDuration(0);
             mAdapter.notifyItemChanged(mList.indexOf(bean));
         }
     }

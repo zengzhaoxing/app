@@ -22,7 +22,7 @@ public class FileBean extends BaseModel {
 
     public float getProgress() {
         if (contentLength == 0) {
-            return 0;
+            return -1;
         }
         return (float)downLoadLength / (float)contentLength;
     }
@@ -50,6 +50,9 @@ public class FileBean extends BaseModel {
         return getProgress() == 1;
     }
 
+    public boolean isFail() {
+        return getProgress() == -1;
+    }
 
     private long downLoadLength;
 

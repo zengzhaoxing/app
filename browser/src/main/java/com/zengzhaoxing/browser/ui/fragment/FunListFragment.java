@@ -171,8 +171,8 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
         }
         if (mFileBean != null) {
             fun.add(FUN_OPEN_FILE_DIR);
-            fun.add(FUN_FILE_DETAIL);
             fun.add(FUN_COPY_DOWN_URL);
+            fun.add(FUN_FILE_RENAME);
             fun.add(FUN_DELETE_DOWNLOAD);
             fun.add(FUN_RE_DOWN);
         }

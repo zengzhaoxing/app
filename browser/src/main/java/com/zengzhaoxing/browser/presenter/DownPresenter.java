@@ -99,8 +99,14 @@ public class DownPresenter implements Downloader.DownLoadListener {
         int index = mDownloaders.indexOf(downloader);
         if (index >= 0) {
             FileBean b = mCurrBean.get(index);
-            b.setContentLength(downloader.getContentLength());
-            b.setDownLoadLength(downloader.getDownLoadLength());
+            if (progress == -1) {
+                b.setContentLength(0);
+                b.setDownLoadLength(0);
+            } else {
+                b.setContentLength(downloader.getContentLength());
+                b.setDownLoadLength(downloader.getDownLoadLength());
+            }
+
             App.getDaoSession().update(b);
             callUpData(b);
         }

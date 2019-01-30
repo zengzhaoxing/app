@@ -92,8 +92,9 @@ public abstract class ListFragment<T,VH extends RecyclerView.ViewHolder> extends
 
     @Override
     public void onClick(View v) {
-
+        onItemClick((T) v.getTag());
     }
 
+    abstract protected void onItemClick(T t);
 
 }
