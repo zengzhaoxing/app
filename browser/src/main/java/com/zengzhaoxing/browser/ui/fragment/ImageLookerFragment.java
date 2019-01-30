@@ -37,7 +37,7 @@ public class ImageLookerFragment extends TitleFragment {
         // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
-        ViewUtil.LoadImg(imageIv,getArguments().getString(String.class.getName()),R.mipmap.icon);
+        ViewUtil.LoadImg(imageIv,getArguments().getString(String.class.getName()),0);
         return rootView;
     }
 

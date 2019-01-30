@@ -116,7 +116,11 @@ public class ViewUtil {
     }
 
     public static void LoadImg(ImageView imageView, String imgUrl, @DrawableRes int id) {
-        Picasso.with(BaseApp.getContext()).load(imgUrl).error(id).placeholder(id).into(imageView);
+        if (id != 0) {
+            Picasso.with(BaseApp.getContext()).load(imgUrl).error(id).placeholder(id).into(imageView);
+        } else {
+            Picasso.with(BaseApp.getContext()).load(imgUrl).into(imageView);
+        }
     }
 
 

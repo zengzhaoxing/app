@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:background="@color/white"
     android:layout_width="match_parent"
+
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -76,10 +77,12 @@
         android:layout_height="0.5dp"
         android:background="@color/line_gray"/>
 
-    <View
+    <GridView
+        android:layout_marginTop="30dp"
+        android:id="@+id/url_gv"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:layout_weight="1"
-        android:background="@color/red"/>
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:numColumns="4"/>
 
 </LinearLayout>

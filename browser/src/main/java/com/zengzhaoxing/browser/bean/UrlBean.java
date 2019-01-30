@@ -12,6 +12,11 @@ import static com.zengzhaoxing.browser.Constants.SPILT;
 @Entity
 public class UrlBean extends BaseModel {
 
+    public UrlBean(String url, String title) {
+        this.url = url;
+        this.title = title;
+    }
+
     public String getUrl() {
         return url;
     }
