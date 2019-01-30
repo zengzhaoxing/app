@@ -226,6 +226,8 @@ public class SearchFragment extends BaseFragment {
     }
 
 
-    private static final String SEARCH_HISTORY = "SEARCH_HISTORY";
+
+
+    public static final String SEARCH_HISTORY = "SEARCH_HISTORY";
 
 }

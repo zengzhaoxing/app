@@ -27,8 +27,8 @@ public class FileBeanDao extends AbstractDao<FileBean, Long> {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Url = new Property(1, String.class, "url", false, "URL");
         public final static Property Name = new Property(2, String.class, "name", false, "NAME");
-        public final static Property MContentLength = new Property(3, long.class, "mContentLength", false, "M_CONTENT_LENGTH");
-        public final static Property MDownLoadLength = new Property(4, long.class, "mDownLoadLength", false, "M_DOWN_LOAD_LENGTH");
+        public final static Property ContentLength = new Property(3, long.class, "contentLength", false, "CONTENT_LENGTH");
+        public final static Property DownLoadLength = new Property(4, long.class, "downLoadLength", false, "DOWN_LOAD_LENGTH");
         public final static Property Type = new Property(5, String.class, "type", false, "TYPE");
         public final static Property Dir = new Property(6, String.class, "dir", false, "DIR");
         public final static Property Time = new Property(7, long.class, "time", false, "TIME");
@@ -50,8 +50,8 @@ public class FileBeanDao extends AbstractDao<FileBean, Long> {
                 "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"URL\" TEXT," + // 1: url
                 "\"NAME\" TEXT," + // 2: name
-                "\"M_CONTENT_LENGTH\" INTEGER NOT NULL ," + // 3: mContentLength
-                "\"M_DOWN_LOAD_LENGTH\" INTEGER NOT NULL ," + // 4: mDownLoadLength
+                "\"CONTENT_LENGTH\" INTEGER NOT NULL ," + // 3: contentLength
+                "\"DOWN_LOAD_LENGTH\" INTEGER NOT NULL ," + // 4: downLoadLength
                 "\"TYPE\" TEXT," + // 5: type
                 "\"DIR\" TEXT," + // 6: dir
                 "\"TIME\" INTEGER NOT NULL );"); // 7: time
@@ -81,8 +81,8 @@ public class FileBeanDao extends AbstractDao<FileBean, Long> {
         if (name != null) {
             stmt.bindString(3, name);
         }
-        stmt.bindLong(4, entity.getMContentLength());
-        stmt.bindLong(5, entity.getMDownLoadLength());
+        stmt.bindLong(4, entity.getContentLength());
+        stmt.bindLong(5, entity.getDownLoadLength());
  
         String type = entity.getType();
         if (type != null) {
@@ -114,8 +114,8 @@ public class FileBeanDao extends AbstractDao<FileBean, Long> {
         if (name != null) {
             stmt.bindString(3, name);
         }
-        stmt.bindLong(4, entity.getMContentLength());
-        stmt.bindLong(5, entity.getMDownLoadLength());
+        stmt.bindLong(4, entity.getContentLength());
+        stmt.bindLong(5, entity.getDownLoadLength());
  
         String type = entity.getType();
         if (type != null) {
@@ -140,8 +140,8 @@ public class FileBeanDao extends AbstractDao<FileBean, Long> {
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // url
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // name
-            cursor.getLong(offset + 3), // mContentLength
-            cursor.getLong(offset + 4), // mDownLoadLength
+            cursor.getLong(offset + 3), // contentLength
+            cursor.getLong(offset + 4), // downLoadLength
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // type
             cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // dir
             cursor.getLong(offset + 7) // time
@@ -154,8 +154,8 @@ public class FileBeanDao extends AbstractDao<FileBean, Long> {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setUrl(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setName(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setMContentLength(cursor.getLong(offset + 3));
-        entity.setMDownLoadLength(cursor.getLong(offset + 4));
+        entity.setContentLength(cursor.getLong(offset + 3));
+        entity.setDownLoadLength(cursor.getLong(offset + 4));
         entity.setType(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
         entity.setDir(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
         entity.setTime(cursor.getLong(offset + 7));

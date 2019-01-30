@@ -24,4 +24,6 @@
     <string name="q_delete_down">删除所选下载项？</string>
     <string name="q_delete_all_down">删除所有下载项？</string>
     <string name="delete_file">同时删除源文件</string>
+    <string name="q_clean_record">清除所有搜索记录，浏览记录，下载记录？</string>
+    <string name="clean_succeed">清除成功</string>
 </resources>

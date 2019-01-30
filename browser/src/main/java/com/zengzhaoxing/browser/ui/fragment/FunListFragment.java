@@ -64,6 +64,8 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
 
     public static final int FUN_RE_DOWN = 18;
 
+    public static final int FUN_OPEN_FILE = 19;
+
     private String getFunName(int fun) {
         switch (fun) {
             case FUN_OPEN_IN_BACKGROUND:
@@ -102,7 +104,8 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
                 return "复制下载链接";
             case FUN_RE_DOWN:
                 return "重新下载";
-
+            case FUN_OPEN_FILE:
+                return "打开";
             default:
                 return null;
         }

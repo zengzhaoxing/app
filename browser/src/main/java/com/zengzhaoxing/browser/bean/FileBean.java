@@ -21,28 +21,29 @@ public class FileBean extends BaseModel {
     private String name;
 
     public float getProgress() {
-        if (mContentLength == 0) {
+        if (contentLength == 0) {
             return 0;
         }
-        return (float)mDownLoadLength / (float)mContentLength;
+        return (float)downLoadLength / (float)contentLength;
     }
 
     public long getContentLength() {
-        return mContentLength;
+        return contentLength;
     }
 
     public void setContentLength(long contentLength) {
-        mContentLength = contentLength;
+        this.contentLength = contentLength;
     }
 
-    private long mContentLength;
+    private long contentLength;
+
 
     public long getDownLoadLength() {
-        return mDownLoadLength;
+        return downLoadLength;
     }
 
     public void setDownLoadLength(long downLoadLength) {
-        mDownLoadLength = downLoadLength;
+        this.downLoadLength = downLoadLength;
     }
 
     public boolean isComplete() {
@@ -50,7 +51,8 @@ public class FileBean extends BaseModel {
     }
 
 
-    private long mDownLoadLength;
+    private long downLoadLength;
+
 
     private String type;
 
@@ -58,14 +60,14 @@ public class FileBean extends BaseModel {
 
     private long time = System.currentTimeMillis();
 
-    @Generated(hash = 252725018)
-    public FileBean(Long id, String url, String name, long mContentLength,
-            long mDownLoadLength, String type, String dir, long time) {
+    @Generated(hash = 733448638)
+    public FileBean(Long id, String url, String name, long contentLength,
+            long downLoadLength, String type, String dir, long time) {
         this.id = id;
         this.url = url;
         this.name = name;
-        this.mContentLength = mContentLength;
-        this.mDownLoadLength = mDownLoadLength;
+        this.contentLength = contentLength;
+        this.downLoadLength = downLoadLength;
         this.type = type;
         this.dir = dir;
         this.time = time;
@@ -74,6 +76,7 @@ public class FileBean extends BaseModel {
     @Generated(hash = 1910776192)
     public FileBean() {
     }
+
 
     public Long getId() {
         return this.id;
@@ -133,22 +136,6 @@ public class FileBean extends BaseModel {
 
     public void appendName(String s) {
         name = getPrefix() + s + getSuffix();
-    }
-
-    public long getMContentLength() {
-        return this.mContentLength;
-    }
-
-    public void setMContentLength(long mContentLength) {
-        this.mContentLength = mContentLength;
-    }
-
-    public long getMDownLoadLength() {
-        return this.mDownLoadLength;
-    }
-
-    public void setMDownLoadLength(long mDownLoadLength) {
-        this.mDownLoadLength = mDownLoadLength;
     }
 
     public void deleteFile() {

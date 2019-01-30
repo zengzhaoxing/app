@@ -8,13 +8,19 @@ import android.widget.LinearLayout;
 
 import com.zengzhaoxing.browser.MainActivity;
 import com.zengzhaoxing.browser.R;
+import com.zengzhaoxing.browser.presenter.DownPresenter;
 import com.zengzhaoxing.browser.presenter.UrlCollectPresenter;
+import com.zengzhaoxing.browser.ui.dialog.NoticeDialog;
 import com.zxz.www.base.app.SlideFragment;
+import com.zxz.www.base.utils.SPUtil;
+import com.zxz.www.base.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static com.zengzhaoxing.browser.ui.fragment.SearchFragment.SEARCH_HISTORY;
 
 public class MenuFragment extends SlideFragment {
 
@@ -65,6 +71,17 @@ public class MenuFragment extends SlideFragment {
                 mBaseActivity.openNewFragmentWithDefaultAnim(new DownFragment());
                 break;
             case R.id.clean_view:
+                NoticeDialog dialog = new NoticeDialog(mBaseActivity);
+                dialog.show(R.string.q_clean_record, new NoticeDialog.OnDialogClickListener() {
+                    @Override
+                    public void onOkClick() {
+                        UrlCollectPresenter.getInstance().deleteAllHistory();
+                        DownPresenter.getInstance(mBaseActivity).delete(false);
+                        SPUtil.remove(SEARCH_HISTORY);
+                        ToastUtil.toast(R.string.clean_succeed);
+                        mBaseActivity.closeCurrentFragment();
+                    }
+                });
                 break;
             case R.id.exit_view:
                 mBaseActivity.finish();
