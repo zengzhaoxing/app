@@ -68,14 +68,11 @@ public abstract class Downloader{
 
     private String mFileName;
 
-    private Activity mActivity;
-
     private boolean mPublicProgress;
 
-    Downloader(String downloadUrl, String fileName, boolean publicProgress, Activity activity) {
+    Downloader(String downloadUrl, String fileName, boolean publicProgress) {
         mDownloadUrl = downloadUrl;
         mFileName = fileName;
-        mActivity = activity;
         mPublicProgress = publicProgress;
     }
 
@@ -103,21 +100,16 @@ public abstract class Downloader{
         }
     }
 
-    DownLoadListener mDownloadListener;
+    protected DownLoadListener mDownloadListener;
 
     protected MyTask mMyTask = new MyTask();
 
     private void publicProgress() {
-        if (mDownloadListener != null && mActivity != null && mPublicProgress) {
-            mMyTask.start(new TimerTask() {
+        if (mDownloadListener != null && mPublicProgress) {
+            mMyTask.start(new Runnable() {
                 @Override
                 public void run() {
-                    mActivity.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            mDownloadListener.onDownLoad(getCurrProgress(), Downloader.this);
-                        }
-                    });
+                    mDownloadListener.onDownLoad(getCurrProgress(), Downloader.this);
                 }
             }, 0, 1000);
         }

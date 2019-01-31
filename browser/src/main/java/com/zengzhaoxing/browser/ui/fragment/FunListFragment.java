@@ -264,7 +264,7 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
                 break;
             case FUN_DELETE_DOWNLOAD:
                 DelDownDlg del = new DelDownDlg(mBaseActivity);
-                del.show(DownPresenter.getInstance(mBaseActivity).getFileBeans().indexOf(mFileBean));
+                del.show(DownPresenter.getInstance().getFileBeans().indexOf(mFileBean));
                 mBaseActivity.closeCurrentFragment();
                 break;
             case FUN_OPEN_FILE_DIR:
@@ -280,7 +280,7 @@ public class FunListFragment extends SlideFragment implements View.OnClickListen
                 mBaseActivity.closeCurrentFragment();
                 break;
             case FUN_RE_DOWN:
-                DownPresenter.getInstance(mBaseActivity).reDown(mFileBean);
+                DownPresenter.getInstance().reDown(mFileBean);
                 mBaseActivity.closeCurrentFragment();
                 break;
             default:

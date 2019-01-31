@@ -1,7 +1,13 @@
 package com.zengzhaoxing.browser.bean;
 
+import android.graphics.drawable.Drawable;
+
+import com.zengzhaoxing.browser.R;
 import com.zxz.www.base.model.BaseModel;
 import com.zxz.www.base.utils.FileUtil;
+import com.zxz.www.base.utils.MediaFileUtil;
+import com.zxz.www.base.utils.ResUtil;
+import com.zxz.www.base.utils.Util;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
@@ -142,9 +148,28 @@ public class FileBean extends BaseModel {
     }
 
     public void deleteFile() {
-        File file = new File(dir + "/" + name);
+        File file = new File(getPath());
         if (file.exists()) {
             file.delete();
+        }
+    }
+
+    public String getPath() {
+        return dir + "/" + name;
+    }
+
+    public Drawable getDrawable() {
+        String path = getPath();
+        if (MediaFileUtil.isApkFileType(path)) {
+            return Util.getApkIcon(path);
+        } else if (MediaFileUtil.isImageFileType(path)) {
+            return ResUtil.getDrawable(R.drawable.image);
+        } else if (MediaFileUtil.isAudioFileType(path)) {
+            return ResUtil.getDrawable(R.drawable.audio);
+        } else if (MediaFileUtil.isVideoFileType(path)) {
+            return ResUtil.getDrawable(R.drawable.video);
+        } else {
+            return ResUtil.getDrawable(R.drawable.file);
         }
     }
 

@@ -1,9 +1,12 @@
 package com.zengzhaoxing.browser.ui.fragment;
 
 import android.content.DialogInterface;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.zengzhaoxing.browser.MainActivity;
@@ -13,6 +16,7 @@ import com.zengzhaoxing.browser.bean.UrlBean;
 import com.zengzhaoxing.browser.presenter.DownPresenter;
 import com.zengzhaoxing.browser.ui.dialog.DelDownDlg;
 import com.zengzhaoxing.browser.view.ProgressView;
+import com.zxz.www.base.app.BaseFragment;
 import com.zxz.www.base.app.ListFragment;
 import com.zxz.www.base.utils.IntentUtil;
 import com.zxz.www.base.utils.MathUtil;
@@ -26,7 +30,7 @@ import java.io.File;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DownFragment extends ListFragment<FileBean,DownFragment.ViewHolder> implements  DownPresenter.OnUpDateUiListener, DialogInterface.OnDismissListener {
+public class DownFragment extends ListFragment<FileBean,DownFragment.ViewHolder> implements  DownPresenter.OnUpDateUiListener {
 
     NetSpeed mNetSpeed;
 
@@ -39,12 +43,20 @@ public class DownFragment extends ListFragment<FileBean,DownFragment.ViewHolder>
         String sum = MathUtil.getFormatSize(bean.getContentLength());
         String curr = MathUtil.getFormatSize(bean.getDownLoadLength());
         viewHolder.downloadPv.setProgress(bean.getProgress());
+        Drawable drawable = bean.getDrawable();
+        if (drawable != null) {
+            viewHolder.iconIv.setImageDrawable(bean.getDrawable());
+        }else{
+            viewHolder.iconIv.setImageResource(R.drawable.file);
+        }
         if (bean.isComplete()) {
             viewHolder.descTv.setText(sum);
-        } else {
+        } else if(!DownPresenter.getInstance().isDowning(bean)){
+            viewHolder.descTv.setText(curr + "/" + sum + "  |  " + ResUtil.getString(R.string.paused));
+        } else{
             viewHolder.descTv.setText(curr + "/" + sum + "  |  " + mNetSpeed.getNetSpeed());
         }
-        if (DownPresenter.getInstance(getActivity()).isDowning(bean)) {
+        if (DownPresenter.getInstance().isDowning(bean)) {
             viewHolder.downloadPv.start();
         } else {
             viewHolder.downloadPv.pause();
@@ -61,25 +73,33 @@ public class DownFragment extends ListFragment<FileBean,DownFragment.ViewHolder>
     @Override
     protected void onItemClick(FileBean bean) {
         if (bean.isComplete()) {
-            IntentUtil.openFile(mBaseActivity,new File(bean.getDir() + "/" + bean.getName()));
+            IntentUtil.openFile(mBaseActivity,new File(bean.getPath()));
         } else {
-            DownPresenter.getInstance(getActivity()).exChangeDownStatus(bean);
+            DownPresenter.getInstance().exChangeDownStatus(bean);
         }
     }
 
     @Override
+    protected void onItemLongClick(FileBean bean) {
+        FunListFragment fragment = new FunListFragment();
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(FileBean.class.getName(), bean);
+        fragment.setArguments(bundle);
+        mBaseActivity.openNewFragment(fragment);
+    }
+
+    @Override
     protected void refreshTitle(TitleView titleView) {
-        DownPresenter.getInstance(getActivity()).setOnUpDateUiListener(this);
+        DownPresenter.getInstance().setOnUpDateUiListener(this);
         titleView.getTitleTv().setText(R.string.menu_download);
         titleView.getRightTv().setTextColor(ResUtil.getColor(R.color.blue));
         titleView.getRightTv().setText(R.string.clean_all);
-        setList(DownPresenter.getInstance(getActivity()).getFileBeans());
+        setList(DownPresenter.getInstance().getFileBeans());
         titleView.getRightTv().setVisibility(mList != null && mList.size() > 0 ? View.VISIBLE : View.GONE);
         titleView.getRightTv().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DelDownDlg delDownDlg = new DelDownDlg(getActivity());
-                delDownDlg.setOnDismissListener(DownFragment.this);
                 delDownDlg.show(null);
             }
         });
@@ -89,13 +109,15 @@ public class DownFragment extends ListFragment<FileBean,DownFragment.ViewHolder>
     public void onUpDateUi(FileBean bean) {
         if (mAdapter != null && mList != null) {
             mRecyclerView.getItemAnimator().setChangeDuration(0);
-            mAdapter.notifyItemChanged(mList.indexOf(bean));
+            mAdapter.notifyDataSetChanged();
         }
     }
 
     @Override
-    public void onDismiss(DialogInterface dialog) {
-        mAdapter.notifyDataSetChanged();
+    public void onDelete(int... pos) {
+        if (mAdapter != null) {
+            mAdapter.notifyDataSetChanged();
+        }
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -105,6 +127,8 @@ public class DownFragment extends ListFragment<FileBean,DownFragment.ViewHolder>
         TextView descTv;
         @BindView(R.id.download_pv)
         ProgressView downloadPv;
+        @BindView(R.id.icon_iv)
+        ImageView iconIv;
 
         ViewHolder(View view) {
             super(view);

@@ -82,6 +82,7 @@ public class ProgressView extends View {
             setVisibility(INVISIBLE);
             mProgress = 0;
         } else {
+            setVisibility(VISIBLE);
             mProgress = progress;
         }
         invalidate();

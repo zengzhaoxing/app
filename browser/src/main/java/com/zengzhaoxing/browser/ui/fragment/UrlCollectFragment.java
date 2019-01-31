@@ -46,19 +46,18 @@ public class UrlCollectFragment extends ListFragment<UrlBean,UrlCollectFragment.
         return R.layout.item_url;
     }
 
-    @Override
-    public boolean onLongClick(View v) {
-        UrlBean bean = (UrlBean) v.getTag();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable(UrlBean.class.getName(), bean);
-        FunListFragment.open(mBaseActivity,bundle);
-        return true;
-    }
 
     @Override
     protected void onItemClick(UrlBean bean) {
         mBaseActivity.closeCurrentFragment();
         ((MainActivity)mBaseActivity).getHome().openNewWindow(bean);
+    }
+
+    @Override
+    protected void onItemLongClick(UrlBean bean) {
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(UrlBean.class.getName(), bean);
+        FunListFragment.open(mBaseActivity,bundle);
     }
 
     @Override

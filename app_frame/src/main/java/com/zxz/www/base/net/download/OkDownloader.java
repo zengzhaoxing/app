@@ -28,7 +28,7 @@ public class OkDownloader extends Downloader {
     private Call mCall;
 
     OkDownloader(String downloadUrl, String fileName, boolean publicProgress, Activity activity) {
-        super(downloadUrl, fileName, publicProgress, activity);
+        super(downloadUrl, fileName, publicProgress);
         mOkHttpClient = new OkHttpClient();
     }
 

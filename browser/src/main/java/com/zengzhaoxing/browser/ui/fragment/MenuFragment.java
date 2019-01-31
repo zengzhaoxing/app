@@ -76,7 +76,7 @@ public class MenuFragment extends SlideFragment {
                     @Override
                     public void onOkClick() {
                         UrlCollectPresenter.getInstance().deleteAllHistory();
-                        DownPresenter.getInstance(mBaseActivity).delete(false);
+                        DownPresenter.getInstance().delete(false);
                         SPUtil.remove(SEARCH_HISTORY);
                         ToastUtil.toast(R.string.clean_succeed);
                         mBaseActivity.closeCurrentFragment();

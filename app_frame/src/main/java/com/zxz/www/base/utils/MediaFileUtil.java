@@ -52,6 +52,9 @@ public class MediaFileUtil {
     private static final int FIRST_PLAYLIST_FILE_TYPE = FILE_TYPE_M3U;
     private static final int LAST_PLAYLIST_FILE_TYPE = FILE_TYPE_WPL;
 
+    //apk
+    public static final int FILE_TYPE_APK     = 51;
+
     //静态内部类
     static class MediaFileType {
 
@@ -105,6 +108,8 @@ public class MediaFileUtil {
         addFileType("M3U", FILE_TYPE_M3U, "audio/x-mpegurl");
         addFileType("PLS", FILE_TYPE_PLS, "audio/x-scpls");
         addFileType("WPL", FILE_TYPE_WPL, "application/vnd.ms-wpl");
+
+        addFileType("APK", FILE_TYPE_APK, "application/vnd.android.package-archive");
 
         // compute file extensions list for native Media Scanner
         StringBuilder builder = new StringBuilder();
@@ -179,6 +184,15 @@ public class MediaFileUtil {
         MediaFileType type = getFileType(path);
         if(null != type) {
             return isImageFileType(type.fileType);
+        }
+        return false;
+    }
+
+    //根据apk文件路径判断文件类型
+    public static boolean isApkFileType(String path) {
+        MediaFileType type = getFileType(path);
+        if(null != type) {
+            return type.fileType == FILE_TYPE_APK;
         }
         return false;
     }

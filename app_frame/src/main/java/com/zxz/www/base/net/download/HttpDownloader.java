@@ -29,7 +29,7 @@ public class HttpDownloader extends Downloader {
     private AsyncTask mTask;
 
     public HttpDownloader(String downloadUrl, String fileName, boolean publicProgress, Activity activity) {
-        super(downloadUrl, fileName, publicProgress, activity);
+        super(downloadUrl, fileName, publicProgress);
     }
 
 
@@ -53,25 +53,25 @@ public class HttpDownloader extends Downloader {
                 URL url = new URL(mDownloadUrl);
                 File file = new File(getFileUrl());
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                if (file.exists() && file.length() > 0) {
-                    mDownLoadLength = file.length();
-                    conn.setRequestProperty("Range", "bytes=" + mDownLoadLength + "-" + (mContentLength - 1));
-                } else {
-                    mDownLoadLength = 0;
-                    mContentLength = conn.getContentLength();
-                }
                 for (Object o : mHeader.entrySet()) {
                     Map.Entry entry = (Map.Entry) o;
                     String key = (String) entry.getKey();
                     String val = (String) entry.getValue();
                     conn.setRequestProperty(key, val);
                 }
+                if (file.exists() && file.length() > 0) {
+                    mDownLoadLength = file.length();
+                    conn.setRequestProperty("Range", "bytes=" + mDownLoadLength + "-" + (mContentLength - 1));
+                } else {
+                    mDownLoadLength = 0;
+                }
+                conn.connect();
                 InputStream is = conn.getInputStream();
+                byte[] buf = new byte[256];
+                int size;
+                conn.connect();
                 RandomAccessFile out = new RandomAccessFile(getFileUrl(),"rw");
                 out.seek(mDownLoadLength);
-                byte[] buf = new byte[256];
-                conn.connect();
-                int size;
                 while (!isCancelled()) {
                     size = is.read(buf);
                     if (size != -1) {
@@ -95,7 +95,9 @@ public class HttpDownloader extends Downloader {
         @Override
         protected void onPostExecute(Object url) {
             mMyTask.stop();
-            mDownloadListener.onDownLoad(getCurrProgress(),HttpDownloader.this);
+            if (mDownloadListener != null) {
+                mDownloadListener.onDownLoad(getCurrProgress(),HttpDownloader.this);
+            }
         }
     }
 

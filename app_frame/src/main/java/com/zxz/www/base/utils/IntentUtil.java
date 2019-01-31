@@ -29,6 +29,14 @@ import java.util.List;
 
 public class IntentUtil {
 
+    public static Uri getFileUri(File file,Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            return  FileProvider.getUriForFile(activity, AppInfoUtil.getPackageName() + ".fileprovider", file);
+        } else {
+            return Uri.parse("file://" + file.toString());
+        }
+    }
+
     public static void openPermissionSetting() {
         Intent intent = new Intent();
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -65,15 +73,12 @@ public class IntentUtil {
     public static void installApk(File file, Activity activity) {
         if (file != null && file.exists()) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                // 给目标应用一个临时授权
-                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                Uri contentUri = FileProvider.getUriForFile(activity, "com.example.admin.fastpay.fileprovider", file);
-                intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
-            } else {
-                intent.setDataAndType(Uri.parse("file://" + file.toString()), "application/vnd.android.package-archive");
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             }
+            Uri uri = getFileUri(file, activity);
+            intent.setDataAndType(uri,"application/vnd.android.package-archive");
             activity.startActivity(intent);
         }
     }
@@ -115,7 +120,8 @@ public class IntentUtil {
                         intent.setAction(Intent.ACTION_SEND);
                         intent.setType("image/*");
                         File file = new File(downloader.getFileUrl());
-                        Uri uri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".fileprovider", file);
+                        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                        Uri uri = getFileUri(file,activity);
                         intent.putExtra(Intent.EXTRA_STREAM, uri);
                         if (hasMatchIntent(intent)) {
                             activity.startActivity(intent);
@@ -141,10 +147,8 @@ public class IntentUtil {
     void takePhoto(String cameraPhotoPath,Activity activity) {
         File cameraPhoto = new File(cameraPhotoPath);
         Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        Uri photoUri = FileProvider.getUriForFile(
-                activity,
-                activity.getPackageName() + ".provider",
-                cameraPhoto);
+        takePhotoIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Uri photoUri = getFileUri(cameraPhoto,activity);
         takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
         activity.startActivity(takePhotoIntent);
     }
@@ -152,27 +156,28 @@ public class IntentUtil {
     public static void openDir(Activity activity,String dir) {
         File file = new File(dir);
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-        Uri uri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".fileprovider", file);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        Uri uri = getFileUri(file,activity);
         intent.setDataAndType(uri, "*/*");
         intent.addCategory(Intent.CATEGORY_OPENABLE);
         activity.startActivity(intent);
     }
 
     public static void openFile(Activity activity,File file) {
-        if (file.getName().endsWith(".apk")) {
-            installApk(file,activity);
-        } else{
-            Uri photoUri = FileProvider.getUriForFile(activity, activity.getPackageName() + ".provider", file);
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_VIEW);
-            MediaFileUtil.MediaFileType type = MediaFileUtil.getFileType(file.getName());
-            if (type != null) {
-                intent.setDataAndType(photoUri, type.mimeType);
-            } else {
-                intent.setDataAndType(photoUri, "*/*");
+        Uri photoUri = getFileUri(file,activity);
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        MediaFileUtil.MediaFileType type = MediaFileUtil.getFileType(file.getName());
+        if (type != null) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N && type.fileType == MediaFileUtil.FILE_TYPE_APK) {
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             }
-            activity.startActivity(intent);
+            intent.setDataAndType(photoUri, type.mimeType);
+        } else {
+            intent.setDataAndType(photoUri, "*/*");
         }
+        activity.startActivity(intent);
     }
 
 

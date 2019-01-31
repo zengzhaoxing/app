@@ -86,15 +86,19 @@ public abstract class ListFragment<T,VH extends RecyclerView.ViewHolder> extends
     int getItemLayoutId();
 
     @Override
-    public boolean onLongClick(View v) {
+    public final boolean onLongClick(View v) {
+        onItemLongClick((T) v.getTag());
         return true;
     }
 
     @Override
-    public void onClick(View v) {
+    public final void onClick(View v) {
         onItemClick((T) v.getTag());
     }
 
     abstract protected void onItemClick(T t);
+
+    abstract protected void onItemLongClick(T t);
+
 
 }

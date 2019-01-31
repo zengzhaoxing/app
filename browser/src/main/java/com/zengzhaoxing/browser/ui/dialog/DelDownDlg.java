@@ -35,7 +35,7 @@ public class DelDownDlg extends Dialog {
         findViewById(R.id.yes_tv).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DownPresenter.getInstance(null).delete(imageView.isSelected(),mPos);
+                DownPresenter.getInstance().delete(imageView.isSelected(),mPos);
                 dismiss();
             }
         });

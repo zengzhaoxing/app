@@ -194,7 +194,7 @@ public class BrowserFragment extends WindowChildFragment implements View.OnLongC
     private NoticeDialog mDialog;
 
     @Override
-    public void onDownloadStart(final String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
+    public void onDownloadStart(final String url, String userAgent, String contentDisposition, String mimetype, final long contentLength) {
         String name;
         if (!StringUtil.isBlank(contentDisposition) && contentDisposition.contains("filename=")) {
             name = contentDisposition.split("filename=")[1];
@@ -217,9 +217,10 @@ public class BrowserFragment extends WindowChildFragment implements View.OnLongC
                 @Override
                 public void onOkClick() {
                     FileBean bean = new FileBean();
+                    bean.setContentLength(contentLength);
                     bean.setUrl(url);
                     bean.setName(finalName);
-                    DownPresenter.getInstance(getActivity()).startNew(bean);
+                    DownPresenter.getInstance().startNew(bean);
                 }
             });
         }
