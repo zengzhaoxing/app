@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import com.zengzhaoxing.browser.R;
 import com.zxz.www.base.model.BaseModel;
 import com.zxz.www.base.utils.FileUtil;
+import com.zxz.www.base.utils.MathUtil;
 import com.zxz.www.base.utils.MediaFileUtil;
 import com.zxz.www.base.utils.ResUtil;
 import com.zxz.www.base.utils.Util;
@@ -12,6 +13,7 @@ import com.zxz.www.base.utils.Util;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Transient;
 
 import java.io.File;
 
@@ -171,6 +173,24 @@ public class FileBean extends BaseModel {
         } else {
             return ResUtil.getDrawable(R.drawable.file);
         }
+    }
+
+    @Transient
+    public long lastSize;
+
+    @Transient
+    public long lastTime;
+
+    public String getSpeed() {
+        String speed = "0B/s";
+        long time = System.currentTimeMillis();
+        if (lastTime != 0) {
+            long l = (contentLength - lastSize) / (time - lastTime) * 1000;
+            speed = MathUtil.getFormatSize(l) + "/s";
+        }
+        lastSize = contentLength;
+        lastTime = System.currentTimeMillis();
+        return speed;
     }
 
 }

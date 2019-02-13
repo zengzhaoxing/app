@@ -40,6 +40,9 @@ public class UrlBean extends BaseModel {
         if (iconUrl == null && url != null) {
             int begin = url.indexOf(SPILT) + SPILT.length();
             int end = url.indexOf('/', begin);
+            if (end == -1) {
+                end = url.length();
+            }
             return url.substring(0, end) + '/' + Constants.WEB_ICON_SUFFIX;
         }
         return iconUrl;

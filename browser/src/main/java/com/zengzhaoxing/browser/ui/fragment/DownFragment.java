@@ -54,7 +54,7 @@ public class DownFragment extends ListFragment<FileBean,DownFragment.ViewHolder>
         } else if(!DownPresenter.getInstance().isDowning(bean)){
             viewHolder.descTv.setText(curr + "/" + sum + "  |  " + ResUtil.getString(R.string.paused));
         } else{
-            viewHolder.descTv.setText(curr + "/" + sum + "  |  " + mNetSpeed.getNetSpeed());
+            viewHolder.descTv.setText(curr + "/" + sum + "  |  " + bean.getSpeed());
         }
         if (DownPresenter.getInstance().isDowning(bean)) {
             viewHolder.downloadPv.start();
