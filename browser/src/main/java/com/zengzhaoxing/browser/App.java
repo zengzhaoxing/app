@@ -2,12 +2,17 @@ package com.zengzhaoxing.browser;
 
 import com.zengzhaoxing.browser.greendao.DaoMaster;
 import com.zengzhaoxing.browser.greendao.DaoSession;
+import com.zengzhaoxing.browser.view.web.ActivityLifeCycle;
 import com.zxz.www.base.app.BaseApp;
-import com.zxz.www.base.utils.AppInfoUtil;
+import com.zxz.www.base.app.SDKAgent;
 
 import org.greenrobot.greendao.database.Database;
 
 public class App extends BaseApp {
+
+    static {
+        SDKAgent.getInstance().addSDKConnector(ActivityLifeCycle.getInstance());
+    }
 
     private static DaoSession daoSession;
 

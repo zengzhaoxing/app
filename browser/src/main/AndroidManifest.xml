@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.zengzhaoxing.browser">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -10,6 +11,7 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
 
     <application
         android:name=".App"
@@ -31,6 +33,28 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+            <!--<intent-filter>-->
+                <!--&lt;!&ndash;<category android:name="android.intent.category.DEFAULT"/>&ndash;&gt;-->
+                <!--<action android:name="android.intent.action.VIEW"/>-->
+                <!--<category android:name="android.intent.category.DEFAULT"/>-->
+                <!--<category android:name="android.intent.category.BROWSABLE"/>-->
+                <!--&lt;!&ndash;<data android:scheme="https"/>&ndash;&gt;-->
+                <!--<data android:scheme="https" android:host="ssl.ptlogin2.qq.com" android:path="/jump" />-->
+                <!--&lt;!&ndash;<data android:scheme="wtloginmqq" android:host="ptlogin" android:path="/qlogin"/>&ndash;&gt;-->
+            <!--</intent-filter>-->
+
+            <intent-filter>
+            <!--<category android:name="android.intent.category.DEFAULT"/>-->
+            <action android:name="android.intent.action.VIEW"/>
+            <category android:name="android.intent.category.DEFAULT"/>
+            <category android:name="android.intent.category.BROWSABLE"/>
+            <!--<data android:scheme="https"/>-->
+            <data android:scheme="https" />
+                <data android:scheme="http" />
+            <!--<data android:scheme="wtloginmqq" android:host="ptlogin" android:path="/qlogin"/>-->
+            </intent-filter>
+
         </activity>
 
         <provider

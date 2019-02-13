@@ -2,8 +2,11 @@ package com.zengzhaoxing.browser;
 
 
 import android.Manifest;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.zengzhaoxing.browser.bean.UrlBean;
 import com.zengzhaoxing.browser.ui.fragment.BrowserFragment;
 import com.zengzhaoxing.browser.ui.fragment.HomeFragment;
 import com.zxz.www.base.app.BaseActivity;
@@ -18,6 +21,8 @@ import java.util.Stack;
 
 public class MainActivity extends BaseActivity {
 
+
+
     @Override
     protected MainFragment returnMainFragment() {
         return new HomeFragment();
@@ -26,7 +31,20 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PermissionUtil.requestPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE, null);
+        PermissionUtil.requestPermission(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.CAMERA}, null);
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (intent != null && intent.getData() != null) {
+            String url = intent.getData().toString();
+            Log.i("zxz", url);
+            UrlBean bean = new UrlBean();
+            bean.setUrl(url);
+            getHome().openNewWindow(bean);
+        }
     }
 
     @Override

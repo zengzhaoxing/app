@@ -1,31 +1,42 @@
 package com.zengzhaoxing.browser.view.web;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.GeolocationPermissions;
+import android.webkit.PermissionRequest;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
-import android.widget.ProgressBar;
 
+import com.zengzhaoxing.browser.MainActivity;
 import com.zengzhaoxing.browser.R;
+import com.zengzhaoxing.browser.ui.dialog.NoticeDialog;
 import com.zxz.www.base.utils.NetUtil;
+import com.zxz.www.base.utils.PermissionUtil;
+import com.zxz.www.base.utils.ResUtil;
+import com.zxz.www.base.utils.StringUtil;
 import com.zxz.www.base.view.LoadingView;
 
 public class MyWebView extends WebView implements NetUtil.OnNetSpeedListener {
 
-    private Activity mActivity;
+    private MainActivity mActivity;
 
     private LoadingView mLoadingView;
+
 
     /**
      * 视频全屏参数
@@ -71,13 +82,11 @@ public class MyWebView extends WebView implements NetUtil.OnNetSpeedListener {
     }
 
     private void init() {
-        mActivity = (Activity) getContext();
-
+        mActivity = (MainActivity) getContext();
         mLoadingView = new LoadingView(mActivity);
         mLoadingView.setBackgroundResource(R.color.transparent);
         mLoadingView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         NetUtil.registerNetSpeed(this);
-
         WebSettings webSettings = getSettings();
         webSettings.setDomStorageEnabled(true);//主要是这句
         webSettings.setJavaScriptEnabled(true);//启用js
@@ -89,13 +98,24 @@ public class MyWebView extends WebView implements NetUtil.OnNetSpeedListener {
         webSettings.setAllowFileAccess(true); // 允许访问文件
         webSettings.setSupportZoom(true); // 支持缩放
         webSettings.setLoadWithOverviewMode(true);
+//        webSettings.setUserAgentString(ResUtil.getString(R.string.browser_name));
+        webSettings.setSaveFormData(true);
+        webSettings.setGeolocationEnabled(true);
+        webSettings.setSavePassword(true);
         super.setWebChromeClient(new WebChromeClient());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             webSettings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
+
+//        String agent = webSettings.getUserAgentString();
+//        webSettings.setUserAgentString(agent.replace("Chrome", ResUtil.getString(R.string.browser_name)));
+
         webSettings.setCacheMode(WebSettings.LOAD_DEFAULT);
         //该方法解决的问题是打开浏览器不调用系统浏览器，直接用webview打开
         super.setWebChromeClient(new WebChromeClient() {
+
+
+
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 if (newProgress < 10) {
@@ -120,12 +140,60 @@ public class MyWebView extends WebView implements NetUtil.OnNetSpeedListener {
                 return mLoadingView;
             }
 
+
+            @Override
             public void onReceivedTitle(WebView view, String title) {
                 if (mClient != null) {
                     mClient.onReceivedTitle(view,title);
                 }
             }
 
+            @Override
+            public void onGeolocationPermissionsShowPrompt(final String origin, final GeolocationPermissions.Callback callback) {
+                PermissionUtil.requestPermission(mActivity, Manifest.permission.ACCESS_FINE_LOCATION, new PermissionUtil.OnPermissionRequest() {
+                    @Override
+                    public void onResult(boolean isAllow) {
+                        NoticeDialog noticeDialog = new NoticeDialog(mActivity);
+                        noticeDialog.show("允许“" + origin + "”" + "访问您当前的地理位置信息", new NoticeDialog.OnDialogClickListener() {
+                            @Override
+                            public void onOkClick() {
+                                callback.invoke(origin, true, true);
+                            }
+                        });
+                    }
+                });
+            }
+
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onPermissionRequest(PermissionRequest request) {
+                request.grant(request.getResources());
+            }
+
+            // For Android 3.0+
+            public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType) {
+                ActivityLifeCycle.getInstance().openFileChooser(uploadMsg,acceptType);
+            }
+
+            // For Android < 3.0
+            public void openFileChooser(ValueCallback<Uri> uploadMsgs) {
+                ActivityLifeCycle.getInstance().openFileChooser(uploadMsgs);
+            }
+
+            // For Android  > 4.1.1
+           //    @Override
+            public void openFileChooser(ValueCallback<Uri> uploadMsg, String acceptType, String capture) {
+                ActivityLifeCycle.getInstance().openFileChooser(uploadMsg,acceptType,capture);
+            }
+
+            // For Android  >= 5.0
+            @Override
+            public boolean onShowFileChooser(WebView webView,
+                                             ValueCallback<Uri[]> filePathCallback,
+                                             WebChromeClient.FileChooserParams fileChooserParams) {
+                ActivityLifeCycle.getInstance().onShowFileChooser(webView,filePathCallback,fileChooserParams);
+                return true;
+            }
         });
     }
 
@@ -203,9 +271,6 @@ public class MyWebView extends WebView implements NetUtil.OnNetSpeedListener {
         int flag = visible ? 0 : WindowManager.LayoutParams.FLAG_FULLSCREEN;
         mActivity.getWindow().setFlags(flag, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     }
-
-
-
 
 
 }

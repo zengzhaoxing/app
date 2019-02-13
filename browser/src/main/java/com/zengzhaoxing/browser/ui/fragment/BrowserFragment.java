@@ -1,9 +1,12 @@
 package com.zengzhaoxing.browser.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,6 +85,15 @@ public class BrowserFragment extends WindowChildFragment implements View.OnLongC
                         }
                     }
                     lastTime = time;
+                } else {
+                    try {
+                        Log.i("zxz", url);
+                        Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        startActivity(intent);
+                    }catch (Exception ignored){
+                    }
                 }
                 return true;
             }

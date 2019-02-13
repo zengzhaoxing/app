@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.CookieManager;
+import android.webkit.CookieSyncManager;
 import android.widget.LinearLayout;
 
 import com.zengzhaoxing.browser.MainActivity;
@@ -78,6 +80,10 @@ public class MenuFragment extends SlideFragment {
                         UrlCollectPresenter.getInstance().deleteAllHistory();
                         DownPresenter.getInstance().delete(false);
                         SPUtil.remove(SEARCH_HISTORY);
+                        CookieSyncManager.createInstance(mBaseActivity);
+                        CookieManager cookieManager = CookieManager.getInstance();
+                        cookieManager.removeAllCookie();
+                        CookieSyncManager.getInstance().sync();
                         ToastUtil.toast(R.string.clean_succeed);
                         mBaseActivity.closeCurrentFragment();
                     }
