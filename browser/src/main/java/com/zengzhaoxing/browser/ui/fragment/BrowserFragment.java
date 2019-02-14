@@ -87,7 +87,6 @@ public class BrowserFragment extends WindowChildFragment implements View.OnLongC
                     lastTime = time;
                 } else {
                     try {
-                        Log.i("zxz", url);
                         Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                         intent.addCategory(Intent.CATEGORY_BROWSABLE);
                         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_SINGLE_TOP);

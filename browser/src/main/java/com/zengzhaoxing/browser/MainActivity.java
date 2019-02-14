@@ -40,7 +40,6 @@ public class MainActivity extends BaseActivity {
         super.onNewIntent(intent);
         if (intent != null && intent.getData() != null) {
             String url = intent.getData().toString();
-            Log.i("zxz", url);
             UrlBean bean = new UrlBean();
             bean.setUrl(url);
             getHome().openNewWindow(bean);

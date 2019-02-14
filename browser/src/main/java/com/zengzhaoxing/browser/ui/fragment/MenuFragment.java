@@ -73,21 +73,8 @@ public class MenuFragment extends SlideFragment {
                 mBaseActivity.openNewFragmentWithDefaultAnim(new DownFragment());
                 break;
             case R.id.clean_view:
-                NoticeDialog dialog = new NoticeDialog(mBaseActivity);
-                dialog.show(R.string.q_clean_record, new NoticeDialog.OnDialogClickListener() {
-                    @Override
-                    public void onOkClick() {
-                        UrlCollectPresenter.getInstance().deleteAllHistory();
-                        DownPresenter.getInstance().delete(false);
-                        SPUtil.remove(SEARCH_HISTORY);
-                        CookieSyncManager.createInstance(mBaseActivity);
-                        CookieManager cookieManager = CookieManager.getInstance();
-                        cookieManager.removeAllCookie();
-                        CookieSyncManager.getInstance().sync();
-                        ToastUtil.toast(R.string.clean_succeed);
-                        mBaseActivity.closeCurrentFragment();
-                    }
-                });
+                mBaseActivity.closeCurrentFragment();
+                mBaseActivity.openNewFragmentWithDefaultAnim(new CleanDataFragment());
                 break;
             case R.id.exit_view:
                 mBaseActivity.finish();
