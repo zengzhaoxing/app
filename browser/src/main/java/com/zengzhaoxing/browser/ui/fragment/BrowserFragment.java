@@ -23,12 +23,16 @@ import com.zengzhaoxing.browser.MainActivity;
 import com.zengzhaoxing.browser.R;
 import com.zengzhaoxing.browser.bean.FileBean;
 import com.zengzhaoxing.browser.bean.UrlBean;
+import com.zengzhaoxing.browser.bean.event.CleanDataForm;
 import com.zengzhaoxing.browser.presenter.DownPresenter;
 import com.zengzhaoxing.browser.presenter.UrlCollectPresenter;
 import com.zengzhaoxing.browser.ui.dialog.NoticeDialog;
 import com.zengzhaoxing.browser.view.web.MyWebView;
 import com.zxz.www.base.utils.ResUtil;
 import com.zxz.www.base.utils.StringUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,6 +74,7 @@ public class BrowserFragment extends WindowChildFragment implements View.OnLongC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View view = inflater.inflate(R.layout.fra_main_browser, container, false);
         unbinder = ButterKnife.bind(this, view);
+        EventBus.getDefault().register(this);
         //该方法解决的问题是打开浏览器不调用系统浏览器，直接用webview打开
         webView.setWebViewClient(new WebViewClient() {
             @Override
@@ -190,6 +195,7 @@ public class BrowserFragment extends WindowChildFragment implements View.OnLongC
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        EventBus.getDefault().unregister(this);
         unbinder.unbind();
     }
 
@@ -200,6 +206,13 @@ public class BrowserFragment extends WindowChildFragment implements View.OnLongC
             return "加载中...";
         }
         return webView.getTitle();
+    }
+
+    @Subscribe
+    public void onCleanDataForm(CleanDataForm cleanDataForm) {
+        if (webView != null) {
+            webView.clearFormData();
+        }
     }
 
     private NoticeDialog mDialog;

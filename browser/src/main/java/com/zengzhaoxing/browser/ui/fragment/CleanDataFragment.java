@@ -6,11 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
+import android.webkit.GeolocationPermissions;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.zengzhaoxing.browser.R;
+import com.zengzhaoxing.browser.bean.event.CleanDataForm;
 import com.zengzhaoxing.browser.presenter.DownPresenter;
 import com.zengzhaoxing.browser.presenter.UrlCollectPresenter;
 import com.zengzhaoxing.browser.ui.dialog.NoticeDialog;
@@ -19,6 +21,8 @@ import com.zxz.www.base.utils.ResUtil;
 import com.zxz.www.base.utils.SPUtil;
 import com.zxz.www.base.utils.ToastUtil;
 import com.zxz.www.base.view.TitleView;
+
+import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -115,10 +119,10 @@ public class CleanDataFragment extends TitleFragment {
                             UrlCollectPresenter.getInstance().deleteAllHistory();
                         }
                         if (formDataLl.isSelected()) {
-
+                            EventBus.getDefault().post(new CleanDataForm());
                         }
                         if (locationLl.isSelected()) {
-
+                            GeolocationPermissions.getInstance().clearAll();
                         }
                         if (cookiesLl.isSelected()) {
                             CookieSyncManager.createInstance(mBaseActivity);
