@@ -84,7 +84,7 @@ public class WindowHomeFragment extends WindowChildFragment implements View.OnCl
                 if (convertView == null) {
                     convertView = LayoutInflater.from(mBaseActivity).inflate(R.layout.item_url_icon, parent, false);
                 }
-                SharpImageView imageView = convertView.findViewById(R.id.url_iv);
+                ImageView imageView = convertView.findViewById(R.id.url_iv);
                 TextView textView = convertView.findViewById(R.id.title_tv);
                 ImageView delIv = convertView.findViewById(R.id.del_iv);
                 delIv.setVisibility(mDleStatus ? View.VISIBLE : View.GONE);
@@ -95,6 +95,7 @@ public class WindowHomeFragment extends WindowChildFragment implements View.OnCl
                     delIv.setTag(null);
                 } else {
                     UrlBean bean = beans.get(position);
+                    Log.i("zxz", bean.getIconUrl());
                     Picasso.with(BaseApp.getContext()).load(bean.getIconUrl()).error(R.mipmap.icon).into(imageView);
                     textView.setText(bean.getTitle());
                     delIv.setTag(bean);
