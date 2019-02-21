@@ -4,11 +4,19 @@ package com.zxz.www.base.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.zxz.www.base.app.BaseApp;
+import com.zxz.www.base.model.BaseModel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SPUtil {
 
     private static String FILE_NAME = SPUtil.class.getName();
+
+    private static Gson GSON = new Gson();
 
     public static void put(String key,Object object) {
         if(object == null){
@@ -27,6 +35,8 @@ public class SPUtil {
             editor.putFloat(key, (Float) object);
         } else if (object instanceof Long) {
             editor.putLong(key, (Long) object);
+        } else if (object instanceof BaseModel) {
+            editor.putString(key, GSON.toJson(object));
         } else {
             editor.putString(key, object.toString());
         }
@@ -46,7 +56,14 @@ public class SPUtil {
             return sp.getFloat(key, (Float) defaultObject);
         } else if (defaultObject instanceof Long) {
             return sp.getLong(key, (Long) defaultObject);
-        }else{
+        } else if (defaultObject instanceof Class) {
+            String s = sp.getString(key, null);
+            if (s != null) {
+                return GSON.fromJson(s, (Class) defaultObject);
+            } else {
+                return null;
+            }
+        } else {
             return defaultObject;
         }
     }
@@ -57,6 +74,30 @@ public class SPUtil {
         SharedPreferences.Editor editor = sp.edit();
         editor.remove(key);
         editor.apply();
+    }
+
+    public static void putList(String key,List<? extends BaseModel> list) {
+        Context context = BaseApp.getContext();
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(key,GSON.toJson(list));
+        editor.apply();
+    }
+
+    public static <T> List<T> getList(String key,Class<T> clz) {
+        Context context = BaseApp.getContext();
+        SharedPreferences sp = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        String s = sp.getString(key, null);
+        List<T> list = GSON.fromJson(s, new TypeToken<List<T>>() {}.getType());
+        if (list == null || list.size() ==0) {
+            return null;
+        } else {
+            List<T> tList = new ArrayList<>();
+            for (Object o : list) {
+                tList.add(GSON.fromJson(GSON.toJson(o), clz));
+            }
+            return tList;
+        }
     }
 
 }

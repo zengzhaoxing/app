@@ -27,4 +27,5 @@
     <string name="q_clean_record">清除所有搜索记录，浏览记录，下载记录？</string>
     <string name="clean_succeed">清除成功</string>
     <string name="paused">已暂停</string>
+    <string name="add">添加</string>
 </resources>

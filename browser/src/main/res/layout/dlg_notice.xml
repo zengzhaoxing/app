@@ -5,41 +5,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:background="@color/white"
-    android:gravity="center_horizontal"
-    android:paddingTop="20dp">
+    android:gravity="center_horizontal">
 
     <TextView
         android:id="@+id/title_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:paddingTop="30dp"
+        android:paddingBottom="30dp"
         tools:text="@string/q_delete_all_down"
         android:textColor="@color/text_black"
         android:layout_gravity="center_horizontal"
         android:textSize="17sp"/>
-
-    <LinearLayout
-        android:id="@+id/check_ll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="17dp"
-        android:gravity="center_vertical"
-        android:paddingBottom="20dp">
-
-        <ImageView android:id="@+id/check_iv"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/check_off"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/text_gray"
-            android:textSize="14sp"
-            android:text="@string/delete_file"
-            android:layout_marginLeft="15dp"/>
-
-    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
