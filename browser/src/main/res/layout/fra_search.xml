@@ -48,6 +48,7 @@
                 android:selectAllOnFocus="true"
                 android:textColor="@color/text_black"
                 android:textColorHint="@color/text_gray"
+                android:imeOptions="actionGo"
                 android:inputType="text" />
 
             <com.zhaoxing.view.sharpview.SharpTextView

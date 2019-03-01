@@ -4,9 +4,12 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -122,6 +125,17 @@ public class SearchFragment extends BaseFragment {
 
             }
         });
+        searchEt.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_GO){
+                    search(searchEt.getText().toString());
+                    return true;
+                }
+                return false;
+            }
+        });
+
         mBDSuggestionAdapter = new BDSuggestionAdapter();
         if (getArguments() != null) {
             mUrl = getArguments().getString(String.class.getName());

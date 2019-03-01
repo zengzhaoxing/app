@@ -13,9 +13,6 @@ import static com.zengzhaoxing.browser.Constants.SPILT;
 public class UrlBean extends BaseModel {
 
     public UrlBean(String url, String title) {
-        if (url != null && !url.endsWith("/")) {
-            url += "/";
-        }
         this.url = url;
         this.title = title;
     }
@@ -41,9 +38,6 @@ public class UrlBean extends BaseModel {
 
     public String getIconUrl() {
         if (iconUrl == null && url != null) {
-            if (!url.endsWith("/")) {
-                url += "/";
-            }
             int begin = url.indexOf(SPILT) + SPILT.length();
             int end = url.indexOf('/', begin);
             if (end == -1) {

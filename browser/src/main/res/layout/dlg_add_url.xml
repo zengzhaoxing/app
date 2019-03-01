@@ -19,6 +19,7 @@
         android:padding="0dp"
         android:textColorHint="@color/text_gray"
         android:gravity="center|left"
+        android:paddingLeft="5dp"
         android:textSize="14sp"
         android:hint="输入标题（如：百度）"
         app:borderColor="@color/line_gray"/>
@@ -33,6 +34,7 @@
         android:textColor="@color/text_black"
         android:textColorHint="@color/text_gray"
         android:gravity="center|left"
+        android:paddingLeft="5dp"
         app:border="1dp"
         android:hint="输入网站（如：www.baidu.com）"
         app:borderColor="@color/line_gray"/>

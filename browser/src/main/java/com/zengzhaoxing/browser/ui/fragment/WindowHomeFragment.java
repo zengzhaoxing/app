@@ -90,13 +90,12 @@ public class WindowHomeFragment extends WindowChildFragment implements View.OnCl
                 delIv.setVisibility(mDleStatus ? View.VISIBLE : View.GONE);
                 delIv.setOnClickListener(WindowHomeFragment.this);
                 if (position >= beans.size()) {
-                    Picasso.with(BaseApp.getContext()).load("dd").error(R.drawable.add_url).into(imageView);
+                    imageView.setImageResource(R.drawable.add_url);
                     textView.setText(R.string.add);
                     delIv.setTag(null);
                 } else {
                     UrlBean bean = beans.get(position);
-                    Log.i("zxz", bean.getIconUrl());
-                    Picasso.with(BaseApp.getContext()).load(bean.getIconUrl()).error(R.mipmap.icon).into(imageView);
+                    Picasso.with(BaseApp.getContext()).load(bean.getIconUrl()).placeholder(R.mipmap.icon).error(R.mipmap.icon).into(imageView);
                     textView.setText(bean.getTitle());
                     delIv.setTag(bean);
                 }
