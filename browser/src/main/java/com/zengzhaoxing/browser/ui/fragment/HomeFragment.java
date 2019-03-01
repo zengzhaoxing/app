@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import com.zengzhaoxing.browser.R;
 import com.zengzhaoxing.browser.bean.UrlBean;
 import com.zengzhaoxing.browser.ui.adapter.SwitchWindowAdapter;
+import com.zengzhaoxing.browser.view.WindowView;
 import com.zxz.www.base.app.BaseFragment;
 import com.zxz.www.base.app.MainFragment;
 import com.zxz.www.base.utils.DensityUtil;
@@ -115,7 +116,6 @@ public class HomeFragment extends MainFragment {
                     mSwitchWindowAdapter.refresh(switchViewPager.getCurrentItem());
                 }
             }).start();
-
         } else {
             switchRl.setVisibility(View.GONE);
             mWindowFrame.setVisibility(View.VISIBLE);
@@ -158,9 +158,9 @@ public class HomeFragment extends MainFragment {
         mSwitchWindowAdapter = new SwitchWindowAdapter(mWindowFragments, getActivity());
         switchViewPager.setAdapter(mSwitchWindowAdapter);
         switchViewPager.setOffscreenPageLimit(5);
-        mSwitchWindowAdapter.setOnItemClickListener(new SwitchWindowAdapter.OnItemClickListener() {
+        mSwitchWindowAdapter.setOnWindowListener(new WindowView.OnWindowListener() {
             @Override
-            public void onItemClick(final int position) {
+            public void onWindowOpen(final int position) {
                 if (switchViewPager.getCurrentItem() != position) {
                     switchViewPager.setCurrentItem(position);
                 }
@@ -171,11 +171,10 @@ public class HomeFragment extends MainFragment {
                         showSwitchWindow(false);
                     }
                 }, 100);
-
             }
 
             @Override
-            public void onCloseClick(int position) {
+            public void onWindowDelete(int position) {
                 if (mSwitchWindowAdapter.getCount() > 1) {
                     WindowFragment fragment =  mWindowFragments.remove(position);
                     if (fragment.isAdded()) {

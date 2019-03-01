@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/window_item_view"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:background="@color/black">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <TextView
         android:id="@+id/window_title_tv"
