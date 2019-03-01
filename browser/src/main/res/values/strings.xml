@@ -5,6 +5,7 @@
     <string name="search">搜索</string>
     <string name="refresh">刷新</string>
     <string name="input_key_work">输入网址或关键字</string>
+    <string name="pl_input_key_work">请输入网址或关键字</string>
     <string name="menu_add_collect">添加收藏</string>
     <string name="menu_collect">收藏</string>
     <string name="menu_history">历史</string>

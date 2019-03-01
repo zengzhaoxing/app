@@ -31,6 +31,7 @@ import com.zxz.www.base.utils.JsonUtil;
 import com.zxz.www.base.utils.KeyBoardUtil;
 import com.zxz.www.base.utils.SPUtil;
 import com.zxz.www.base.utils.StringUtil;
+import com.zxz.www.base.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -183,6 +184,10 @@ public class SearchFragment extends BaseFragment {
     }
 
     private void search(String text) {
+        if (StringUtil.isBlank(text)) {
+            ToastUtil.toast(R.string.pl_input_key_work);
+            return;
+        }
         String history;
         if (isHttpUrl(text)) {
             mUrl = text;
