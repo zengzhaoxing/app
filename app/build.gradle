@@ -91,6 +91,6 @@ android {
         compile fileTree(include: ['*.jar'], dir: 'libs')
 //        compile 'com.jakewharton:butterknife:8.4.0'
         annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-
+        compile 'com.baidu.mobstat:mtj-sdk:3.9.3.2'
     }
 }
