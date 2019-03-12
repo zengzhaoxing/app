@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
+import com.baidu.mobstat.StatService;
 import com.zengzhaoxing.browser.R;
 import com.zengzhaoxing.browser.bean.UrlBean;
 import com.zengzhaoxing.browser.ui.adapter.SwitchWindowAdapter;
@@ -72,6 +73,9 @@ public class HomeFragment extends MainFragment {
             }
         }, 2000);
         initFirstWindow();
+
+//        StatService.setUserId(getActivity(),  "13610107352");
+
         return view;
     }
 

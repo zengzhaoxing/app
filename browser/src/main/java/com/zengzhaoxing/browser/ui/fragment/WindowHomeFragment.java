@@ -146,8 +146,7 @@ public class WindowHomeFragment extends WindowChildFragment implements View.OnCl
 
     @OnClick(R.id.search_srl)
     public void onViewClicked() {
-//        SearchFragment fragment = new SearchFragment();
-        TestFragment fragment = new TestFragment();
+        SearchFragment fragment = new SearchFragment();
         mBaseActivity.openNewFragment(fragment);
     }
 

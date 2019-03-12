@@ -1,5 +1,6 @@
 package com.zengzhaoxing.browser;
 
+import com.baidu.mobstat.StatService;
 import com.zengzhaoxing.browser.greendao.DaoMaster;
 import com.zengzhaoxing.browser.greendao.DaoSession;
 import com.zengzhaoxing.browser.view.web.ActivityLifeCycle;
@@ -22,6 +23,8 @@ public class App extends BaseApp {
         DaoMaster.DevOpenHelper helper = new DaoMaster.DevOpenHelper(this, DaoMaster.class.getName());
         Database db = helper.getWritableDb();
         daoSession = new DaoMaster(db).newSession();
+        StatService.setDebugOn(true);
+        StatService.start(this);
     }
 
     public static DaoSession getDaoSession() {
