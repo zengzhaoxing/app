@@ -52,7 +52,9 @@ public class HomeFragment extends MainFragment {
 
     private List<WindowFragment> mWindowFragments = new ArrayList<>();
 
-    private static final float SCALE = 0.6F;
+    public static final float SCALE = 0.6F;
+
+    public static final int ITEM_MARGIN = DensityUtil.dip2px(25);
 
     private static final int DURATION = 300;
 
@@ -105,7 +107,7 @@ public class HomeFragment extends MainFragment {
             int py = (int) (mWindowFrame.getHeight() * (1 - SCALE) / 2);
             int px = (int) (mWindowFrame.getWidth() * (1 - SCALE) / 2);
             switchViewPager.setPadding(px, (int) (py - ResUtil.getDimension(R.dimen.window_title_height)), px, py);
-            switchViewPager.setPageMargin(DensityUtil.dip2px(25));
+            switchViewPager.setPageMargin(ITEM_MARGIN);
         }
         if (isSwitch) {
             mWindowFrame.animate().scaleX(SCALE).scaleY(SCALE).setDuration(DURATION).withStartAction(new Runnable() {
@@ -159,6 +161,10 @@ public class HomeFragment extends MainFragment {
     }
 
     private void reSetAdapter() {
+        reSetAdapter(-1);
+    }
+
+    private void reSetAdapter(int p) {
         mSwitchWindowAdapter = new SwitchWindowAdapter(mWindowFragments, getActivity());
         switchViewPager.setAdapter(mSwitchWindowAdapter);
         switchViewPager.setOffscreenPageLimit(5);
@@ -178,7 +184,7 @@ public class HomeFragment extends MainFragment {
             }
 
             @Override
-            public void onWindowDelete(int position) {
+            public void onWindowDelete(final int position) {
                 if (mSwitchWindowAdapter.getCount() > 1) {
                     WindowFragment fragment =  mWindowFragments.remove(position);
                     if (fragment.isAdded()) {
@@ -187,13 +193,22 @@ public class HomeFragment extends MainFragment {
                         fm.commitAllowingStateLoss();
                     }
                     refreshWindowCount();
-                    reSetAdapter();
+                    int p;
+                    if (position > 0) {
+                        p = position - 1;
+                    } else {
+                        p = 0;
+                    }
+                    reSetAdapter(p);
                 } else {
                     initFirstWindow();
                     showSwitchWindow(false);
                 }
             }
         });
+        if (p >= 0) {
+            switchViewPager.setCurrentItem(p,false);
+        }
     }
 
     private int getCurrWindowIndex() {

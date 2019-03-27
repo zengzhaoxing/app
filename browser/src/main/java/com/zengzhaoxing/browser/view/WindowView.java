@@ -18,7 +18,7 @@ import com.zxz.www.base.utils.DensityUtil;
 
 public class WindowView extends FrameLayout {
 
-    final float mFloat = 1f / 2f;
+    final float mFloat = 2f / 5f;
 
     public ImageView getImageView() {
         return mImageView;
